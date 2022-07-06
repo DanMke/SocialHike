@@ -19,18 +19,11 @@ export default StyleSheet.create({
     // fontFamily: 'Open Sans',
     color: '#04C37D',
   },
-  input: {
-    paddingTop: 30,
-    paddingHorizontal: 30,
-  },
   containerInputs: {
     flex: 2,
     paddingTop: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#333333'
-  },
-  inputText: {
-    color: '#8C8A8C'
   }
 });
