@@ -1,0 +1,1 @@
+{"version":"0.0.1","name":"socialhike","dependencies":{"@reduxjs/toolkit":{"version":"1.8.2"},"react-native":{"version":"0.68.2"},"react-redux":{"version":"8.0.2"},"react":{"version":"17.0.2"},"redux":{"version":"4.2.0"}}}
