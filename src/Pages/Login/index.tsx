@@ -90,7 +90,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
               onChangeText={value => setPassword(value)}
             />
             {('email' || 'password') in errors && (
-              <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+              <FormControl.ErrorMessage fontSize={'md'} leftIcon={<WarningOutlineIcon size="md" />}>
                 Error
               </FormControl.ErrorMessage>
             )}
