@@ -16,7 +16,6 @@ import {updateUser} from '../../Redux/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
 
 import styles from './styles';
@@ -86,7 +85,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
             />
             {'email' in errors && (
               <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                Error
+                {errors.email}
               </FormControl.ErrorMessage>
             )}
           </FormControl>
@@ -104,11 +103,11 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
               borderColor={'#04C37D'}
               onChangeText={value => setPassword(value)}
               type={showPassword ? "text" : "password"} 
-              InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
+              InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
             />
             {'password' in errors && (
               <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                Error
+                {errors.password}
               </FormControl.ErrorMessage>
             )}
           </FormControl>

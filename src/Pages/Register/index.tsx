@@ -115,7 +115,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 borderColor={'#04C37D'}
                 onChangeText={value => setPassword(value)}
                 type={showPassword ? "text" : "password"} 
-                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
+                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
               />
               {'password' in errors && (
                 <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
@@ -135,7 +135,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 borderColor={'#04C37D'}
                 onChangeText={value => setConfirmPassword(value)}
                 type={showPassword ? "text" : "password"} 
-                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
+                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
               />
               {('confirmPassword') in errors && (
                 <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
