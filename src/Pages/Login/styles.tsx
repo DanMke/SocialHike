@@ -25,5 +25,5 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#333333'
-  }
+  },
 });

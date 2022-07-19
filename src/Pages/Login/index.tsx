@@ -6,11 +6,16 @@ import {
   Button,
   WarningOutlineIcon,
   Link,
+  IconButton,
 } from 'native-base';
 import React from 'react';
 import {View, SafeAreaView, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
 
@@ -28,11 +33,14 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState({});
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
   const validate = () => {
     if (email === undefined || email === '') {
       setErrors({...errors, email: 'Email is required'});
       return false;
-    } else if (password === undefined) {
+    } 
+    if (password === undefined || password === '') {
       setErrors({...errors, password: 'Password is required'});
       return false;
     }
@@ -41,9 +49,10 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
   };
 
   const onSubmit = () => {
+    setErrors({});
     validate() ? console.log('Submitted') : console.log('Validation Failed');
     // TODO: navigate to Register screen
-    navigation.navigate('Register');
+    // navigation.navigate('Register');
   };
 
   const onCreateAnAccount = () => {
@@ -59,8 +68,8 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
         </Text>
       </View>
       <View style={styles.containerInputs}>
-        <VStack width="90%" mx="3" maxW="300px">
-          <FormControl isInvalid={('email' || 'password') in errors}>
+        <VStack width="90%" mx="3" maxW="320px">
+          <FormControl isInvalid={'email' in errors}>
             <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}}>
               Email
             </FormControl.Label>
@@ -75,12 +84,18 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
               borderColor={'#04C37D'}
               onChangeText={value => setEmail(value)}
             />
+            {'email' in errors && (
+              <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                Error
+              </FormControl.ErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={'password' in errors}>
             <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="8">
               Password
             </FormControl.Label>
             <Input
               placeholder=""
-              type="password"
               selectionColor={'#15573E'}
               size="md"
               _focus={{borderColor: '#15573E'}}
@@ -88,9 +103,11 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
               variant="underlined"
               borderColor={'#04C37D'}
               onChangeText={value => setPassword(value)}
+              type={showPassword ? "text" : "password"} 
+              InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
             />
-            {('email' || 'password') in errors && (
-              <FormControl.ErrorMessage fontSize={'md'} leftIcon={<WarningOutlineIcon size="md" />}>
+            {'password' in errors && (
+              <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
                 Error
               </FormControl.ErrorMessage>
             )}

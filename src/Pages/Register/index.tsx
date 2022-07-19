@@ -6,6 +6,8 @@ import {
     Button,
     WarningOutlineIcon,
     Link,
+    Icon,
+    IconButton
   } from 'native-base';
 import React from 'react';
 import {View, SafeAreaView, Image, ScrollView} from 'react-native';
@@ -13,6 +15,8 @@ import {View, SafeAreaView, Image, ScrollView} from 'react-native';
 import styles from './styles';
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 interface RegisterProps {
   navigation: any;
@@ -20,99 +24,164 @@ interface RegisterProps {
 
 const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
+  const [confirmPassword, setConfirmPassword] = React.useState<string>('');
+  const [firstName, setFirstName] = React.useState<string>('');
+  const [lastName, setLastName] = React.useState<string>('');
+  const [weight, setWeight] = React.useState<number>(0.0);
+  const [height, setHeight] = React.useState<number>(0.0);
   const [errors, setErrors] = React.useState({});
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const validate = () => {
+    let valid = true;
+    let e = {};
+    if (email === undefined || email === '') {
+      e = Object.assign(e, {email: 'Email is required'});
+      valid = false;
+    }
+    if (password === undefined || password === '') {
+      e = Object.assign(e, {password: 'Password is required'});
+      valid = false;
+    }
+    if (confirmPassword === undefined || confirmPassword === '') {
+      e = Object.assign(e, {confirmPassword: 'Confirm Password is required'});
+      valid = false;
+    }
+    if (firstName === undefined || firstName === '') {
+      e = Object.assign(e, {firstName: 'First Name is required'});
+      valid = false;
+    }
+    if (lastName === undefined || lastName === '') {
+      e = Object.assign(e, {lastName: 'Last Name is required'});
+      valid = false;
+    }
+    if (weight === undefined || weight === 0.0) {
+      e = Object.assign(e, {weight: 'Weight is required'});
+      valid = false;
+    }
+    if (height === undefined || height === 0.0) {
+      e = Object.assign(e, {height: 'Height is required'});
+      valid = false;
+    }
+    setErrors(e);
+    return valid;
+  };
   
   const onCreateAnAccount = () => {
-    navigation.navigate('Login');
+    setErrors({});
+    validate() ? console.log('Submitted') : console.log('Validation Failed');
+    // navigation.navigate('Login');
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-
         <View style={styles.containerIcon}>
           <Image source={SocialHikeIcon} style={styles.icon} />
         </View>
         <View style={styles.containerInputs}>
-          <VStack width="90%" mx="3" maxW="300px">
-            <FormControl>
+          <VStack width="90%" mx="3" maxW="320px">
+            <FormControl isInvalid={('email' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Email</FormControl.Label>
               <Input
                 placeholder=""
                 type="text"
-                keyboardType='numeric'
                 selectionColor={'#15573E'}
                 size="md"
                 _focus={{borderColor: '#15573E'}}
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setEmail(value)}
               />
+              
+              {'email' in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.email}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('password' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Password</FormControl.Label>
               <Input
                 placeholder=""
-                type="text"
-                keyboardType='numeric'
                 selectionColor={'#15573E'}
                 size="md"
                 _focus={{borderColor: '#15573E'}}
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setPassword(value)}
+                type={showPassword ? "text" : "password"} 
+                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
               />
+              {'password' in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.password}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('confirmPassword' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Confirm Password</FormControl.Label>
               <Input
                 placeholder=""
-                type="text"
-                keyboardType='numeric'
                 selectionColor={'#15573E'}
                 size="md"
                 _focus={{borderColor: '#15573E'}}
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setConfirmPassword(value)}
+                type={showPassword ? "text" : "password"} 
+                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#E9E8E8"/>} onPress={() => setShowPassword(!showPassword)}/>}
               />
+              {('confirmPassword') in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.confirmPassword}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('firstName' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
               <Input
                 placeholder=""
                 type="text"
-                keyboardType='numeric'
                 selectionColor={'#15573E'}
                 size="md"
                 _focus={{borderColor: '#15573E'}}
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setFirstName(value)}
               />
+              {('firstName') in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.firstName}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('lastName' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Last Name</FormControl.Label>
               <Input
                 placeholder=""
                 type="text"
-                keyboardType='numeric'
                 selectionColor={'#15573E'}
                 size="md"
                 _focus={{borderColor: '#15573E'}}
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setLastName(value)}
               />
+              {('lastName') in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.lastName}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('weight' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
               <Input
                 placeholder=""
@@ -125,10 +194,15 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 variant="underlined"
                 borderColor={'#04C37D'}
                 rightIcon={<WarningOutlineIcon size="xs" />}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setWeight((value as unknown) as number)}
               />
+              {('weight') in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.weight}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={('height' in errors)}>
               <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height</FormControl.Label>
               <Input
                 placeholder=""
@@ -140,8 +214,13 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 color={'#E9E8E8'}
                 variant="underlined"
                 borderColor={'#04C37D'}
-                // onChangeText={value => setPassword(value)}
+                onChangeText={value => setHeight((value as unknown) as number)}
               />
+              {('height') in errors && (
+                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                  {errors.height}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
             <Button
               onPress={onCreateAnAccount}
