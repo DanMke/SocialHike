@@ -20,6 +20,6 @@ export default StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#333333',
+    backgroundColor: '#333333'
   }
 });

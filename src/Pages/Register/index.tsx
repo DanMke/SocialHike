@@ -1,16 +1,13 @@
 import {
     Input,
-    Text,
     VStack,
     FormControl,
     Button,
     WarningOutlineIcon,
-    Link,
-    Icon,
     IconButton
   } from 'native-base';
 import React from 'react';
-import {View, SafeAreaView, Image, ScrollView} from 'react-native';
+import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 import styles from './styles';
 
@@ -77,166 +74,169 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.containerIcon}>
-          <Image source={SocialHikeIcon} style={styles.icon} />
-        </View>
-        <View style={styles.containerInputs}>
-          <VStack width="90%" mx="3" maxW="320px">
-            <FormControl isInvalid={('email' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Email</FormControl.Label>
-              <Input
-                placeholder=""
-                type="text"
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setEmail(value)}
-              />
-              
-              {'email' in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.email}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('password' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Password</FormControl.Label>
-              <Input
-                placeholder=""
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setPassword(value)}
-                type={showPassword ? "text" : "password"} 
-                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
-              />
-              {'password' in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.password}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('confirmPassword' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Confirm Password</FormControl.Label>
-              <Input
-                placeholder=""
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setConfirmPassword(value)}
-                type={showPassword ? "text" : "password"} 
-                InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
-              />
-              {('confirmPassword') in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.confirmPassword}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('firstName' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
-              <Input
-                placeholder=""
-                type="text"
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setFirstName(value)}
-              />
-              {('firstName') in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.firstName}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('lastName' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Last Name</FormControl.Label>
-              <Input
-                placeholder=""
-                type="text"
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setLastName(value)}
-              />
-              {('lastName') in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.lastName}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('weight' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
-              <Input
-                placeholder=""
-                type="text"
-                keyboardType='numeric'
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                rightIcon={<WarningOutlineIcon size="xs" />}
-                onChangeText={value => setWeight((value as unknown) as number)}
-              />
-              {('weight') in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.weight}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <FormControl isInvalid={('height' in errors)}>
-              <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height</FormControl.Label>
-              <Input
-                placeholder=""
-                type="text"
-                keyboardType='numeric'
-                selectionColor={'#15573E'}
-                size="md"
-                _focus={{borderColor: '#15573E'}}
-                color={'#E9E8E8'}
-                variant="underlined"
-                borderColor={'#04C37D'}
-                onChangeText={value => setHeight((value as unknown) as number)}
-              />
-              {('height') in errors && (
-                <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                  {errors.height}
-                </FormControl.ErrorMessage>
-              )}
-            </FormControl>
-            <Button
-              onPress={onCreateAnAccount}
-              mt="8"
-              _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
-              backgroundColor={'#15573E'}
-              paddingTop={5}
-              paddingBottom={5}
-              borderRadius={10}
-              mb={10}>
-              Create An Account
-            </Button>
-          </VStack>
-        </View>
-      </ScrollView>
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView>
+          <View style={styles.containerIcon}>
+            <Image source={SocialHikeIcon} style={styles.icon} />
+          </View>
+          <View style={styles.containerInputs}>
+            <VStack width="90%" mx="3" maxW="320px">
+              <FormControl isInvalid={('email' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Email</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setEmail(value)}
+                />
+                
+                {'email' in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.email}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('password' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Password</FormControl.Label>
+                <Input
+                  placeholder=""
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setPassword(value)}
+                  type={showPassword ? "text" : "password"} 
+                  InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
+                />
+                {'password' in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.password}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('confirmPassword' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Confirm Password</FormControl.Label>
+                <Input
+                  placeholder=""
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setConfirmPassword(value)}
+                  type={showPassword ? "text" : "password"} 
+                  InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
+                />
+                {('confirmPassword') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.confirmPassword}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('firstName' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setFirstName(value)}
+                />
+                {('firstName') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.firstName}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('lastName' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Last Name</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setLastName(value)}
+                />
+                {('lastName') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.lastName}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('weight' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  keyboardType='numeric'
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  rightIcon={<WarningOutlineIcon size="xs" />}
+                  onChangeText={value => setWeight((value as unknown) as number)}
+                />
+                {('weight') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.weight}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('height' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  keyboardType='numeric'
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setHeight((value as unknown) as number)}
+                />
+                {('height') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.height}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <Button
+                onPress={onCreateAnAccount}
+                mt="8"
+                _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
+                backgroundColor={'#15573E'}
+                paddingTop={5}
+                paddingBottom={5}
+                borderRadius={10}
+                mb={10}>
+                Create An Account
+              </Button>
+            </VStack>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
+
   );
 };
 
