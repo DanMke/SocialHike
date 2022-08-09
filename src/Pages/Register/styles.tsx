@@ -11,6 +11,18 @@ export default StyleSheet.create({
     flex: 1,
     marginBottom: 10,
   },
+  backIcon: {
+    color: '#fff',
+    width: 50,
+    height: 50,
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+    position: 'absolute',
+    top: 0,
+    left: 20,
+  },
   icon: {
     width: 100,
     height: 100,

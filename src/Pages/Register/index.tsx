@@ -4,7 +4,9 @@ import {
     FormControl,
     Button,
     WarningOutlineIcon,
-    IconButton
+    IconButton,
+    Pressable,
+    ArrowBackIcon
   } from 'native-base';
 import React from 'react';
 import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
@@ -77,6 +79,11 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
           <View style={styles.containerIcon}>
+            <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>
+              <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
+                <ArrowBackIcon size="xl" color="#ffffff" />
+              </VStack>
+            </Pressable>
             <Image source={SocialHikeIcon} style={styles.icon} />
           </View>
           <View style={styles.containerInputs}>
