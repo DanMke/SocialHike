@@ -4,12 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-import Feed from '../Pages/Feed';
+import Home from '../Pages/Home';
+import Start from '../Pages/Start';
 
 export function TabRoutes() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Feed" component={Feed} />
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Start" component={Start} />
     </Tab.Navigator>
   );
 }

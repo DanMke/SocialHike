@@ -52,7 +52,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
     setErrors({});
     validate() ? console.log('Submitted') : console.log('Validation Failed');
     // TODO: navigate to Register screen
-    navigation.navigate('TabRoutes',  {screen: 'Feed'});
+    navigation.navigate('TabRoutes',  {screen: 'Home'});
   };
 
   const onCreateAnAccount = () => {
