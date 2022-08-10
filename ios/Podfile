@@ -5,6 +5,10 @@ platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'SocialHike' do
+
+  pod 'react-native-geolocation-service', path: '../node_modules/react-native-geolocation-service'
+
+
   config = use_native_modules!
 
   # Flags change depending on the env values.

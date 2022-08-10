@@ -28,7 +28,7 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-              
+          
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
