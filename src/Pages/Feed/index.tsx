@@ -21,13 +21,13 @@ import SocialHikeIcon from '../../../assets/socialhikeicon.png';
 
 import styles from './styles';
 
-interface LoginProps {
+interface FeedProps {
   onTest?: any;
   user: any;
   navigation: any;
 }
 
-const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => {
+const Feed: React.FC<FeedProps> = ({onTest, user, navigation}: FeedProps) => {
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -52,7 +52,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
     setErrors({});
     validate() ? console.log('Submitted') : console.log('Validation Failed');
     // TODO: navigate to Register screen
-    navigation.navigate('TabRoutes',  {screen: 'Feed'});
+    // navigation.navigate('Register');
   };
 
   const onCreateAnAccount = () => {
@@ -161,4 +161,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);
