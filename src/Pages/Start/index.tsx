@@ -1,16 +1,8 @@
 import {
-  Input,
-  Text,
-  VStack,
-  FormControl,
-  Button,
-  WarningOutlineIcon,
-  Link,
-  IconButton,
   ScrollView,
 } from 'native-base';
 import React, {useEffect} from 'react';
-import {View, SafeAreaView, Image, KeyboardAvoidingView} from 'react-native';
+import { SafeAreaView, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -28,7 +20,6 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
 
   useEffect(() => {
     // Geolocation.requestAuthorization("always");
-
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);

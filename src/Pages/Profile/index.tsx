@@ -8,13 +8,13 @@ import {updateUser} from '../../Redux/actions';
 
 import styles from './styles';
 
-interface HomeProps {
+interface ProfileProps {
   onTest?: any;
   user: any;
   navigation: any;
 }
 
-const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
+const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,4 +39,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
