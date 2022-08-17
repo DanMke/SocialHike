@@ -1,12 +1,14 @@
 import {
-  ScrollView,
+  ScrollView, View,
 } from 'native-base';
 import React, {useEffect} from 'react';
-import { SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import { SafeAreaView, Text, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import Geolocation from 'react-native-geolocation-service';
+
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 
 import styles from './styles';
 
@@ -36,7 +38,23 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-          
+          <Text>dfsdfs</Text>
+        <MapView style={styles.map}
+          showsUserLocation={true}
+          followsUserLocation={true}
+          showsMyLocationButton={true}
+          scrollEnabled={true}
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          region={{
+            latitude: -15.8477559,
+            longitude: -48.0505933,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        >
+        </MapView>
+        <Text>dfsdfs</Text>
+
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
