@@ -20,17 +20,44 @@ interface StartProps {
 
 const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => {
 
+  const [latitude, setLatitude] = React.useState(0);
+  const [longitude, setLongitude] = React.useState(0);
+  const [initialLatitude, setInitialLatitude] = React.useState(0);
+  const [initialLongitude, setInitialLongitude] = React.useState(0);
+
   useEffect(() => {
+    // TODO geolocation request authorization if not authorized
     // Geolocation.requestAuthorization("always");
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
+        setInitialLatitude(position.coords.latitude);
+        setInitialLongitude(position.coords.longitude);
       },
       (error) => {
         console.log(error);
       },
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
+
+    const intervalGetCurrentPosition = setInterval(() => {
+      console.log('Logs every second');
+      Geolocation.getCurrentPosition(
+        (position) => {
+          console.log(position);
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+        },
+        (error) => {
+          console.log(error);
+        },
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    }, 5000);
+    // TODO: On FOCUS OUT clear interval
+    // TODO: update location in background
+    return () => clearInterval(intervalGetCurrentPosition); 
+
   } , []);
   
 
@@ -38,23 +65,22 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-          <Text>dfsdfs</Text>
-        <MapView style={styles.map}
-          showsUserLocation={true}
-          followsUserLocation={true}
-          showsMyLocationButton={true}
-          scrollEnabled={true}
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          region={{
-            latitude: -15.8477559,
-            longitude: -48.0505933,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        >
-        </MapView>
-        <Text>dfsdfs</Text>
-
+          <MapView style={styles.map}
+            showsUserLocation={true}
+            followsUserLocation={true}
+            showsMyLocationButton={true}
+            scrollEnabled={true}
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            region={{
+              latitude: initialLatitude,
+              longitude: initialLongitude,
+              latitudeDelta: 0,
+              longitudeDelta: 0.01,
+            }}
+          >
+          </MapView>
+        <Text style={{color: 'white'}}>LATITUDE: {latitude}</Text>
+        <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
