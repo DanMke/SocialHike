@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
   routeElement: {
     flexDirection: 'column',
-    height: 120,
+    minHeight: 100,
     width: '100%',
     alignItems: 'flex-start',
     padding: 10,
