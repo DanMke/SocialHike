@@ -10,6 +10,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginBottom: 10,
+    marginTop: 20,
   },
   backIcon: {
     color: '#fff',
@@ -32,6 +33,6 @@ export default StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#333333'
+    backgroundColor: '#211F20'
   }
 });

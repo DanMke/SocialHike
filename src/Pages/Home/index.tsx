@@ -57,9 +57,9 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
               scrollEnabled={false}
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
               region={{
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0,
+                latitude: -15.8426396,
+                longitude: -48.0511031,
+                latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
               }} />
               <View style={styles.feedElementUser}>

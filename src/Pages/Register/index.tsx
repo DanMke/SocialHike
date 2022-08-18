@@ -232,8 +232,8 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 mt="8"
                 _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
                 backgroundColor={'#15573E'}
-                paddingTop={5}
-                paddingBottom={5}
+                paddingTop={4}
+                paddingBottom={4}
                 borderRadius={10}
                 mb={10}>
                 Create An Account

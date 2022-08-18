@@ -25,8 +25,8 @@ interface RoutesProps {
 
 const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) => {
 
-  const [latitude, setLatitude] = React.useState(0);
-  const [longitude, setLongitude] = React.useState(0);
+  const [latitude, setLatitude] = React.useState(-15.8426396);
+  const [longitude, setLongitude] = React.useState(-48.0511031);
 
   useEffect(() => {
     // TODO geolocation request authorization if not authorized

@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
   routeElement: {
     flexDirection: 'column',
-    height: 135,
+    height: 120,
     width: '100%',
     alignItems: 'flex-start',
     padding: 10,
@@ -34,15 +34,15 @@ export default StyleSheet.create({
   },
   routeElementTextDark: {
     color: '#8C8A8C',
-    fontSize: 16,
+    fontSize: 14,
   },
   routeElementTextValue: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 14,
   },
   routeElementTextKM: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 14,
     paddingLeft: 5,
   },
   routeElementTextWithImage: {
@@ -52,7 +52,7 @@ export default StyleSheet.create({
   },
   routeDetails: {
     flexDirection: 'row',
-    paddingTop: 5,
+    paddingTop: 0,
     justifyContent: 'space-between',
   },
   routeElevation: {

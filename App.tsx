@@ -9,6 +9,7 @@
  */
 
 import React from 'react';
+import {SSRProvider} from '@react-aria/ssr'; 
 
 import { NativeBaseProvider } from 'native-base';
 import { Provider } from 'react-redux';
@@ -19,9 +20,11 @@ import { Routes } from './src/Routes';
 const App = () => {
   return (
     <Provider store={ store }>
-      <NativeBaseProvider>
-        <Routes />
-      </NativeBaseProvider>
+      <SSRProvider>
+        <NativeBaseProvider>
+          <Routes />
+        </NativeBaseProvider>
+      </SSRProvider>
     </Provider>
   );
 };

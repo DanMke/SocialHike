@@ -11,6 +11,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     marginBottom: 10,
+    marginTop: 20,
   },
   icon: {
     color: '#fff',

@@ -7,7 +7,7 @@ import {
   WarningOutlineIcon,
   Link,
   IconButton,
-  ScrollView,
+  Modal,
 } from 'native-base';
 import React from 'react';
 import {View, SafeAreaView, Image, KeyboardAvoidingView} from 'react-native';
@@ -30,20 +30,20 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => {
 
   const [email, setEmail] = React.useState('');
+  const [emailForgotPassword, setEmailForgotPassword] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errors, setErrors] = React.useState({});
+
+  const [showModal, setShowModal] = React.useState(false);
 
   const [showPassword, setShowPassword] = React.useState(false);
 
   const validate = () => {
-    if (email === undefined || email === '') {
+    if (email === undefined || email === '' || password === undefined || password === '') {
       setErrors({...errors, email: 'Email is required'});
-      return false;
-    } 
-    if (password === undefined || password === '') {
       setErrors({...errors, password: 'Password is required'});
       return false;
-    }
+    } 
 
     return true;
   };
@@ -62,7 +62,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
-        <ScrollView>
+        <View style={{width: '100%', height: '100%'}}>
           <View style={styles.containerIcon}>
             <Image source={SocialHikeIcon} style={styles.icon} />
             <Text fontSize="3xl" 
@@ -95,7 +95,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
                 )}
               </FormControl>
               <FormControl isInvalid={'password' in errors}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="8">
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="5">
                   Password
                 </FormControl.Label>
                 <Input
@@ -119,33 +119,70 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
               <Link
                 _text={{fontSize: 'md', fontWeight: '500', color: '#8C8A8C'}}
                 alignSelf="center"
-                mt="8">
-                Forget Password?
+                mt="5"
+                onPress={() => setShowModal(true)}>
+                Forgot Password?
               </Link>
               <Button
                 onPress={onSubmit}
-                mt="8"
+                mt="5"
                 _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
                 backgroundColor={'#04AA6C'}
-                paddingTop={5}
-                paddingBottom={5}
+                paddingTop={4}
+                paddingBottom={4}
                 borderRadius={10}>
                 Log in
               </Button>
               <Button
                 onPress={onCreateAnAccount}
-                mt="8"
+                mt="5"
                 _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
                 backgroundColor={'#15573E'}
-                paddingTop={5}
-                paddingBottom={5}
-                marginBottom={10}
+                paddingTop={4}
+                paddingBottom={4}
                 borderRadius={10}>
                 Create An Account
               </Button>
             </VStack>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Forgot Password?</Modal.Header>
+                <Modal.Body>
+                  Enter email address and we'll send a link to reset your password.
+                  <FormControl>
+                    <FormControl.Label mt={4}>Email</FormControl.Label>
+                    <Input
+                      placeholder=""
+                      type="text"
+                      selectionColor={'#15573E'}
+                      size="md"
+                      _focus={{borderColor: '#15573E'}}
+                      color={'#E9E8E8'}
+                      variant="underlined"
+                      borderColor={'#04C37D'}
+                      onChangeText={value => setEmailForgotPassword(value)}
+                    />
+                  </FormControl>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button backgroundColor={'#15573E'} onPress={() => {
+                    setShowModal(false);
+                    }}>
+                      Cancel
+                    </Button>
+                    <Button backgroundColor={'#04AA6C'} onPress={() => {
+                    setShowModal(false);
+                    }}>
+                      Send Email
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
