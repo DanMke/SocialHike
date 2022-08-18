@@ -65,7 +65,9 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
         <ScrollView>
           <View style={styles.containerIcon}>
             <Image source={SocialHikeIcon} style={styles.icon} />
-            <Text fontSize="3xl" fontFamily="Open Sans" style={styles.appNameText}>
+            <Text fontSize="3xl" 
+            // fontFamily="Open Sans" 
+            style={styles.appNameText}>
               SocialHike
             </Text>
           </View>

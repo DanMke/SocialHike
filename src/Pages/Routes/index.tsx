@@ -48,7 +48,7 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
-        <View>
+        <View style={styles.externalView}>
           <MapView style={styles.map}
             showsUserLocation={true}
             followsUserLocation={true}
@@ -63,29 +63,31 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
             }}
           >
           </MapView>
-          <ScrollView>
-            <View>
+          <ScrollView style={styles.routes}>
+            <View style={styles.routeElement}>
               <View>
-                <Text>Percurso 1</Text>
-                <Text>Distance</Text>
-                <View>
-                  <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
-                  <Text>12.34KM</Text>
+                <Text style={styles.routeElementText}>Percurso 1</Text>
+              </View>
+              <View style={styles.routeDetails}>
+                <View style={styles.routeDistance}>
+                  <Text style={styles.routeElementTextDark}>Distance</Text>
+                  <View style={styles.routeElementTextWithImage}>
+                    <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
+                    <Text style={styles.routeElementTextKM}>12.34KM</Text>
+                  </View>
+                </View>
+                <View style={styles.routeElevation}> 
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.routeElementTextDark}>Max Elevation</Text>
+                    <Text style={styles.routeElementTextValue}>1500 m</Text>
+                  </View>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={styles.routeElementTextDark}>Min Elevation</Text>
+                    <Text style={styles.routeElementTextValue}>500 m</Text>
+                  </View>
                 </View>
               </View>
-              <View>
-                <View>
-                  <Text>Max Elevation</Text>
-                  <Text>1500 m</Text>
-                </View>
-                <View>
-                  <Text>Min Elevation</Text>
-                  <Text>1500 m</Text>
-                </View>
-              </View>
-
             </View>
-            
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
