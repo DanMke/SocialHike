@@ -62,7 +62,7 @@ export default StyleSheet.create({
   },
   routeDistance: {
     flexDirection: 'column',
-    paddingTop: 15,
     paddingRight: 20,
+    alignItems: 'center',
   },
 });
