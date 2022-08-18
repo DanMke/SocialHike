@@ -53,7 +53,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
         },
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
-    }, 5000);
+    }, 1000);
     // TODO: On FOCUS OUT clear interval
     // TODO: update location in background
     return () => clearInterval(intervalGetCurrentPosition); 
@@ -74,7 +74,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
             region={{
               latitude: initialLatitude,
               longitude: initialLongitude,
-              latitudeDelta: 0,
+              latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
           >
