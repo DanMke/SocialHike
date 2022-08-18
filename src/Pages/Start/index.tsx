@@ -25,6 +25,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const [initialLatitude, setInitialLatitude] = React.useState(0);
   const [initialLongitude, setInitialLongitude] = React.useState(0);
   const [altitude, setAltitude] = React.useState(0);
+  const [speed, setSpeed] = React.useState(0);
 
   useEffect(() => {
     // TODO geolocation request authorization if not authorized
@@ -49,6 +50,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
           setAltitude(position.coords.altitude);
+          setSpeed(position.coords.speed);
         },
         (error) => {
           console.log(error);
@@ -84,6 +86,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
         <Text style={{color: 'white'}}>LATITUDE: {latitude}</Text>
         <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
         <Text style={{color: 'white'}}>ALTITUDE: {altitude}</Text>
+        <Text style={{color: 'white'}}>SPEED: {speed}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
