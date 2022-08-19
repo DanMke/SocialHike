@@ -53,12 +53,13 @@ const Activity: React.FC<ActivityProps> = ({onTest, user, navigation}: ActivityP
             </View>
             <View style={styles.feedElementDetails}>
               <View>
-                <Text style={styles.feedElementDetailsTextDark}>Average Speed</Text>
+                <Text style={styles.feedElementDetailsTextDark}>Calories Burned</Text>
                 <View style={styles.feedElementDetailsTextWithImage}>
-                  <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
-                  <Text style={styles.feedElementDetailsText}>8.02km/h</Text>
+                  <FontAwesomeIcon icon={faFire} size={20} color="#ffffff"/>
+                  <Text style={styles.feedElementDetailsText}>802kcal</Text>
                 </View>
               </View>
+              
               <View>
                 <Text style={styles.feedElementDetailsTextDark}>Time Duration</Text>
                 <View style={styles.feedElementDetailsTextWithImage}>
@@ -76,17 +77,17 @@ const Activity: React.FC<ActivityProps> = ({onTest, user, navigation}: ActivityP
             </View>
             <View style={styles.feedElementDetailsTwo}>
               <View>
-                <Text style={styles.feedElementDetailsTextDark}>Calories Burned</Text>
+                <Text style={styles.feedElementDetailsTextDark}>Average Speed</Text>
                 <View style={styles.feedElementDetailsTextWithImage}>
-                  <FontAwesomeIcon icon={faFire} size={20} color="#ffffff"/>
-                  <Text style={styles.feedElementDetailsText}>802kcal</Text>
+                  <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
+                  <Text style={styles.feedElementDetailsText}>8.02km/h</Text>
                 </View>
               </View>
               <View>
-                <Text style={styles.feedElementDetailsTextDark}>Time Duration</Text>
+                <Text style={styles.feedElementDetailsTextDark}>Max Speed</Text>
                 <View style={styles.feedElementDetailsTextWithImage}>
-                  <FontAwesomeIcon icon={faClock} size={20} color="#ffffff"/>
-                  <Text style={styles.feedElementDetailsText}>2:24:02h</Text>
+                  <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
+                  <Text style={styles.feedElementDetailsText}>8.02km/h</Text>
                 </View>
               </View>
             </View>

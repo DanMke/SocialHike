@@ -17,9 +17,7 @@ import styles from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons'
 
-import {
-  LineChart,
-} from "react-native-chart-kit";
+import {LineChart} from "react-native-chart-kit";
 
 interface RoutesProps {
   onTest?: any;
