@@ -40,8 +40,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
 
   const validate = () => {
     if (email === undefined || email === '' || password === undefined || password === '') {
-      setErrors({...errors, email: 'Email is required'});
-      setErrors({...errors, password: 'Password is required'});
+      setErrors({...errors, email: 'Email is required', password: 'Password is required'});
       return false;
     } 
 
@@ -57,7 +56,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
 
   const onCreateAnAccount = () => {
     navigation.navigate('Register');
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>

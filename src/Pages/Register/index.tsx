@@ -30,6 +30,8 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   const [lastName, setLastName] = React.useState<string>('');
   const [weight, setWeight] = React.useState<number>(0.0);
   const [height, setHeight] = React.useState<number>(0.0);
+  const [birth, setBirth] = React.useState<string>('');
+
   const [errors, setErrors] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -62,6 +64,10 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
     }
     if (height === undefined || height === 0.0) {
       e = Object.assign(e, {height: 'Height is required'});
+      valid = false;
+    }
+    if (birth === undefined || birth === '') {
+      e = Object.assign(e, {birth: 'Birth is required'});
       valid = false;
     }
     setErrors(e);
@@ -224,6 +230,26 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 {('height') in errors && (
                   <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
                     {errors.height}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={('birth' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Birth</FormControl.Label>
+                <Input
+                  placeholder=""
+                  type="text"
+                  keyboardType='numeric'
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  onChangeText={value => setBirth((value as unknown) as Date)}
+                />
+                {('birth') in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.birth}
                   </FormControl.ErrorMessage>
                 )}
               </FormControl>
