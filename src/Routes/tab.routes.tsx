@@ -2,7 +2,7 @@ import React from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHouse, faRoute, faMapLocationDot, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faRoute, faMapLocationDot, faUser, faChartLine } from '@fortawesome/free-solid-svg-icons'
 
 const Tab = createBottomTabNavigator();
 
@@ -10,6 +10,7 @@ import Home from '../Pages/Home';
 import Routes from '../Pages/Routes';
 import Start from '../Pages/Start';
 import Profile from '../Pages/Profile';
+import Activity from '../Pages/Activity';
 
 export function TabRoutes() {
   return (
@@ -36,6 +37,8 @@ export function TabRoutes() {
             <FontAwesomeIcon icon={faMapLocationDot} color={color} size={30} />) }} />
       <Tab.Screen name="Start" component={Start} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faRoute} color={color} size={30} />) }} />
+      <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false, tabBarIcon: ({color}) => (
+            <FontAwesomeIcon icon={faChartLine} color={color} size={30} />) }} />
       <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faUser} color={color} size={30} />) }} />
     </Tab.Navigator>
