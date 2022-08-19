@@ -23,14 +23,20 @@ interface ProfileProps {
   navigation: any;
 }
 
-const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProps) => {
 
+
+
+const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProps) => {
+  
+  const onCreateAnAccount = () => {
+    navigation.navigate('Register');
+  }
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView style={{paddingHorizontal: 20}}>
           <View style={styles.containerIcon}>
-            <Pressable style={styles.icon} onPress={() => navigation.goBack()}>
+            <Pressable style={styles.icon} onPress={onCreateAnAccount}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
                 <FontAwesomeIcon icon={faGear} size={30} color="#ffffff"/>
               </VStack>

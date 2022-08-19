@@ -6,10 +6,11 @@ import { faHouse, faRoute, faMapLocationDot, faUser, faChartLine } from '@fortaw
 
 const Tab = createBottomTabNavigator();
 
-import Home from '../Pages/Home';
+import {HomeStack} from './stack.routes'
+import {ProfileStack} from './stack.routes'
+
 import Routes from '../Pages/Routes';
 import Start from '../Pages/Start';
-import Profile from '../Pages/Profile';
 import Activity from '../Pages/Activity';
 
 export function TabRoutes() {
@@ -31,7 +32,7 @@ export function TabRoutes() {
           height: 90
         }
       }}>
-      <Tab.Screen name="Home" component={Home} options={{ headerShown: false, tabBarIcon: ({color}) => (
+      <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faHouse} color={color} size={30} />) }} />
       <Tab.Screen name="Routes" component={Routes} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faMapLocationDot} color={color} size={30} />) }} />
@@ -39,7 +40,7 @@ export function TabRoutes() {
             <FontAwesomeIcon icon={faRoute} color={color} size={30} />) }} />
       <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faChartLine} color={color} size={30} />) }} />
-      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false, tabBarIcon: ({color}) => (
+      <Tab.Screen name="Profile" component={ProfileStack} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faUser} color={color} size={30} />) }} />
     </Tab.Navigator>
   );
