@@ -32,6 +32,10 @@ let mock = [
 
 const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
 
+  const onFeedDetails = () => {
+    navigation.navigate('FeedDetails');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
@@ -97,7 +101,7 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
                     <FontAwesomeIcon icon={faHeart} size={30} color="#ffffff"/>
                   </VStack>
                 </Pressable>
-                <Pressable style={styles.feedElementReactComment} onPress={() => navigation.goBack()}>
+                <Pressable style={styles.feedElementReactComment} onPress={onFeedDetails}>
                   <VStack width={'50%'} height={10} bgColor={"#04AA6C"} alignItems="center" justifyContent={"center"}>
                     <FontAwesomeIcon icon={faPlus} size={30} color="#ffffff"/>
                   </VStack>

@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator();
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import Home from '../Pages/Home';
+import FeedDetails from '../Pages/FeedDetails';
 import Profile from '../Pages/Profile';
 
 export function StackRoutes() {
@@ -25,6 +26,7 @@ export function HomeStack() {
   return (
     <Stack.Navigator initialRouteName='HomeStack'>
         <Stack.Screen name='HomeStack' component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name='FeedDetails' component={FeedDetails} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
