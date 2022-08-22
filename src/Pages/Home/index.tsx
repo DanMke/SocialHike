@@ -40,12 +40,16 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
     navigation.navigate('Notifications');
   }
 
+  const onSocial = () => {
+    navigation.navigate('Social');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
           <View style={styles.containerIcon}>
-            <Pressable style={styles.icon} onPress={() => navigation.goBack()}>
+            <Pressable style={styles.icon} onPress={onSocial}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
                 <FontAwesomeIcon icon={faUsers} size={30} color="#ffffff"/>
               </VStack>

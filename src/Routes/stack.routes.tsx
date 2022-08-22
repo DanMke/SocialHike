@@ -11,6 +11,7 @@ import Home from '../Pages/Home';
 import FeedDetails from '../Pages/FeedDetails';
 import Profile from '../Pages/Profile';
 import Notifications from '../Pages/Notifications';
+import Social from '../Pages/Social';
 
 export function StackRoutes() {
   return (
@@ -29,6 +30,7 @@ export function HomeStack() {
         <Stack.Screen name='HomeStack' component={Home} options={{ headerShown: false }} />
         <Stack.Screen name='FeedDetails' component={FeedDetails} options={{ headerShown: false }} />
         <Stack.Screen name='Notifications' component={Notifications} options={{ headerShown: false }} />
+        <Stack.Screen name='Social' component={Social} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
