@@ -36,6 +36,10 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
     navigation.navigate('FeedDetails');
   }
 
+  const onNotifications = () => {
+    navigation.navigate('Notifications');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
@@ -46,7 +50,7 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
                 <FontAwesomeIcon icon={faUsers} size={30} color="#ffffff"/>
               </VStack>
             </Pressable>
-            <Pressable style={styles.icon} onPress={() => navigation.goBack()}>
+            <Pressable style={styles.icon} onPress={onNotifications}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
                 <FontAwesomeIcon icon={faBell} size={30} color="#ffffff"/>
               </VStack>
