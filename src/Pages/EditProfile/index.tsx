@@ -17,21 +17,18 @@ import SocialHikeIcon from '../../../assets/socialhikeicon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-interface RegisterProps {
+interface EditProfileProps {
   navigation: any;
 }
 
-const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
+const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps) => {
 
   const [email, setEmail] = React.useState<string>('');
-  const [password, setPassword] = React.useState<string>('');
-  const [confirmPassword, setConfirmPassword] = React.useState<string>('');
   const [firstName, setFirstName] = React.useState<string>('');
   const [lastName, setLastName] = React.useState<string>('');
   const [weight, setWeight] = React.useState<number>(0.0);
   const [height, setHeight] = React.useState<number>(0.0);
   const [birth, setBirth] = React.useState<string>('');
-  const [username, setUsername] = React.useState<string>('');
 
   const [errors, setErrors] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
@@ -41,14 +38,6 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
     let e = {};
     if (email === undefined || email === '') {
       e = Object.assign(e, {email: 'Email is required'});
-      valid = false;
-    }
-    if (password === undefined || password === '') {
-      e = Object.assign(e, {password: 'Password is required'});
-      valid = false;
-    }
-    if (confirmPassword === undefined || confirmPassword === '') {
-      e = Object.assign(e, {confirmPassword: 'Confirm Password is required'});
       valid = false;
     }
     if (firstName === undefined || firstName === '') {
@@ -71,18 +60,14 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       e = Object.assign(e, {birth: 'Birth is required'});
       valid = false;
     }
-    if (username === undefined || username === '') {
-      e = Object.assign(e, {username: 'Username is required'});
-      valid = false;
-    }
     setErrors(e);
     return valid;
   };
   
-  const onCreateAnAccount = () => {
+  const onSave = () => {
     setErrors({});
     validate() ? console.log('Submitted') : console.log('Validation Failed');
-    // navigation.navigate('Login');
+    navigation.goBack();
   }
 
   return (
@@ -102,6 +87,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
               <FormControl isInvalid={('email' in errors)}>
                 <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Email</FormControl.Label>
                 <Input
+                  isDisabled={true}
                   placeholder=""
                   type="text"
                   selectionColor={'#15573E'}
@@ -110,6 +96,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                   color={'#E9E8E8'}
                   variant="underlined"
                   borderColor={'#04C37D'}
+                  value={"danmke@hotmail.com"}
                   onChangeText={value => setEmail(value)}
                 />
                 
@@ -119,66 +106,8 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                   </FormControl.ErrorMessage>
                 )}
               </FormControl>
-              <FormControl isInvalid={('username' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Username</FormControl.Label>
-                <Input
-                  placeholder=""
-                  type="text"
-                  selectionColor={'#15573E'}
-                  size="md"
-                  _focus={{borderColor: '#15573E'}}
-                  color={'#E9E8E8'}
-                  variant="underlined"
-                  borderColor={'#04C37D'}
-                  onChangeText={value => setUsername(value)}
-                />
-                
-                {'username' in errors && (
-                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                    {errors.username}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
-              <FormControl isInvalid={('password' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Password</FormControl.Label>
-                <Input
-                  placeholder=""
-                  selectionColor={'#15573E'}
-                  size="md"
-                  _focus={{borderColor: '#15573E'}}
-                  color={'#E9E8E8'}
-                  variant="underlined"
-                  borderColor={'#04C37D'}
-                  onChangeText={value => setPassword(value)}
-                  type={showPassword ? "text" : "password"} 
-                  InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
-                />
-                {'password' in errors && (
-                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                    {errors.password}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
-              <FormControl isInvalid={('confirmPassword' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Confirm Password</FormControl.Label>
-                <Input
-                  placeholder=""
-                  selectionColor={'#15573E'}
-                  size="md"
-                  _focus={{borderColor: '#15573E'}}
-                  color={'#E9E8E8'}
-                  variant="underlined"
-                  borderColor={'#04C37D'}
-                  onChangeText={value => setConfirmPassword(value)}
-                  type={showPassword ? "text" : "password"} 
-                  InputRightElement={<IconButton icon={<FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} size={20} color="#8C8A8C"/>} onPress={() => setShowPassword(!showPassword)}/>}
-                />
-                {('confirmPassword') in errors && (
-                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                    {errors.confirmPassword}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
+             
+
               <FormControl isInvalid={('firstName' in errors)}>
                 <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
                 <Input
@@ -279,7 +208,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 )}
               </FormControl>
               <Button
-                onPress={onCreateAnAccount}
+                onPress={onSave}
                 mt="8"
                 _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
                 backgroundColor={'#15573E'}
@@ -287,7 +216,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 paddingBottom={4}
                 borderRadius={10}
                 mb={10}>
-                Create An Account
+                Save
               </Button>
             </VStack>
           </View>
@@ -298,4 +227,4 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   );
 };
 
-export default Register;
+export default EditProfile;

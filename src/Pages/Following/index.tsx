@@ -15,13 +15,13 @@ import {updateUser} from '../../Redux/actions';
 
 import styles from './styles';
 
-interface SocialProps {
+interface FollowingProps {
   onTest?: any;
   user: any;
   navigation: any;
 }
 
-const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) => {
+const Following: React.FC<FollowingProps> = ({onTest, user, navigation}: FollowingProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,8 +45,8 @@ const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) 
                   <Text style={styles.feedElementText}>Daniel Maike</Text>
                 </View>
               </View>
-              <Button backgroundColor={"#04AA6C"} onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonText}>Follow</Text>
+              <Button backgroundColor={"#15573E"} onPress={() => navigation.goBack()}>
+                <Text style={styles.buttonText}>Unfollow</Text>
               </Button>
             </View>
           </View>
@@ -68,4 +68,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Social);
+export default connect(mapStateToProps, mapDispatchToProps)(Following);

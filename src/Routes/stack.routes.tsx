@@ -12,6 +12,9 @@ import FeedDetails from '../Pages/FeedDetails';
 import Profile from '../Pages/Profile';
 import Notifications from '../Pages/Notifications';
 import Social from '../Pages/Social';
+import Followers from '../Pages/Followers';
+import Following from '../Pages/Following';
+import EditProfile from '../Pages/EditProfile';
 
 export function StackRoutes() {
   return (
@@ -39,6 +42,9 @@ export function ProfileStack() {
   return (
     <Stack.Navigator initialRouteName='ProfileStack'>
         <Stack.Screen name='ProfileStack' component={Profile} options={{ headerShown: false }} />
+        <Stack.Screen name='Followers' component={Followers} options={{ headerShown: false }} />
+        <Stack.Screen name='Following' component={Following} options={{ headerShown: false }} />
+        <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

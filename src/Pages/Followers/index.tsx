@@ -15,13 +15,13 @@ import {updateUser} from '../../Redux/actions';
 
 import styles from './styles';
 
-interface SocialProps {
+interface FollowersProps {
   onTest?: any;
   user: any;
   navigation: any;
 }
 
-const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) => {
+const Followers: React.FC<FollowersProps> = ({onTest, user, navigation}: FollowersProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,4 +68,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Social);
+export default connect(mapStateToProps, mapDispatchToProps)(Followers);

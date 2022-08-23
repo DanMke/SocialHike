@@ -25,12 +25,24 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProps) => {
 
+  const onFollowers = () => {
+    navigation.navigate('Followers');
+  }
+
+  const onFollowing = () => {
+    navigation.navigate('Following');
+  }
+
+  const onEditProfile = () => {
+    navigation.navigate('EditProfile');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
         <ScrollView style={{paddingHorizontal: 20}}>
           <View style={styles.containerIcon}>
-            <Pressable style={styles.icon} onPress={() => navigation.goBack()}>
+            <Pressable style={styles.icon} onPress={onEditProfile}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
                 <FontAwesomeIcon icon={faGear} size={30} color="#ffffff"/>
               </VStack>
@@ -59,14 +71,14 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
                 </View>
               </View>
               <View style={styles.profileUserDetailsTwo}>
-                <View style={{alignItems: 'center'}}>
+                <Pressable style={{alignItems: 'center'}} onPress={onFollowers}>
                   <Text style={styles.feedElementDetailsTextDark}>Followers</Text>
                   <Text style={styles.feedElementDetailsText}>9</Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
+                </Pressable>
+                <Pressable style={{alignItems: 'center'}} onPress={onFollowing}>
                   <Text style={styles.feedElementDetailsTextDark}>Following</Text>
                   <Text style={styles.feedElementDetailsText}>12</Text>
-                </View>
+                </Pressable>
               </View>
             </View>
             <View style={styles.activity}>
