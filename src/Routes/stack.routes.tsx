@@ -5,16 +5,16 @@ import {TabRoutes} from './tab.routes';
 
 const Stack = createNativeStackNavigator();
 
-import Login from '../Pages/Login';
-import Register from '../Pages/Register';
-import Home from '../Pages/Home';
-import FeedDetails from '../Pages/FeedDetails';
-import Profile from '../Pages/Profile';
-import Notifications from '../Pages/Notifications';
-import Social from '../Pages/Social';
-import Followers from '../Pages/Followers';
-import Following from '../Pages/Following';
-import EditProfile from '../Pages/EditProfile';
+import Login from '../Screens/Login';
+import Register from '../Screens/Register';
+import Home from '../Screens/Home';
+import FeedDetails from '../Screens/FeedDetails';
+import Profile from '../Screens/Profile';
+import Notifications from '../Screens/Notifications';
+import Social from '../Screens/Social';
+import Followers from '../Screens/Followers';
+import Following from '../Screens/Following';
+import EditProfile from '../Screens/EditProfile';
 
 export function StackRoutes() {
   return (

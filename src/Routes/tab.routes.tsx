@@ -9,9 +9,9 @@ const Tab = createBottomTabNavigator();
 import {HomeStack} from './stack.routes'
 import {ProfileStack} from './stack.routes'
 
-import Routes from '../Pages/Routes';
-import Start from '../Pages/Start';
-import Activity from '../Pages/Activity';
+import Routes from '../Screens/Routes';
+import Start from '../Screens/Start';
+import Activity from '../Screens/Activity';
 
 export function TabRoutes() {
   return (
