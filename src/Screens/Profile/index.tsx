@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faGear } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 import styles from './styles';
 
 import {LineChart} from "react-native-chart-kit";
@@ -27,15 +27,19 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
 
   const onFollowers = () => {
     navigation.navigate('Followers');
-  }
+  };
 
   const onFollowing = () => {
     navigation.navigate('Following');
-  }
+  };
 
   const onEditProfile = () => {
     navigation.navigate('EditProfile');
-  }
+  };
+  
+  const onSignOut = () => {
+    navigation.navigate('Login');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,6 +49,11 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
             <Pressable style={styles.icon} onPress={onEditProfile}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
                 <FontAwesomeIcon icon={faGear} size={30} color="#ffffff"/>
+              </VStack>
+            </Pressable>
+            <Pressable style={styles.icon} onPress={onSignOut}>
+              <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
+                <FontAwesomeIcon icon={faDoorOpen} size={30} color="#ffffff"/>
               </VStack>
             </Pressable>
           </View>

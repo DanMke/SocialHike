@@ -6,7 +6,7 @@ export default StyleSheet.create({
     backgroundColor: '#211F20',
   },
   containerIcon: {
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: 20,
