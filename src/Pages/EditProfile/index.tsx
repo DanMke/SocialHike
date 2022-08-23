@@ -4,7 +4,6 @@ import {
     FormControl,
     Button,
     WarningOutlineIcon,
-    IconButton,
     Pressable,
     ArrowBackIcon
   } from 'native-base';
@@ -14,8 +13,6 @@ import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react
 import styles from './styles';
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 interface EditProfileProps {
   navigation: any;
