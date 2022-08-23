@@ -1,4 +1,5 @@
 import {
+  Button,
   ScrollView, View,
 } from 'native-base';
 import React, {useEffect} from 'react';
@@ -27,6 +28,8 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const [altitude, setAltitude] = React.useState(0);
   const [speed, setSpeed] = React.useState(0);
 
+  let intervalGetCurrentPosition = null;
+
   useEffect(() => {
     // TODO geolocation request authorization if not authorized
     // Geolocation.requestAuthorization("always");
@@ -42,7 +45,30 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
 
-    const intervalGetCurrentPosition = setInterval(() => {
+    // const intervalGetCurrentPosition = setInterval(() => {
+    //   console.log('Logs every second');
+    //   Geolocation.getCurrentPosition(
+    //     (position) => {
+    //       console.log(position);
+    //       setLatitude(position.coords.latitude);
+    //       setLongitude(position.coords.longitude);
+    //       setAltitude(position.coords.altitude);
+    //       setSpeed(position.coords.speed);
+    //     },
+    //     (error) => {
+    //       console.log(error);
+    //     },
+    //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    //   );
+    // }, 1000);
+    // // TODO: On FOCUS OUT clear interval
+    // // TODO: update location in background
+    // return () => clearInterval(intervalGetCurrentPosition); 
+
+  } , []);
+  
+  const onStart = () => {
+    intervalGetCurrentPosition = setInterval(() => {
       console.log('Logs every second');
       Geolocation.getCurrentPosition(
         (position) => {
@@ -58,12 +84,11 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
     }, 1000);
-    // TODO: On FOCUS OUT clear interval
-    // TODO: update location in background
-    return () => clearInterval(intervalGetCurrentPosition); 
+  };
 
-  } , []);
-  
+  const onStop = () => {
+    return () => clearInterval(intervalGetCurrentPosition); // TODO: Fix this
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,10 +108,21 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
             }}
           >
           </MapView>
-        <Text style={{color: 'white'}}>LATITUDE: {latitude}</Text>
-        <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
-        <Text style={{color: 'white'}}>ALTITUDE: {altitude}</Text>
-        <Text style={{color: 'white'}}>SPEED: {speed}</Text>
+          <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{color: 'white'}}>LATITUDE: {latitude}</Text>
+            <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
+            <Text style={{color: 'white'}}>ALTITUDE: {altitude}</Text>
+            <Text style={{color: 'white'}}>SPEED: {speed}</Text>
+            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart}>
+              <Text style={{color: '#fff', fontSize: 16}}>Start</Text>
+            </Button>
+            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+              <Text style={{color: '#fff', fontSize: 16}}>Pause</Text>
+            </Button>
+            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+              <Text style={{color: '#fff', fontSize: 16}}>Stop</Text>
+            </Button>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
