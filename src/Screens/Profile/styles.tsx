@@ -21,7 +21,7 @@ export default StyleSheet.create({
   },
   profile: {
     backgroundColor: "#333333",
-    height: 180,
+    height: 200,
     marginTop: 20,
     padding: 20,
     flexDirection: 'column',
@@ -60,7 +60,7 @@ export default StyleSheet.create({
   },
   activity: {
     backgroundColor: "#333333",
-    height: 350,
+    height: 360,
     marginTop: 20,
     width: '100%',
     padding: 20,

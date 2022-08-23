@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   notificationElement: {
     backgroundColor: '#333333',
-    height: 100,
+    height: 120,
     borderTopColor: '#fff',
     borderTopWidth: 1,
     borderBottomColor: '#fff',

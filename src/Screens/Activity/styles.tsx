@@ -7,7 +7,7 @@ export default StyleSheet.create({
   },
   feedElement: {
     backgroundColor: '#333333',
-    height: 500,
+    minHeight: 650,
     marginVertical: 5,
   },
   feedElementMap: {
