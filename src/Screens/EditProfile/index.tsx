@@ -196,6 +196,7 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
                   color={'#E9E8E8'}
                   variant="underlined"
                   borderColor={'#04C37D'}
+                  isDisabled={true}
                   onChangeText={value => setBirth((value as unknown) as Date)}
                 />
                 {('birth') in errors && (
