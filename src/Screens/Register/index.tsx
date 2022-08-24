@@ -11,6 +11,8 @@ import {
 import React from 'react';
 import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
 
+import DatePicker from 'react-native-date-picker'
+
 import styles from './styles';
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
@@ -30,11 +32,13 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   const [lastName, setLastName] = React.useState<string>('');
   const [weight, setWeight] = React.useState<number>(0.0);
   const [height, setHeight] = React.useState<number>(0.0);
-  const [birth, setBirth] = React.useState<string>('');
+  const [birth, setBirth] = React.useState<Date>(new Date());
   const [username, setUsername] = React.useState<string>('');
 
   const [errors, setErrors] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   const validate = () => {
     let valid = true;
@@ -270,8 +274,24 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                   color={'#E9E8E8'}
                   variant="underlined"
                   borderColor={'#04C37D'}
+                  onPressIn={() => setShowDatePicker(true)}
+                  value={birth.toLocaleDateString("en-US")}
                   onChangeText={value => setBirth((value as unknown) as Date)}
                 />
+                <DatePicker
+                  modal
+                  open={showDatePicker}
+                  date={birth}
+                  mode="date"
+                  onConfirm={(date) => {
+                    setShowDatePicker(false)
+                    setBirth(date)
+                  }}
+                  onCancel={() => {
+                    setShowDatePicker(false)
+                  }}
+                />
+
                 {('birth') in errors && (
                   <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
                     {errors.birth}
