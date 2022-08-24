@@ -124,7 +124,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 )}
               </FormControl>
               <FormControl isInvalid={('username' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Username</FormControl.Label>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Username</FormControl.Label>
                 <Input
                   placeholder=""
                   type="text"

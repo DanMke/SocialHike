@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "930837684088",
+    "project_id": "social-hike",
+    "storage_bucket": "social-hike.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930837684088:android:c9aefbb22e84eefa47328d",
+        "android_client_info": {
+          "package_name": "com.socialhike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930837684088-mbqg0ut6v23d4ghck9e8n7uos0nae0pt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8czF0JFwy65qSiVeBxUSb0npSBvi_1XY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930837684088-mbqg0ut6v23d4ghck9e8n7uos0nae0pt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

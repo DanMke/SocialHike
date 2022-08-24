@@ -26,12 +26,14 @@
 #endif
 
 #import <GoogleMaps/GoogleMaps.h>
+#import <Firebase.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [GMSServices provideAPIKey:@"AIzaSyB7s0q8XsrI4Ih0gnv19wuZOlyE32fc_ds"];
+  [FIRApp configure];
   
   RCTAppSetupPrepareApp(application);
 

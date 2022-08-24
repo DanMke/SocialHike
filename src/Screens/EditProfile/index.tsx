@@ -28,13 +28,18 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
   const [birth, setBirth] = React.useState<string>('');
 
   const [errors, setErrors] = React.useState({});
-  const [showPassword, setShowPassword] = React.useState(false);
+
+  const [username, setUsername] = React.useState<string>('');
 
   const validate = () => {
     let valid = true;
     let e = {};
     if (email === undefined || email === '') {
       e = Object.assign(e, {email: 'Email is required'});
+      valid = false;
+    }
+    if (username === undefined || username === '') {
+      e = Object.assign(e, {username: 'Username is required'});
       valid = false;
     }
     if (firstName === undefined || firstName === '') {
@@ -103,7 +108,29 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
                   </FormControl.ErrorMessage>
                 )}
               </FormControl>
-             
+
+              <FormControl isInvalid={('username' in errors)}>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Username</FormControl.Label>
+                <Input
+                  isDisabled={true}
+                  placeholder=""
+                  type="text"
+                  selectionColor={'#15573E'}
+                  size="md"
+                  _focus={{borderColor: '#15573E'}}
+                  color={'#E9E8E8'}
+                  variant="underlined"
+                  borderColor={'#04C37D'}
+                  value={"@danielmaike"}
+                  onChangeText={value => setUsername(value)}
+                />
+                
+                {'username' in errors && (
+                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                    {errors.username}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
 
               <FormControl isInvalid={('firstName' in errors)}>
                 <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
