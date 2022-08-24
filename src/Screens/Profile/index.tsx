@@ -91,7 +91,7 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
               </View>
             </View>
             <View style={styles.activity}>
-              <Text style={styles.feedElementUserText}>Activity in Time</Text>
+              <Text style={styles.feedElementUserText}>Activity in this Year</Text>
               <View style={styles.profileUserDetailsTwo}>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Time</Text>
@@ -102,8 +102,8 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
                   <Text style={styles.feedElementDetailsText}>12.78km</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.feedElementDetailsTextDark}>Weight</Text>
-                  <Text style={styles.feedElementDetailsText}>98kg</Text>
+                  <Text style={styles.feedElementDetailsTextDark}>Activities</Text>
+                  <Text style={styles.feedElementDetailsText}>98</Text>
                 </View>
               </View>
               <LineChart
