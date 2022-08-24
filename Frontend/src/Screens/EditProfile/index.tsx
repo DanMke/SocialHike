@@ -236,12 +236,23 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
                 onPress={onSave}
                 mt="8"
                 _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
+                backgroundColor={'#04C37D'}
+                paddingTop={4}
+                paddingBottom={4}
+                borderRadius={10}
+                mb={2}>
+                Save
+              </Button>
+              <Button
+                onPress={onSave}
+                mt="2"
+                _text={{fontWeight: 'bold', fontSize: 'md', color: '#E9E8E8'}}
                 backgroundColor={'#15573E'}
                 paddingTop={4}
                 paddingBottom={4}
                 borderRadius={10}
                 mb={10}>
-                Save
+                Delete Account
               </Button>
             </VStack>
           </View>
