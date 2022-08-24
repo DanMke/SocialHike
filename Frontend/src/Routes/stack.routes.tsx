@@ -22,7 +22,7 @@ export function StackRoutes() {
         <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
         <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
         <Stack.Screen name='TabRoutes' component={TabRoutes} options={{ headerShown: false }} />
-        <Stack.Screen name='HomeTab' component={Home} options={{ headerShown: false }} />
+        {/* <Stack.Screen name='HomeTab' component={Home} options={{ headerShown: false }} /> */}
     </Stack.Navigator>
   );
 }
