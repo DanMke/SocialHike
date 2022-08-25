@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 
+import userRouter from './routes/user.routes';
+
 // Porta do servidor
 const PORT = process.env.PORT || 4000;
 
@@ -10,20 +12,24 @@ const HOSTNAME = process.env.HOSTNAME || 'http://localhost';
 // App Express
 const app = express();
 
-// Endpoint raiz
-app.get('/', (req, res) => {
-    res.send('Bem-vindo!');
-});
+// JSON
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Cors
 app.use(cors({
     origin: ['http://localhost:3000'],
 }));
 
-// Resposta padrão para quaisquer outras requisições:
-app.use((req, res) => {
-    res.status(404);
+
+// Endpoint raiz
+app.get('/', (req, res) => {
+    res.send('Bem-vindo!');
 });
+
+
+
+app.use(userRouter);
 
 // Inicia o sevidor
 app.listen(PORT, () => {
