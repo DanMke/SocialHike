@@ -6,10 +6,11 @@ import {
     WarningOutlineIcon,
     IconButton,
     Pressable,
-    ArrowBackIcon
+    ArrowBackIcon,
+    Image
   } from 'native-base';
 import React from 'react';
-import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {View, SafeAreaView, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 import DatePicker from 'react-native-date-picker'
 
@@ -99,10 +100,57 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 <ArrowBackIcon size="xl" color="#ffffff" />
               </VStack>
             </Pressable>
-            <Image source={SocialHikeIcon} style={styles.icon} />
+            <Image source={SocialHikeIcon} style={styles.icon} alt="App Icon" />
           </View>
           <View style={styles.containerInputs}>
             <VStack width="90%" mx="3" maxW="320px">
+              <View>
+              <View style={{flexDirection: "row", alignItems: 'center'}}>
+                <Image width={20} height={20} borderRadius={100} source={{
+                    uri: "https://wallpaperaccess.com/full/317501.jpg"
+                    }} alt="User Image" />
+                <View style={{flexDirection: "column", width: '70%', marginLeft: 20}}>
+                  <FormControl isInvalid={('firstName' in errors)}>
+                    <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">First Name</FormControl.Label>
+                    <Input
+                      placeholder=""
+                      type="text"
+                      selectionColor={'#15573E'}
+                      size="md"
+                      _focus={{borderColor: '#15573E'}}
+                      color={'#E9E8E8'}
+                      variant="underlined"
+                      borderColor={'#04C37D'}
+                      onChangeText={value => setFirstName(value)}
+                    />
+                    {('firstName') in errors && (
+                      <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                        {errors.firstName}
+                      </FormControl.ErrorMessage>
+                    )}
+                  </FormControl>  
+                  <FormControl isInvalid={('lastName' in errors)}>
+                    <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Last Name</FormControl.Label>
+                    <Input
+                      placeholder=""
+                      type="text"
+                      selectionColor={'#15573E'}
+                      size="md"
+                      _focus={{borderColor: '#15573E'}}
+                      color={'#E9E8E8'}
+                      variant="underlined"
+                      borderColor={'#04C37D'}
+                      onChangeText={value => setLastName(value)}
+                    />
+                    {('lastName') in errors && (
+                      <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
+                        {errors.lastName}
+                      </FormControl.ErrorMessage>
+                    )}
+                  </FormControl>
+                </View>
+              </View>
+              </View>
               <FormControl isInvalid={('email' in errors)}>
                 <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">Email</FormControl.Label>
                 <Input
@@ -183,44 +231,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                   </FormControl.ErrorMessage>
                 )}
               </FormControl>
-              <FormControl isInvalid={('firstName' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">First Name</FormControl.Label>
-                <Input
-                  placeholder=""
-                  type="text"
-                  selectionColor={'#15573E'}
-                  size="md"
-                  _focus={{borderColor: '#15573E'}}
-                  color={'#E9E8E8'}
-                  variant="underlined"
-                  borderColor={'#04C37D'}
-                  onChangeText={value => setFirstName(value)}
-                />
-                {('firstName') in errors && (
-                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                    {errors.firstName}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
-              <FormControl isInvalid={('lastName' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Last Name</FormControl.Label>
-                <Input
-                  placeholder=""
-                  type="text"
-                  selectionColor={'#15573E'}
-                  size="md"
-                  _focus={{borderColor: '#15573E'}}
-                  color={'#E9E8E8'}
-                  variant="underlined"
-                  borderColor={'#04C37D'}
-                  onChangeText={value => setLastName(value)}
-                />
-                {('lastName') in errors && (
-                  <FormControl.ErrorMessage fontSize={'sm'} leftIcon={<WarningOutlineIcon size="sm" />}>
-                    {errors.lastName}
-                  </FormControl.ErrorMessage>
-                )}
-              </FormControl>
+              
               <FormControl isInvalid={('weight' in errors)}>
                 <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
                 <Input
