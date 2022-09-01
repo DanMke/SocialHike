@@ -54,7 +54,7 @@ const Notifications: React.FC<NotificationsProps> = ({onTest, user, navigation}:
           <View>
             {mockNotifications.map((notification) => {
               return (
-                <View style={styles.notificationElement}>
+                <View style={styles.notificationElement} key={notification.id}>
                   <View style={{flexDirection: 'row'}}>
                     <FontAwesomeIcon icon={faBell} size={20} color="#ffffff"/>
                     <Text style={styles.notificationElementText}>{notification.title}</Text>
