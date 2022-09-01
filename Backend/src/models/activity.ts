@@ -81,7 +81,8 @@ const activitySchema = new Schema({
     },
     user: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     createdAt: {
         type: Date,
