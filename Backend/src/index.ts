@@ -1,12 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 
-import connectDB from './database/database';
+import connectDB from './config/database';
 import userRouter from './routes/user.routes';
 
-const PORT = process.env.PORT || 4000;
-
-const HOSTNAME = process.env.HOSTNAME || 'http://localhost';
+const PORT = 4000;
+const HOSTNAME = 'http://localhost';
 
 connectDB();
 

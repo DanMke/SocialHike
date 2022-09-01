@@ -1,14 +1,16 @@
 import express from 'express';
 
+import UserController from '../controllers/user.controller';
+
 const userRouter = express.Router();
 
-userRouter.post('/users', (req, res) => {
-    const user = req.body;
-    console.log(user);
-    // create user object
-    // salvar no banco de dados
-    res.send('Cria novo item');
-});
+userRouter.post('/users', UserController.createUser);
+    
+    // const user = req.body;
+    // console.log(user);
+    // // create user object
+    // // salvar no banco de dados
+    // res.send('Cria novo item');
 
 userRouter.get('/users', (req, res) => {
     res.send('Lê todos os itens');

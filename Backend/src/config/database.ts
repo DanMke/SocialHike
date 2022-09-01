@@ -1,7 +1,6 @@
+import mongoose from 'mongoose';
 
-import mongoose, {Schema} from 'mongoose';
-
-const uri = "mongodb+srv://socialhikeadmin:iiCtYiCCARaFfFR7@clustersocialhike.9tygyk5.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://socialhikeadmin:iiCtYiCCARaFfFR7@clustersocialhike.9tygyk5.mongodb.net/socialhike?retryWrites=true&w=majority";
 
 // const mongoOptions = {
 //     useFindAndModify: false,
