@@ -109,7 +109,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 <Image width={20} height={20} borderRadius={100} source={{
                     uri: "https://wallpaperaccess.com/full/317501.jpg"
                     }} alt="User Image" />
-                <View style={{flexDirection: "column", width: '70%', marginLeft: 20}}>
+                <View style={{flexDirection: "column", width: '70%', marginLeft: 15}}>
                   <FormControl isInvalid={('firstName' in errors)}>
                     <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">First Name</FormControl.Label>
                     <Input
