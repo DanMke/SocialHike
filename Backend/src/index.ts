@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import connectDatabase from './config/database';
 import userRouter from './routes/user.routes';
+import activityRouter from './routes/activity.routes';
 
 const PORT = 4000;
 const HOSTNAME = 'http://localhost';
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(userRouter);
+app.use(activityRouter);
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando com sucesso ${HOSTNAME}:${PORT}`);
