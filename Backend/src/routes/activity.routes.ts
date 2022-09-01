@@ -10,4 +10,8 @@ activityRouter.get('/activities', ActivityController.getActivities);
 
 activityRouter.get('/activities/:email', ActivityController.getActivitiesByUser);
 
+activityRouter.get('/activities/near', ActivityController.getActivitiesNearestOfPoint);
+
+activityRouter.get('/activities/following/:email', ActivityController.getActivitiesOfFollowingUsers);
+
 export default activityRouter;

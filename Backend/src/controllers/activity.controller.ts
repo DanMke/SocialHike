@@ -44,6 +44,29 @@ const ActivityController = {
             console.log(error);
             return res.status(500).send(error);
         }
+    },
+    getActivitiesNearestOfPoint: async (req: express.Request, res: express.Response) => {
+        try {
+            const point = req.body;
+            const activities = await ActivityService.getActivities();
+            //TODO: Filter by point
+            return res.status(200).json(activities);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    getActivitiesOfFollowingUsers: async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.params.email;
+            const activities = await ActivityService.getActivities();
+            // TODO: Get following users
+            // TODO: Get activities of following users
+            return res.status(200).json(activities);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
     }
 }
 

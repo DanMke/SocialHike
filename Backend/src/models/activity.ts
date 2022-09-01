@@ -13,6 +13,32 @@ const activitySchema = new Schema({
         type: String,
         required: true
     },
+    likes: {
+        type: Number,
+        default: 0
+    },
+    comments: [
+        {
+            user: {
+                type: String,
+                required: true
+            },
+            comment: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+    initialCoord: {
+        latitude: {
+            type: Number,
+            required: true
+        },
+        longitude: {
+            type: Number,
+            required: true
+        },
+    },
     points: [
         {
             coords: {
