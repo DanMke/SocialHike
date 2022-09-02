@@ -17,6 +17,8 @@ import styles from './styles';
 
 import {LineChart} from "react-native-chart-kit";
 
+import auth from '@react-native-firebase/auth';
+
 interface ProfileProps {
   onTest?: any;
   user: any;
@@ -38,6 +40,10 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
   };
   
   const onSignOut = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'))
+      .catch((error) => console.log(error));
     navigation.navigate('Login');
   };
 
