@@ -7,7 +7,8 @@ import {
     IconButton,
     Pressable,
     ArrowBackIcon,
-    Image
+    Image,
+    Modal
   } from 'native-base';
 import React from 'react';
 import {View, SafeAreaView, ScrollView, KeyboardAvoidingView} from 'react-native';
@@ -39,47 +40,49 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   const [username, setUsername] = React.useState<string>('');
 
   const [errors, setErrors] = React.useState({});
-  const [showPassword, setShowPassword] = React.useState(false);
 
+  const [showPassword, setShowPassword] = React.useState(false);
   const [showDatePicker, setShowDatePicker] = React.useState(false);
+
+  const [showModal, setShowModal] = React.useState(false);
 
   const validate = () => {
     let valid = true;
     let e = {};
     if (email === undefined || email === '') {
-      e = Object.assign(e, {email: 'Email is required'});
+      e = Object.assign(e, {email: 'Email is required or incorrect'});
       valid = false;
     }
     if (password === undefined || password === '') {
-      e = Object.assign(e, {password: 'Password is required'});
+      e = Object.assign(e, {password: 'Password is required or incorrect'});
       valid = false;
     }
     if (confirmPassword === undefined || confirmPassword === '') {
-      e = Object.assign(e, {confirmPassword: 'Confirm Password is required'});
+      e = Object.assign(e, {confirmPassword: 'Confirm Password is required or incorrect'});
       valid = false;
     }
     if (firstName === undefined || firstName === '') {
-      e = Object.assign(e, {firstName: 'First Name is required'});
+      e = Object.assign(e, {firstName: 'First Name is required or incorrect'});
       valid = false;
     }
     if (lastName === undefined || lastName === '') {
-      e = Object.assign(e, {lastName: 'Last Name is required'});
+      e = Object.assign(e, {lastName: 'Last Name is required or incorrect'});
       valid = false;
     }
     if (weight === undefined || weight === 0.0) {
-      e = Object.assign(e, {weight: 'Weight is required'});
+      e = Object.assign(e, {weight: 'Weight is required or incorrect'});
       valid = false;
     }
     if (height === undefined || height === 0.0) {
-      e = Object.assign(e, {height: 'Height is required'});
+      e = Object.assign(e, {height: 'Height is required or incorrect'});
       valid = false;
     }
-    if (birth === undefined || birth === '') {
-      e = Object.assign(e, {birth: 'Birth is required'});
+    if (birth === undefined || birth.getFullYear() > 2010) {
+      e = Object.assign(e, {birth: 'Birth is required or incorrect'});
       valid = false;
     }
     if (username === undefined || username === '') {
-      e = Object.assign(e, {username: 'Username is required'});
+      e = Object.assign(e, {username: 'Username is required or incorrect'});
       valid = false;
     }
     setErrors(e);
@@ -87,25 +90,25 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   };
   
   const onCreateAnAccount = () => {
-
-    auth()
-      .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-      .then(() => {
+    if (validate()) {
+      console.log('Submitted and Validated');
+      auth().createUserWithEmailAndPassword(email, password).then(() => {
         console.log('User account created & signed in!');
-      })
-      .catch(error => {
+        // TODO: Add user to database
+        navigation.navigate('Login');
+      }).catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
         }
-
         if (error.code === 'auth/invalid-email') {
           console.log('That email address is invalid!');
         }
-
         console.error(error);
       });
-    validate() ? console.log('Submitted') : console.log('Validation Failed');
-    // navigation.navigate('Login');
+    } else {
+      console.log(errors);
+      console.log('Validation Failed');
+    }
   }
 
   return (
@@ -337,8 +340,45 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 borderRadius={10}
                 mb={10}>
                 Create An Account
-              </Button>
+              </Button>              
             </VStack>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Forgot Password?</Modal.Header>
+                <Modal.Body>
+                  Enter email address and we'll send a link to reset your password.
+                  <FormControl>
+                    <FormControl.Label mt={4}>Email</FormControl.Label>
+                    <Input
+                      placeholder=""
+                      type="text"
+                      selectionColor={'#15573E'}
+                      size="md"
+                      _focus={{borderColor: '#15573E'}}
+                      color={'#E9E8E8'}
+                      variant="underlined"
+                      borderColor={'#04C37D'}
+                      onChangeText={value => setEmailForgotPassword(value)}
+                    />
+                  </FormControl>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button backgroundColor={'#15573E'} onPress={() => {
+                    setShowModal(false);
+                    }}>
+                      Cancel
+                    </Button>
+                    <Button backgroundColor={'#04AA6C'} onPress={() => {
+                    setShowModal(false);
+                    }}>
+                      Send Email
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

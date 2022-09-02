@@ -49,7 +49,6 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   
   const onStart = () => {
     const interval = setInterval(() => {
-      console.log('Logs every second');
       Geolocation.getCurrentPosition(
         (position) => {
           console.log(position);
