@@ -28,7 +28,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const [altitude, setAltitude] = React.useState(0);
   const [speed, setSpeed] = React.useState(0);
 
-  let intervalGetCurrentPosition = null;
+  const [intervalGetCurrentPosition, setIntervalGetCurrentPosition] = React.useState<any>();
 
   useEffect(() => {
     // TODO geolocation request authorization if not authorized
@@ -45,30 +45,10 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
 
-    // const intervalGetCurrentPosition = setInterval(() => {
-    //   console.log('Logs every second');
-    //   Geolocation.getCurrentPosition(
-    //     (position) => {
-    //       console.log(position);
-    //       setLatitude(position.coords.latitude);
-    //       setLongitude(position.coords.longitude);
-    //       setAltitude(position.coords.altitude);
-    //       setSpeed(position.coords.speed);
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     },
-    //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    //   );
-    // }, 1000);
-    // // TODO: On FOCUS OUT clear interval
-    // // TODO: update location in background
-    // return () => clearInterval(intervalGetCurrentPosition); 
-
   } , []);
   
   const onStart = () => {
-    intervalGetCurrentPosition = setInterval(() => {
+    const interval = setInterval(() => {
       console.log('Logs every second');
       Geolocation.getCurrentPosition(
         (position) => {
@@ -84,10 +64,11 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
     }, 1000);
+    setIntervalGetCurrentPosition(interval);
   };
 
   const onStop = () => {
-    return () => clearInterval(intervalGetCurrentPosition); // TODO: Fix this
+    return clearInterval(intervalGetCurrentPosition);
   };
 
   return (

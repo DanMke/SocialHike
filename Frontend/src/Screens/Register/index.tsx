@@ -17,8 +17,10 @@ import DatePicker from 'react-native-date-picker'
 import styles from './styles';
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
+import auth from '@react-native-firebase/auth';
 
 interface RegisterProps {
   navigation: any;
@@ -85,7 +87,23 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   };
   
   const onCreateAnAccount = () => {
-    setErrors({});
+
+    auth()
+      .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
     validate() ? console.log('Submitted') : console.log('Validation Failed');
     // navigation.navigate('Login');
   }
