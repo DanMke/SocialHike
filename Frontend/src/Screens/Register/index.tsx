@@ -45,6 +45,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   const [showDatePicker, setShowDatePicker] = React.useState(false);
 
   const [showModal, setShowModal] = React.useState(false);
+  const [modalMessage, setModalMessage] = React.useState('');
 
   const validate = () => {
     let valid = true;
@@ -61,6 +62,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       e = Object.assign(e, {confirmPassword: 'Confirm Password is required or incorrect'});
       valid = false;
     }
+   
     if (firstName === undefined || firstName === '') {
       e = Object.assign(e, {firstName: 'First Name is required or incorrect'});
       valid = false;
@@ -90,7 +92,10 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   };
   
   const onCreateAnAccount = () => {
-    if (validate()) {
+    if (password !== confirmPassword) {
+      setModalMessage('Passwords do not match');
+      setShowModal(true);
+    } else if (validate()) {
       console.log('Submitted and Validated');
       auth().createUserWithEmailAndPassword(email, password).then(() => {
         console.log('User account created & signed in!');
@@ -99,9 +104,13 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       }).catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
+          setModalMessage('That email address is already in use!');
+          setShowModal(true);
         }
         if (error.code === 'auth/invalid-email') {
           console.log('That email address is invalid!');
+          setModalMessage('That email address is invalid!');
+          setShowModal(true);
         }
         console.error(error);
       });
@@ -345,35 +354,16 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
               <Modal.Content maxWidth="400px">
                 <Modal.CloseButton />
-                <Modal.Header>Forgot Password?</Modal.Header>
+                <Modal.Header>Invalid Data</Modal.Header>
                 <Modal.Body>
-                  Enter email address and we'll send a link to reset your password.
-                  <FormControl>
-                    <FormControl.Label mt={4}>Email</FormControl.Label>
-                    <Input
-                      placeholder=""
-                      type="text"
-                      selectionColor={'#15573E'}
-                      size="md"
-                      _focus={{borderColor: '#15573E'}}
-                      color={'#E9E8E8'}
-                      variant="underlined"
-                      borderColor={'#04C37D'}
-                      onChangeText={value => setEmailForgotPassword(value)}
-                    />
-                  </FormControl>
+                  {modalMessage}
                 </Modal.Body>
                 <Modal.Footer>
                   <Button.Group space={2}>
                     <Button backgroundColor={'#15573E'} onPress={() => {
                     setShowModal(false);
                     }}>
-                      Cancel
-                    </Button>
-                    <Button backgroundColor={'#04AA6C'} onPress={() => {
-                    setShowModal(false);
-                    }}>
-                      Send Email
+                      Okay
                     </Button>
                   </Button.Group>
                 </Modal.Footer>
