@@ -23,6 +23,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import auth from '@react-native-firebase/auth';
 
+import api from '../../Services/api';
+
 interface RegisterProps {
   navigation: any;
 }
@@ -38,6 +40,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
   const [height, setHeight] = React.useState<number>(0.0);
   const [birth, setBirth] = React.useState<Date>(new Date());
   const [username, setUsername] = React.useState<string>('');
+  const [avatar, setAvatar] = React.useState<string>('');
 
   const [errors, setErrors] = React.useState({});
 
@@ -99,9 +102,23 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       console.log('Submitted and Validated');
       auth().createUserWithEmailAndPassword(email, password).then(() => {
         console.log('User account created & signed in!');
-        // TODO: Add user to database
-        setErrors({});
-        navigation.navigate('Login');
+        api.post('/users', {
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          weight: weight,
+          height: height,
+          birth: birth,
+          username: username,
+          avatar: avatar
+        }).then((response) => {
+          console.log(response.data);
+          setErrors({});
+          navigation.navigate('Login');
+        }).catch((error) => {
+          console.log(error);
+        });
       }).catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
@@ -121,6 +138,10 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
     }
   }
 
+  const onChooseAvatar = () => {
+    console.log('Choose Avatar');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">
@@ -137,9 +158,11 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
             <VStack width="90%" mx="3" maxW="320px">
               <View>
               <View style={{flexDirection: "row", alignItems: 'center'}}>
-                <Image width={20} height={20} borderRadius={100} source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="User Image" />
+                <Pressable onPress={onChooseAvatar}>
+                  <Image width={20} height={20} borderRadius={100} source={{
+                      uri: "https://wallpaperaccess.com/full/317501.jpg"
+                      }} alt="User Image" />
+                </Pressable>
                 <View style={{flexDirection: "column", width: '70%', marginLeft: 15}}>
                   <FormControl isInvalid={('firstName' in errors)}>
                     <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">First Name</FormControl.Label>

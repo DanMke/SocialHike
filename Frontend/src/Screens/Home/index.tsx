@@ -24,12 +24,6 @@ interface HomeProps {
   navigation: any;
 }
 
-let mock = [
-  {
-
-  }
-]
-
 const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
 
   const onFeedDetails = () => {
@@ -42,6 +36,11 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
 
   const onSocial = () => {
     navigation.navigate('Social');
+  }
+
+  const onLike = () => {
+    // TODO req +1 like or -1 like
+    // TODO change color of heart
   }
 
   return (
@@ -104,7 +103,7 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
                 </View>
               </View>
               <View style={styles.feedElementReacts}>
-                <Pressable style={styles.feedElementReactLike} onPress={() => navigation.goBack()}>
+                <Pressable style={styles.feedElementReactLike} onPress={onLike}>
                   <VStack width={'50%'} height={10} bgColor={"#15573E"} alignItems="center" justifyContent={"center"}>
                     <FontAwesomeIcon icon={faHeart} size={30} color="#ffffff"/>
                   </VStack>

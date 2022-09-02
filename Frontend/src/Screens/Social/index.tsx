@@ -23,6 +23,8 @@ interface SocialProps {
 
 const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) => {
 
+  // TODO useEffect pegando os usuarios com logica de sort por relacionamento
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="padding">

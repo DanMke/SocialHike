@@ -31,6 +31,9 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
   const [longitude, setLongitude] = React.useState(-48.0511031);
 
   useEffect(() => {
+    // TODO: pegar as activities e os inicios de rotas e desenhar no mapa
+    // TODO: listar as activities
+    
     // TODO geolocation request authorization if not authorized
     // Geolocation.requestAuthorization("always");
     Geolocation.getCurrentPosition(

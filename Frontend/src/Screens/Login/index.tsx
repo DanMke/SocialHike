@@ -59,6 +59,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
           console.log('User account signed in!');
           console.log(userCredential);
           setErrors({});
+          // TODO salvar o usuario e o token no redux
           navigation.navigate('TabRoutes',  {screen: 'Home'});
         })
         .catch(error => {
