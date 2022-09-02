@@ -100,6 +100,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
       auth().createUserWithEmailAndPassword(email, password).then(() => {
         console.log('User account created & signed in!');
         // TODO: Add user to database
+        setErrors({});
         navigation.navigate('Login');
       }).catch(error => {
         if (error.code === 'auth/email-already-in-use') {

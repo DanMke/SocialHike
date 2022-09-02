@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
+import auth from '@react-native-firebase/auth';
 
 import styles from './styles';
 
@@ -36,6 +37,9 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
 
   const [showModal, setShowModal] = React.useState(false);
 
+  const [showModalError, setShowModalError] = React.useState(false);
+  const [modalErrorMessage, setModalErrorMessage] = React.useState('');
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const validate = () => {
@@ -48,9 +52,60 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
   };
 
   const onSubmit = () => {
-    setErrors({});
-    validate() ? console.log('Submitted') : console.log('Validation Failed');
-    navigation.navigate('TabRoutes',  {screen: 'Home'});
+    if (validate()) {
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          console.log('User account signed in!');
+          console.log(userCredential);
+          setErrors({});
+          navigation.navigate('TabRoutes',  {screen: 'Home'});
+        })
+        .catch(error => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error(error);
+          if (errorCode === 'auth/invalid-email') {
+            setModalErrorMessage('Invalid email address');
+            setShowModalError(true);
+          }
+          if (errorCode === 'auth/wrong-password') {
+            setModalErrorMessage('Wrong password.');
+            setShowModalError(true);
+          }
+          if (errorCode === 'auth/user-not-found') {
+            setModalErrorMessage('User not found.');
+            setShowModalError(true);
+          }
+          
+        });
+    } else {
+      console.log(errors);
+      console.log('Validation Failed');
+    }
+  
+  };
+
+  const onForgotPassword = () => {
+    auth()
+      .sendPasswordResetEmail(emailForgotPassword)
+      .then(() => {
+        console.log('Password reset email sent!');
+        setShowModal(false);
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(error);
+        if (errorCode === 'auth/invalid-email') {
+          setModalErrorMessage('Invalid email address');
+          setShowModalError(true);
+        }
+        if (errorCode === 'auth/user-not-found') {
+          setModalErrorMessage('User not found.');
+          setShowModalError(true);
+        }
+      });
   };
 
   const onCreateAnAccount = () => {
@@ -156,7 +211,7 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
                       selectionColor={'#15573E'}
                       size="md"
                       _focus={{borderColor: '#15573E'}}
-                      color={'#E9E8E8'}
+                      color={'#15573E'}
                       variant="underlined"
                       borderColor={'#04C37D'}
                       onChangeText={value => setEmailForgotPassword(value)}
@@ -171,9 +226,28 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
                       Cancel
                     </Button>
                     <Button backgroundColor={'#04AA6C'} onPress={() => {
-                    setShowModal(false);
+                      setShowModal(false);
+                      onForgotPassword();
                     }}>
                       Send Email
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
+            <Modal isOpen={showModalError} onClose={() => setShowModalError(false)}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Invalid Data</Modal.Header>
+                <Modal.Body>
+                  {modalErrorMessage}
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button backgroundColor={'#15573E'} onPress={() => {
+                    setShowModalError(false);
+                    }}>
+                      Okay
                     </Button>
                   </Button.Group>
                 </Modal.Footer>
