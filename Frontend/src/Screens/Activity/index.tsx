@@ -29,7 +29,7 @@ const Activity: React.FC<ActivityProps> = ({onTest, user, navigation}: ActivityP
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView style={{paddingHorizontal: 20, paddingTop: 20}}>
           <View style={styles.feedElement}>
             <MapView style={styles.feedElementMap}

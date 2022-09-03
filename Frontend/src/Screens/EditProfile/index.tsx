@@ -75,7 +75,7 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView>
           <View style={styles.containerIcon}>
             <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>

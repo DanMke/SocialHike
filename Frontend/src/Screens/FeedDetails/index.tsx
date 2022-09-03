@@ -32,7 +32,7 @@ const FeedDetails: React.FC<FeedDetailsProps> = ({onTest, user, navigation}: Fee
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView style={{paddingHorizontal: 20, paddingTop: 20}}>
         <View style={styles.containerIcon}>
           <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>

@@ -46,7 +46,7 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView>
           <View style={styles.containerIcon}>
             <Pressable style={styles.icon} onPress={onSocial}>

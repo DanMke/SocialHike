@@ -72,7 +72,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView>
           <MapView style={styles.map}
             showsUserLocation={true}
