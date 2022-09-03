@@ -68,7 +68,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const following = await User.findOne({ email: followingEmail });
             if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $push: { following: following } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $addToSet: { following: following } }, { new: true });
                 return updatedUser;
             }
             else {
@@ -84,7 +84,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const follower = await User.findOne({ email: followerEmail });
             if (user && follower) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { followers: follower } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { followers: follower._id } }, { new: true });
                 return updatedUser;
             }
             else {
@@ -100,7 +100,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const following = await User.findOne({ email: followingEmail });
             if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: following } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: following._id } }, { new: true });
                 return updatedUser;
             }
             else {

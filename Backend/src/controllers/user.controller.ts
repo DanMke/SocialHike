@@ -103,6 +103,8 @@ const UserController = {
         try {
             const email = req.params.email;
             const {follower} = req.body;
+            console.log(email);
+            console.log(follower);
             const updatedUser = await UserService.deleteFollowerByEmail(email, follower);
             return res.status(200).json(updatedUser);
         } catch (error) {
