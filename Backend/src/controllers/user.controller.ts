@@ -76,6 +76,50 @@ const UserController = {
             console.log(error);
             return res.status(500).send(error);
         }
+    },
+    addFollowerByEmail: async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.params.email;
+            const {follower} = req.body;
+            const updatedUser = await UserService.addFollowerByEmail(email, follower);
+            return res.status(200).json(updatedUser);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    addFollowingByEmail: async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.params.email;
+            const {following} = req.body;
+            const updatedUser = await UserService.addFollowingByEmail(email, following);
+            return res.status(200).json(updatedUser);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    deleteFollowerByEmail: async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.params.email;
+            const {follower} = req.body;
+            const updatedUser = await UserService.deleteFollowerByEmail(email, follower);
+            return res.status(200).json(updatedUser);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    deleteFollowingByEmail: async (req: express.Request, res: express.Response) => {
+        try {
+            const email = req.params.email;
+            const {following} = req.body;
+            const updatedUser = await UserService.deleteFollowingByEmail(email, following);
+            return res.status(200).json(updatedUser);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
     }
 };
 

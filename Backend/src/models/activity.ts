@@ -20,8 +20,8 @@ const activitySchema = new Schema({
     comments: [
         {
             user: {
-                type: String,
-                required: true
+                type: Schema.Types.ObjectId,
+                ref: 'Users',
             },
             comment: {
                 type: String,
@@ -106,7 +106,8 @@ const activitySchema = new Schema({
         required: true
     },
     user: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Users',
         required: true,
         index: true
     },
