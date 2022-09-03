@@ -6,7 +6,9 @@ import {
   VStack,
   ArrowBackIcon,
   Image,
-  Button
+  Button,
+  Input,
+  Icon,
 } from 'native-base';
 import React from 'react';
 import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
@@ -14,6 +16,9 @@ import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import styles from './styles';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 interface SocialProps {
   onTest?: any;
@@ -30,11 +35,27 @@ const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) 
       <KeyboardAvoidingView behavior="height">
         <ScrollView style={{paddingHorizontal: 20, paddingTop: 20}}>
           <View style={styles.containerIcon}>
-            <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>
-              <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
-                <ArrowBackIcon size="xl" color="#ffffff" />
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'space-between'}}>
+              <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>
+                <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
+                  <ArrowBackIcon size="xl" color="#ffffff" />
+                </VStack>
+              </Pressable>
+              <VStack w="80%" space={5} alignSelf="center">
+                <Input
+                    placeholder="Search users"
+                    type="text"
+                    selectionColor={'#15573E'}
+                    size="md"
+                    _focus={{borderColor: '#15573E'}}
+                    color={'#E9E8E8'}
+                    variant="outline"
+                    borderColor={'#04C37D'}
+                    InputLeftElement={<Icon size="5" color="gray.400" as={<FontAwesomeIcon style={{marginHorizontal: 10}}  icon={faSearch} size={20} color="#ffffff"/>} />}
+                    // onChangeText={value => setUsername(value)}
+                  />
               </VStack>
-            </Pressable>
+            </View>
           </View>
           <View>
             <View style={styles.feedElement}>

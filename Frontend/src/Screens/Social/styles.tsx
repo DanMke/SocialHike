@@ -6,8 +6,6 @@ export default StyleSheet.create({
     backgroundColor: '#211F20',
   },
   containerIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
     flex: 1,
     marginBottom: 20,
     marginTop: 20,
