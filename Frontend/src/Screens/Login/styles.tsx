@@ -17,8 +17,8 @@ export default StyleSheet.create({
     height: 200,
   },
   appNameText: {
-    // fontFamily: 'Open Sans',
     color: '#04C37D',
+    marginBottom: 10,
   },
   containerInputs: {
     flex: 2,
