@@ -19,12 +19,12 @@ import { faUsers, faBell, faClock, faRoute, faRunning, faHeart, faPlus } from '@
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 
 interface HomeProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
+const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) => {
 
   const onFeedDetails = () => {
     navigation.navigate('FeedDetails');
@@ -39,6 +39,7 @@ const Home: React.FC<HomeProps> = ({onTest, user, navigation}: HomeProps) => {
   }
 
   const onLike = () => {
+    console.log(user);
     // TODO req +1 like or -1 like
     // TODO change color of heart
   }
@@ -130,7 +131,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser) => dispatch(updateUser(loggedUser)),
   };
 };
 

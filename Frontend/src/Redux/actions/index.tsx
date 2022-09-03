@@ -1,8 +1,8 @@
-import { USER } from './actionType';
+import { USER_DATA } from './actionType';
 
 export function updateUser(payload: Object) {
     return {
-        type: USER,
+        type: USER_DATA,
         payload: payload,
     };
 }

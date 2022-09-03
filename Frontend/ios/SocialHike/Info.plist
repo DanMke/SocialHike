@@ -59,5 +59,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>SocialHike would like access to your photo gallery</string>
+	<key>NSCameraUsageDescription</key>
+    <string>SocialHike would like to use your camera</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
 </dict>
 </plist>

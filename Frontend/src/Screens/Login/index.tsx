@@ -20,15 +20,17 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import SocialHikeIcon from '../../../assets/socialhikeicon.png';
 import auth from '@react-native-firebase/auth';
 
+import api from '../../Services/api';
+
 import styles from './styles';
 
 interface LoginProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => {
+const Login: React.FC<LoginProps> = ({onUpdateUser, user, navigation}: LoginProps) => {
 
   const [email, setEmail] = React.useState('');
   const [emailForgotPassword, setEmailForgotPassword] = React.useState('');
@@ -59,8 +61,12 @@ const Login: React.FC<LoginProps> = ({onTest, user, navigation}: LoginProps) => 
           console.log('User account signed in!');
           console.log(userCredential);
           setErrors({});
-          // TODO salvar o usuario e o token no redux
-          navigation.navigate('TabRoutes',  {screen: 'Home'});
+          api.get('/users/' + email).then((response) => {
+            console.log(response.data);
+            onUpdateUser(response.data);
+            // TODO salvar o usuario e o token no redux
+            navigation.navigate('TabRoutes',  {screen: 'Home'});
+          });
         })
         .catch(error => {
           const errorCode = error.code;
@@ -269,7 +275,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 

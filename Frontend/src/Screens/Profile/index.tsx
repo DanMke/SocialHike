@@ -20,12 +20,12 @@ import {LineChart} from "react-native-chart-kit";
 import auth from '@react-native-firebase/auth';
 
 interface ProfileProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProps) => {
+const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
 
   const onFollowers = () => {
     // TODO: endpoint for followers
@@ -45,9 +45,12 @@ const Profile: React.FC<ProfileProps> = ({onTest, user, navigation}: ProfileProp
   const onSignOut = () => {
     auth()
       .signOut()
-      .then(() => console.log('User signed out!'))
+      .then(() => {
+        console.log('User signed out!');
+        onUpdateUser(null);
+        navigation.navigate('Login');
+      })
       .catch((error) => console.log(error));
-    navigation.navigate('Login');
   };
 
   return (
@@ -180,7 +183,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 

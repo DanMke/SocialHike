@@ -1,4 +1,4 @@
-import { USER } from "../actions/actionType";
+import { USER_DATA } from "../actions/actionType";
 
 interface Action {
     type: String,
@@ -6,12 +6,12 @@ interface Action {
 }
 
 const initialState = {
-    user: {name: "teste"}
+    user: null
 };
 
 export function userReducer(state = initialState, action: Action) {
     switch(action.type) {
-        case USER:
+        case USER_DATA:
             return {
                 ...state, user: action.payload
             };

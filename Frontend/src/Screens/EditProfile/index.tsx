@@ -6,10 +6,9 @@ import {
     WarningOutlineIcon,
     Pressable,
     ArrowBackIcon,
-    Image,
   } from 'native-base';
 import React from 'react';
-import {View, SafeAreaView, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {View, Image, SafeAreaView, ScrollView, KeyboardAvoidingView} from 'react-native';
 
 import styles from './styles';
 
@@ -31,6 +30,7 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
   const [errors, setErrors] = React.useState({});
 
   const [username, setUsername] = React.useState<string>('');
+  const [avatar, setAvatar] = React.useState<string>('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');
 
   const validate = () => {
     let valid = true;
@@ -83,14 +83,14 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
                 <ArrowBackIcon size="xl" color="#ffffff" />
               </VStack>
             </Pressable>
-            <Image source={SocialHikeIcon} style={styles.icon} alt="App icon"/>
+            <Image source={SocialHikeIcon} style={styles.icon} />
           </View>
           <View style={styles.containerInputs}>
             <VStack width="90%" mx="3" maxW="320px">
               <View style={{flexDirection: "row", alignItems: 'center'}}>
-                <Image width={20} height={20} borderRadius={100} source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="User Image" />
+                <Image style={{width: 80, height: 80, borderRadius: 100}} source={{
+                      uri: `data:image/png;base64,${avatar}`,
+                      }} />
                 <View style={{flexDirection: "column", width: '70%', marginLeft: 15}}>
                   <FormControl isInvalid={('firstName' in errors)}>
                     <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="0">First Name</FormControl.Label>
