@@ -134,6 +134,11 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
           setModalMessage('That email address is invalid!');
           setShowModal(true);
         }
+        if (error.code === 'auth/weak-password') {
+          console.log('Password is too weak!');
+          setModalMessage('Password is too weak!');
+          setShowModal(true);
+        }
         console.error(error);
       });
     } else {

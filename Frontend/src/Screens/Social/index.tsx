@@ -5,13 +5,12 @@ import {
   Pressable,
   VStack,
   ArrowBackIcon,
-  Image,
   Button,
   Input,
   Icon,
 } from 'native-base';
-import React from 'react';
-import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import React, { useEffect } from 'react';
+import {SafeAreaView, Image, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -19,16 +18,51 @@ import styles from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import api from '../../Services/api';
 
 interface SocialProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) => {
+const Social: React.FC<SocialProps> = ({onUpdateUser, user, navigation}: SocialProps) => {
+
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [usersList, setUsersList] = React.useState([]);
+  const [originalUsersList, setOriginalUsersList] = React.useState([]);
+  const [functionTimeout, setFunctionTimeout] = React.useState<NodeJS.Timeout>((null as unknown) as NodeJS.Timeout);
 
   // TODO useEffect pegando os usuarios com logica de sort por relacionamento
+  useEffect(() => {
+    api.get('/users').then((response) => {
+      console.log(response.data);
+      // TODO filter users without me
+      // TODO filter users without following
+      console.log(response.data);
+      var usersFiltered = response.data.filter((userList: any) => userList.email !== user.email);
+      console.log(usersFiltered)
+      setUsersList(usersFiltered);
+      setOriginalUsersList(usersFiltered);
+    });
+  }, []);
+
+  function onSearch(query: string) {
+    setSearchQuery(query);
+    clearTimeout(functionTimeout);
+    
+    const timeout = setTimeout(() => {
+      console.log(query);
+        if(query === '') {
+            setUsersList(originalUsersList);
+        } else {
+            const newList = usersList.filter(user => String(user.username).toLowerCase().includes(query.toLowerCase()));
+            setUsersList(newList);
+        }
+    }, 1000);
+
+    setFunctionTimeout(timeout);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,7 +77,7 @@ const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) 
               </Pressable>
               <VStack w="80%" space={5} alignSelf="center">
                 <Input
-                    placeholder="Search users"
+                    placeholder="Search users by username"
                     type="text"
                     selectionColor={'#15573E'}
                     size="md"
@@ -52,26 +86,30 @@ const Social: React.FC<SocialProps> = ({onTest, user, navigation}: SocialProps) 
                     variant="outline"
                     borderColor={'#04C37D'}
                     InputLeftElement={<Icon size="5" color="gray.400" as={<FontAwesomeIcon style={{marginHorizontal: 10}}  icon={faSearch} size={20} color="#ffffff"/>} />}
-                    // onChangeText={value => setUsername(value)}
+                    value={searchQuery}
+                    onChangeText={value => onSearch(value)}
                   />
               </VStack>
             </View>
           </View>
           <View>
-            <View style={styles.feedElement}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image width={12} height={12} borderRadius={100} source={{
-                uri: "https://wallpaperaccess.com/full/317501.jpg"
-                }} alt="Alternate Text" />
-                <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                  <Text style={styles.feedElementDetailsTextDark}>@danielmaike</Text>
-                  <Text style={styles.feedElementText}>Daniel Maike</Text>
+            {usersList.map((userList: any) => (
+              <Pressable style={styles.feedElement} key={userList.email}>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                  <Image style={{width: 50, height: 50, borderRadius: 100}} source={{
+                    uri: `data:image/png;base64,${userList.avatar}`,
+                  }} />
+                  <View style={{flexDirection: 'column', marginLeft: 15, justifyContent: 'center', alignItems: 'flex-start', alignContent: 'flex-start' }}>
+                    <Text style={styles.feedElementDetailsTextDark}>{userList.username}</Text>
+                    <Text style={styles.feedElementText}>{userList.firstName}</Text>
+                  </View>
                 </View>
-              </View>
-              <Button backgroundColor={"#04AA6C"} onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonText}>Follow</Text>
-              </Button>
-            </View>
+                <Button backgroundColor={"#04AA6C"} onPress={() => navigation.goBack()}>
+                  <Text style={styles.buttonText}>Follow</Text>
+                </Button>
+              </Pressable>
+            ))}
+            
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -87,7 +125,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 
