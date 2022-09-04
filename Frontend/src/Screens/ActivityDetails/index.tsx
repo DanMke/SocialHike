@@ -4,7 +4,12 @@ import {
   Text,
   Pressable,
   VStack,
-  ArrowBackIcon
+  ArrowBackIcon,
+  Box,
+  HStack,
+  FlatList,
+  Spacer,
+  Avatar
 } from 'native-base';
 import React from 'react';
 import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
@@ -22,13 +27,13 @@ import {
   LineChart,
 } from "react-native-chart-kit";
 
-interface FeedDetailsProps {
-  onTest?: any;
+interface ActivityDetailsProps {
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const FeedDetails: React.FC<FeedDetailsProps> = ({onTest, user, navigation}: FeedDetailsProps) => {
+const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, navigation}: ActivityDetailsProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,10 +60,6 @@ const FeedDetails: React.FC<FeedDetailsProps> = ({onTest, user, navigation}: Fee
               longitudeDelta: 0.01,
             }} />
             <View style={styles.feedElementUser}>
-              {/* <Image width={8} height={8} borderRadius={100} source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg"
-                  }} alt="Alternate Text" /> */}
-                  <Text style={styles.feedElementUserText}>Daniel Maike</Text>
               <View style={styles.feedElementInfo}>
                 <Text style={styles.feedElementDetailsTextDark}>05 May 2022</Text>
                 <Text style={{color: '#fff', fontSize: 14}}>4:15 PM</Text>
@@ -217,6 +218,7 @@ const FeedDetails: React.FC<FeedDetailsProps> = ({onTest, user, navigation}: Fee
                 />
               </View>
             </View>
+            
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -232,8 +234,8 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityDetails);

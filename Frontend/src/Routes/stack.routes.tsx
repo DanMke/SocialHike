@@ -15,6 +15,8 @@ import Social from '../Screens/Social';
 import Followers from '../Screens/Followers';
 import Following from '../Screens/Following';
 import EditProfile from '../Screens/EditProfile';
+import Activity from '../Screens/Activity';
+import ActivityDetails from '../Screens/ActivityDetails';
 
 export function StackRoutes() {
   return (
@@ -45,6 +47,15 @@ export function ProfileStack() {
         <Stack.Screen name='Followers' component={Followers} options={{ headerShown: false }} />
         <Stack.Screen name='Following' component={Following} options={{ headerShown: false }} />
         <Stack.Screen name='EditProfile' component={EditProfile} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
+export function ActivityStack() {
+  return (
+    <Stack.Navigator initialRouteName='ActivityStack'>
+        <Stack.Screen name='ActivityStack' component={Activity} options={{ headerShown: false }} />
+        <Stack.Screen name='ActivityDetails' component={ActivityDetails} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

@@ -6,7 +6,7 @@ import { faHouse, faRoute, faMapLocationDot, faUser, faChartLine } from '@fortaw
 
 const Tab = createBottomTabNavigator();
 
-import {HomeStack} from './stack.routes'
+import {ActivityStack, HomeStack} from './stack.routes'
 import {ProfileStack} from './stack.routes'
 
 import Routes from '../Screens/Routes';
@@ -38,7 +38,7 @@ export function TabRoutes() {
             <FontAwesomeIcon icon={faMapLocationDot} color={color} size={30} />) }} />
       <Tab.Screen name="Start" component={Start} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faRoute} color={color} size={30} />) }} />
-      <Tab.Screen name="Activity" component={Activity} options={{ headerShown: false, tabBarIcon: ({color}) => (
+      <Tab.Screen name="Activity" component={ActivityStack} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faChartLine} color={color} size={30} />) }} />
       <Tab.Screen name="Profile" component={ProfileStack} options={{ headerShown: false, tabBarIcon: ({color}) => (
             <FontAwesomeIcon icon={faUser} color={color} size={30} />) }} />

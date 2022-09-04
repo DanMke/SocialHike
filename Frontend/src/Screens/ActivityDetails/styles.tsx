@@ -5,14 +5,30 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#211F20',
   },
+  containerIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  backIcon: {
+    color: '#fff',
+    width: 50,
+    height: 50,
+    alignContent: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
   feedElement: {
     backgroundColor: '#333333',
-    minHeight: 350,
+    minHeight: 550,
     marginVertical: 5,
   },
   feedElementMap: {
     width: '100%',
-    height: '50%',
+    height: '30%',
   },
   feedElementUser: {
     flexDirection: 'row',
