@@ -28,17 +28,14 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
 
   const onFollowers = () => {
-    // TODO: endpoint for followers
     navigation.navigate('Followers');
   };
 
   const onFollowing = () => {
-    // TODO: endpoint for following
     navigation.navigate('Following');
   };
 
   const onEditProfile = () => {
-    // TODO: endpoint for edit profile
     navigation.navigate('EditProfile');
   };
   

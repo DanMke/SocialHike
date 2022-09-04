@@ -42,7 +42,6 @@ export default StyleSheet.create({
   feedElementText: {
     color: '#fff',
     fontSize: 16,
-    marginLeft: 10,
   },
   buttonText: {
     color: '#fff',

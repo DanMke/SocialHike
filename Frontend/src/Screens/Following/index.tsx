@@ -8,20 +8,30 @@ import {
   Image,
   Button
 } from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import styles from './styles';
+import api from '../../Services/api';
 
 interface FollowingProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Following: React.FC<FollowingProps> = ({onTest, user, navigation}: FollowingProps) => {
+const Following: React.FC<FollowingProps> = ({onUpdateUser, user, navigation}: FollowingProps) => {
+
+  const [following, setFollowing] = React.useState([]);
+
+  useEffect(() => {
+    api.get('/users/' + user.email).then((response) => {
+      onUpdateUser(response.data);
+      setFollowing(user.following);
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,20 +45,22 @@ const Following: React.FC<FollowingProps> = ({onTest, user, navigation}: Followi
             </Pressable>
           </View>
           <View>
-            <View style={styles.feedElement}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image width={12} height={12} borderRadius={100} source={{
-                uri: "https://wallpaperaccess.com/full/317501.jpg"
-                }} alt="Alternate Text" />
-                <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                  <Text style={styles.feedElementDetailsTextDark}>@danielmaike</Text>
-                  <Text style={styles.feedElementText}>Daniel Maike</Text>
+            {following.map((followingUser: any) => (
+              <View style={styles.feedElement} key={followingUser.email}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image width={12} height={12} borderRadius={100} source={{
+                  uri: `data:image/png;base64,${followingUser.avatar}`,
+                  }} alt="Alternate Text" />
+                  <View style={{flexDirection: 'column', marginLeft: 15, justifyContent: 'center', alignItems: 'flex-start', alignContent: 'flex-start' }}>
+                    <Text style={styles.feedElementDetailsTextDark}>{followingUser.username}</Text>
+                    <Text style={styles.feedElementText}>{followingUser.firstName}</Text>
+                  </View>
                 </View>
+                <Button backgroundColor={"#04AA6C"} onPress={() => navigation.goBack()}>
+                  <Text style={styles.buttonText}>Follow</Text>
+                </Button>
               </View>
-              <Button backgroundColor={"#15573E"} onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonText}>Unfollow</Text>
-              </Button>
-            </View>
+            ))}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -64,7 +76,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 
