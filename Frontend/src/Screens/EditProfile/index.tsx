@@ -209,7 +209,7 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
 
               
               <FormControl isInvalid={('weight' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight (KG)</FormControl.Label>
                 <Input
                   placeholder=""
                   type="text"
@@ -230,7 +230,7 @@ const EditProfile: React.FC<EditProfileProps> = ({navigation}: EditProfileProps)
                 )}
               </FormControl>
               <FormControl isInvalid={('height' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height</FormControl.Label>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height (CM)</FormControl.Label>
                 <Input
                   placeholder=""
                   type="text"

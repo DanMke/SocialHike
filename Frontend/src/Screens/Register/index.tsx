@@ -321,9 +321,9 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
               </FormControl>
               
               <FormControl isInvalid={('weight' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight</FormControl.Label>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Weight (KG)</FormControl.Label>
                 <Input
-                  placeholder="KG"
+                  placeholder=""
                   type="text"
                   keyboardType='numeric'
                   selectionColor={'#15573E'}
@@ -342,9 +342,9 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 )}
               </FormControl>
               <FormControl isInvalid={('height' in errors)}>
-                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height</FormControl.Label>
+                <FormControl.Label _text={{fontSize: 'md', color: '#8C8A8C'}} mt="3">Height (CM)</FormControl.Label>
                 <Input
-                  placeholder="CM"
+                  placeholder=""
                   type="text"
                   keyboardType='numeric'
                   selectionColor={'#15573E'}

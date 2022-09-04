@@ -1,13 +1,12 @@
 import {
   ScrollView,
-  Image,
   Pressable,
   View,
   VStack,
   Text,
 } from 'native-base';
-import React from 'react';
-import {SafeAreaView, KeyboardAvoidingView, Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
+import {SafeAreaView, Image, KeyboardAvoidingView, Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -18,6 +17,7 @@ import styles from './styles';
 import {LineChart} from "react-native-chart-kit";
 
 import auth from '@react-native-firebase/auth';
+import api from '../../Services/api';
 
 interface ProfileProps {
   onUpdateUser?: any;
@@ -26,6 +26,29 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
+
+  const [allDurationTimeActivies, setAllDurationTimeActivies] = React.useState(0);
+  const [allDistanceActivities, setAllDistanceActivities] = React.useState(0);
+  const [activiesSize, setActiviesSize] = React.useState(0);
+
+  useEffect(() => {
+    api.get('/users/' + user.email).then((response) => {
+      onUpdateUser(response.data);
+    });
+
+    api.get('/activities/' + user.email).then((response) => {
+      var activities = response.data;
+      setActiviesSize(activities.length);
+      var durationTime = 0;
+      var distance = 0;
+      activities.forEach((activity: any) => {
+        durationTime += activity.durationTime;
+        distance += activity.distance;
+      });
+      setAllDurationTimeActivies(durationTime);
+      setAllDistanceActivities(distance);
+    });
+  }, []);
 
   const onFollowers = () => {
     navigation.navigate('Followers');
@@ -69,33 +92,33 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
           <View>
             <View style={styles.profile}>
               <View style={styles.profileUser}>
-                <Image width={8} height={8} borderRadius={100} source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg"
-                }} alt="Alternate Text" />
-                <Text style={styles.feedElementUserText}>Daniel Maike</Text>
+              <Image style={{width: 30, height: 30, borderRadius: 100}} source={{
+                      uri: `data:image/png;base64,${user.avatar}`,
+                      }} />
+                <Text style={styles.feedElementUserText}>{user.firstName + ' ' + user.lastName}</Text>
               </View>
               <View style={styles.profileUserDetails}>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Username</Text>
-                  <Text style={styles.feedElementDetailsText}>@danielmaike</Text>
+                  <Text style={styles.feedElementDetailsText}>{user.username}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Height</Text>
-                  <Text style={styles.feedElementDetailsText}>1.78m</Text>
+                  <Text style={styles.feedElementDetailsText}>{user.height + ' CM'}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Weight</Text>
-                  <Text style={styles.feedElementDetailsText}>98kg</Text>
+                  <Text style={styles.feedElementDetailsText}>{user.weight + ' KG'}</Text>
                 </View>
               </View>
               <View style={styles.profileUserDetailsTwo}>
                 <Pressable style={{alignItems: 'center'}} onPress={onFollowers}>
                   <Text style={styles.feedElementDetailsTextDark}>Followers</Text>
-                  <Text style={styles.feedElementDetailsText}>9</Text>
+                  <Text style={styles.feedElementDetailsText}>{user.followers.length}</Text>
                 </Pressable>
                 <Pressable style={{alignItems: 'center'}} onPress={onFollowing}>
                   <Text style={styles.feedElementDetailsTextDark}>Following</Text>
-                  <Text style={styles.feedElementDetailsText}>12</Text>
+                  <Text style={styles.feedElementDetailsText}>{user.following.length}</Text>
                 </Pressable>
               </View>
             </View>

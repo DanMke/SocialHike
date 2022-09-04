@@ -60,11 +60,10 @@ const Login: React.FC<LoginProps> = ({onUpdateUser, user, navigation}: LoginProp
         .then((userCredential) => {
           console.log('User account signed in!');
           console.log(userCredential);
-          setErrors({});
           api.get('/users/' + email).then((response) => {
             console.log(response.data);
             onUpdateUser(response.data);
-            // TODO salvar o usuario e o token no redux
+            setErrors({});
             navigation.navigate('TabRoutes',  {screen: 'Home'});
           });
         })
