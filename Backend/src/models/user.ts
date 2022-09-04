@@ -48,6 +48,10 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Users',
     }],
+    gender: {
+        type: String,
+        required: true
+    },
 });
 
 const User = mongoose.model('Users', userSchema);
