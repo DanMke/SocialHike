@@ -12,7 +12,7 @@ import {
     CheckIcon,
   } from 'native-base';
 import React from 'react';
-import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {View, SafeAreaView, Image, ScrollView, KeyboardAvoidingView, PermissionsAndroid} from 'react-native';
 
 import DatePicker from 'react-native-date-picker'
 
@@ -156,7 +156,31 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
     }
   }
 
-  const onChooseAvatar = () => {  
+  const onChooseAvatar = () => {
+
+    const requestExternalStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to upload photos',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the storage');
+        } else {
+          console.log('Storage permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    requestExternalStoragePermission();
+    
     const options = {
       mediaType: 'photo',
       maxWidth: 80,

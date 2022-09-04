@@ -3,7 +3,7 @@ import {
   ScrollView, View,
 } from 'native-base';
 import React, {useEffect} from 'react';
-import { SafeAreaView, Text, KeyboardAvoidingView} from 'react-native';
+import { SafeAreaView, Text, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -31,6 +31,28 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const [intervalGetCurrentPosition, setIntervalGetCurrentPosition] = React.useState<any>();
 
   useEffect(() => {
+    const requestLocationPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'This app needs access to your location',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the location');
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    requestLocationPermission();
     // TODO geolocation request authorization if not authorized
     // Geolocation.requestAuthorization("always");
     Geolocation.getCurrentPosition(
@@ -66,6 +88,10 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
     setIntervalGetCurrentPosition(interval);
   };
 
+  const onPause = () => {
+    return clearInterval(intervalGetCurrentPosition);
+  };
+
   const onStop = () => {
     return clearInterval(intervalGetCurrentPosition);
   };
@@ -96,7 +122,7 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
             <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart}>
               <Text style={{color: '#fff', fontSize: 16}}>Start</Text>
             </Button>
-            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
               <Text style={{color: '#fff', fontSize: 16}}>Pause</Text>
             </Button>
             <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
