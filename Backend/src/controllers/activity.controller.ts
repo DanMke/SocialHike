@@ -2,27 +2,117 @@ import express from 'express';
 
 import ActivityService from '../services/activity.service';
 
+function deg2rad(deg: number) {
+    return deg * (Math.PI/180);
+}
+
+function distanceHaversine(lat1: number, lon1: number, lat2: number, lon2: number) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = deg2rad(lon2-lon1); 
+    var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+}
+
+function distanceVincenty(lat1: number, lon1: number, lat2: number, lon2: number) {
+    var a = 6378137,
+        b = 6356752.3142,
+        f = 1 / 298.257223563, // WGS-84 ellipsoid params
+        L = deg2rad((lon2-lon1)),
+        U1 = Math.atan((1 - f) * Math.tan(deg2rad(lat1))),
+        U2 = Math.atan((1 - f) * Math.tan(deg2rad(lat2))),
+        sinU1 = Math.sin(U1),
+        cosU1 = Math.cos(U1),
+        sinU2 = Math.sin(U2),
+        cosU2 = Math.cos(U2),
+        lambda = L,
+        lambdaP,
+        iterLimit = 100;
+    do {
+        var sinLambda = Math.sin(lambda),
+            cosLambda = Math.cos(lambda),
+            sinSigma = Math.sqrt((cosU2 * sinLambda) * (cosU2 * sinLambda) + (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (cosU1 * sinU2 - sinU1 * cosU2 * cosLambda));
+        if (0 === sinSigma) {
+        return 0; // co-incident points
+     };
+     var cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda,
+         sigma = Math.atan2(sinSigma, cosSigma),
+         sinAlpha = cosU1 * cosU2 * sinLambda / sinSigma,
+         cosSqAlpha = 1 - sinAlpha * sinAlpha,
+         cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha,
+         C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
+     if (isNaN(cos2SigmaM)) {
+      cos2SigmaM = 0; // equatorial line: cosSqAlpha = 0 (§6)
+     };
+     lambdaP = lambda;
+     lambda = L + (1 - C) * f * sinAlpha * (sigma + C * sinSigma * (cos2SigmaM + C * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+    } while (Math.abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
+   
+    if (0 === iterLimit) {
+     return NaN; // formula failed to converge
+    };
+   
+    var uSq = cosSqAlpha * (a * a - b * b) / (b * b),
+        A = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq))),
+        B = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq))),
+        deltaSigma = B * sinSigma * (cos2SigmaM + B / 4 * (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) - B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM))),
+        s = b * A * (sigma - deltaSigma);
+    return s;
+};
+
 const ActivityController = {
+    
     createActivity: async (req: express.Request, res: express.Response) => {
         try {
             const activity = req.body;
             // activity -> start time / end time / user email / activity type / points []
             // TODO: Complete activity -> distance / duration / max pace / average pace / calories / max elevation / average elevation / max speed / average speed
+            console.log(activity);
+            activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
+            var maxElevation = 0;
+            var sumElevation = 0;
+            var maxSpeed = 0;
+            var sumSpeed = 0;
+            for (var i = 0; i < activity.points.length; i++) {
+                if (activity.points[i].coords.altitude > maxElevation) {
+                    maxElevation = activity.points[i].coords.altitude;
+                }
+                sumElevation += activity.points[i].coords.altitude;
+                if (activity.points[i].coords.speed > maxSpeed) {
+                    maxSpeed = activity.points[i].coords.speed;
+                }
+                sumSpeed += activity.points[i].coords.speed;
+            }
+            activity.maxElevation = maxElevation;
+            activity.averageElevation = sumElevation / activity.points.length;
+            activity.maxSpeed = maxSpeed;
+            activity.averageSpeed = sumSpeed / activity.points.length;
+            console.log(activity);
+            var distance = 0;
+            
+            
+            console.log(distanceHaversine(-15.8360091, -48.0561143, -15.836115, -48.0560503))
+            console.log(distanceHaversine(-15.8360091, -48.0561143, -15.8360091, -48.0561143))
+            console.log(distanceVincenty(-15.8360091, -48.0561143, -15.836115, -48.0560503))
+            console.log(distanceVincenty(-15.8360091, -48.0561143, -15.8360091, -48.0561143))
+
             activity.distance = 0;
-            activity.duration = 0;
             activity.maxPace = 0;
             activity.averagePace = 0;
             activity.calories = 0;
-            activity.maxElevation = 0;
-            activity.averageElevation = 0;
-            activity.maxSpeed = 0;
-            activity.averageSpeed = 0;
             const createdActivity = await ActivityService.createActivity(activity);
             return res.status(201).json({
                 message: 'Activity created successfully!',
                 createdActivity
             });
         } catch (error: any) {
+            console.log(error);
             return res.status(500).send(error);
         }
     },

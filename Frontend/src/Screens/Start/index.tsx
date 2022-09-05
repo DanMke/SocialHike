@@ -116,7 +116,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         },
         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
       );
-    }, 1000);
+    }, 2000);
     setIntervalGetCurrentPosition(interval);
     setIsStarted(true);
   };
