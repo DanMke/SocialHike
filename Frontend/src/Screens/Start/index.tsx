@@ -28,6 +28,9 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const [altitude, setAltitude] = React.useState(0);
   const [speed, setSpeed] = React.useState(0);
 
+  const [isStarted, setIsStarted] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
+
   const [intervalGetCurrentPosition, setIntervalGetCurrentPosition] = React.useState<any>();
 
   useEffect(() => {
@@ -52,9 +55,9 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
         console.warn(err);
       }
     };
+
     requestLocationPermission();
-    // TODO geolocation request authorization if not authorized
-    // Geolocation.requestAuthorization("always");
+    
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
@@ -86,14 +89,37 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
       );
     }, 1000);
     setIntervalGetCurrentPosition(interval);
+    setIsStarted(true);
   };
 
   const onPause = () => {
-    return clearInterval(intervalGetCurrentPosition);
+    clearInterval(intervalGetCurrentPosition);
+    setIsPaused(true);
+  };
+
+  const onResume = () => {
+    const interval = setInterval(() => {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          console.log(position);
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+          setAltitude(position.coords.altitude);
+          setSpeed(position.coords.speed);
+        },
+        (error) => {
+          console.log(error);
+        },
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      );
+    }, 1000);
+    setIntervalGetCurrentPosition(interval);
+    setIsPaused(false);
   };
 
   const onStop = () => {
-    return clearInterval(intervalGetCurrentPosition);
+    clearInterval(intervalGetCurrentPosition);
+    setIsStarted(false);
   };
 
   return (
@@ -119,15 +145,29 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
             <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
             <Text style={{color: 'white'}}>ALTITUDE: {altitude}</Text>
             <Text style={{color: 'white'}}>SPEED: {speed}</Text>
-            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart}>
-              <Text style={{color: '#fff', fontSize: 16}}>Start</Text>
-            </Button>
-            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
-              <Text style={{color: '#fff', fontSize: 16}}>Pause</Text>
-            </Button>
-            <Button width={"80%"} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
-              <Text style={{color: '#fff', fontSize: 16}}>Stop</Text>
-            </Button>
+            { !isStarted && 
+              <Button width={"200"} height={"200"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart} borderRadius={100}>
+                <Text style={{color: '#fff', fontSize: 25}}>Start</Text>
+              </Button>
+            }
+            {
+              isStarted && !isPaused &&
+                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
+                  <Text style={{color: '#fff', fontSize: 18}}>Pause</Text>
+                </Button>
+            }
+            {
+              isStarted && isPaused &&
+                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onResume}>
+                  <Text style={{color: '#fff', fontSize: 18}}>Resume</Text>
+                </Button>
+            }
+            {
+              isStarted && 
+                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+                  <Text style={{color: '#fff', fontSize: 18}}>Stop</Text>
+                </Button>
+            }         
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
