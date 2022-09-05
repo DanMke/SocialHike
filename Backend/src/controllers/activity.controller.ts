@@ -137,12 +137,17 @@ const ActivityController = {
             activity.paces = paces;
             activity.averagePace = sumPace / paces.length;
             activity.maxPace = maxPace;
+
             const user: any = await UserService.getUserByEmail(req.body.user);
+
             const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
             const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
             activity.calories = calories;
+
             console.log(activity);
+
             const createdActivity = await ActivityService.createActivity(activity);
+            
             return res.status(201).json({
                 message: 'Activity created successfully!',
                 createdActivity
