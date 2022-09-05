@@ -78,8 +78,7 @@ const ActivityController = {
             var sumElevation = 0;
             var elevations = [];
 
-            var maxSpeed = 0;
-            var sumSpeed = 0;
+            
 
             for (var i = 0; i < activity.points.length; i++) {
                 elevations.push(activity.points[i].coords.altitude);
@@ -87,21 +86,19 @@ const ActivityController = {
                     maxElevation = activity.points[i].coords.altitude;
                 }
                 sumElevation += activity.points[i].coords.altitude;
-                if (activity.points[i].coords.speed > maxSpeed) {
-                    maxSpeed = activity.points[i].coords.speed;
-                }
-                sumSpeed += activity.points[i].coords.speed;
             }
 
             activity.elevations = elevations;
             activity.maxElevation = maxElevation;
             activity.averageElevation = sumElevation / activity.points.length;
-            activity.maxSpeed = maxSpeed;
-            activity.averageSpeed = sumSpeed / activity.points.length;
+            
 
-            var maxPace = 0;
+            var maxPace = 1000000;
             var sumPace = 0;
             var paces = [];
+
+            var maxSpeed = 0;
+            var sumSpeed = 0;
 
             var distance = 0;
             var divider = 1000;
@@ -109,8 +106,13 @@ const ActivityController = {
             for (var i = 0; i < activity.points.length - 1; i++) {
                 distance += distanceVincenty(activity.points[i].coords.latitude, activity.points[i].coords.longitude, 
                     activity.points[i + 1].coords.latitude, activity.points[i + 1].coords.longitude);
+                var durationUntil = (new Date(activity.points[i + 1].timestamp).getTime() - new Date(activity.start).getTime()) * 0.001;
+                var speed = distance / durationUntil;
+                if (speed > maxSpeed) {
+                    maxSpeed = speed;
+                }
+                sumSpeed += speed;
                 if (distance / divider >= 1.0 || i == activity.points.length - 2) {
-                    var durationUntil = (new Date(activity.points[i + 1].timestamp).getTime() - new Date(activity.start).getTime()) * 0.001;
                     var durationToPace = 0;
                     var distanceToPace = 0;
                     if (paces.length == 0) {
@@ -124,7 +126,7 @@ const ActivityController = {
                         distanceToPace = distance;
                     }
                     var pace = durationToPace / (distanceToPace / 1000);
-                    if (pace > maxPace) {
+                    if (pace <= maxPace) {
                         maxPace = pace;
                     }
                     sumPace += pace;
@@ -137,6 +139,8 @@ const ActivityController = {
             activity.paces = paces;
             activity.averagePace = sumPace / paces.length;
             activity.maxPace = maxPace;
+            activity.maxSpeed = maxSpeed;
+            activity.averageSpeed = sumSpeed / activity.points.length;
 
             const user: any = await UserService.getUserByEmail(req.body.user);
 
@@ -147,7 +151,7 @@ const ActivityController = {
             console.log(activity);
 
             const createdActivity = await ActivityService.createActivity(activity);
-            
+
             return res.status(201).json({
                 message: 'Activity created successfully!',
                 createdActivity

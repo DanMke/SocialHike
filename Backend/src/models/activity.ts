@@ -93,6 +93,14 @@ const activitySchema = new Schema({
         type: Number,
         required: true
     },
+    averageElevation: {
+        type: Number,
+        required: true,
+    },
+    maxElevation: {
+        type: Number,
+        required: true
+    },
     averagePace: {
         type: Number,
         required: true
