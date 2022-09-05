@@ -1,6 +1,7 @@
 import express from 'express';
 
 import ActivityService from '../services/activity.service';
+import UserService from '../services/user.service';
 
 function deg2rad(deg: number) {
     return deg * (Math.PI/180);
@@ -71,15 +72,17 @@ const ActivityController = {
     createActivity: async (req: express.Request, res: express.Response) => {
         try {
             const activity = req.body;
-            // activity -> start time / end time / user email / activity type / points []
-            // TODO: Complete activity -> distance / duration / max pace / average pace / calories / max elevation / average elevation / max speed / average speed
-            console.log(activity);
             activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
+
             var maxElevation = 0;
             var sumElevation = 0;
+            var elevations = [];
+
             var maxSpeed = 0;
             var sumSpeed = 0;
+
             for (var i = 0; i < activity.points.length; i++) {
+                elevations.push(activity.points[i].coords.altitude);
                 if (activity.points[i].coords.altitude > maxElevation) {
                     maxElevation = activity.points[i].coords.altitude;
                 }
@@ -89,23 +92,56 @@ const ActivityController = {
                 }
                 sumSpeed += activity.points[i].coords.speed;
             }
+
+            activity.elevations = elevations;
             activity.maxElevation = maxElevation;
             activity.averageElevation = sumElevation / activity.points.length;
             activity.maxSpeed = maxSpeed;
             activity.averageSpeed = sumSpeed / activity.points.length;
-            console.log(activity);
-            var distance = 0;
-            
-            
-            console.log(distanceHaversine(-15.8360091, -48.0561143, -15.836115, -48.0560503))
-            console.log(distanceHaversine(-15.8360091, -48.0561143, -15.8360091, -48.0561143))
-            console.log(distanceVincenty(-15.8360091, -48.0561143, -15.836115, -48.0560503))
-            console.log(distanceVincenty(-15.8360091, -48.0561143, -15.8360091, -48.0561143))
 
-            activity.distance = 0;
-            activity.maxPace = 0;
-            activity.averagePace = 0;
-            activity.calories = 0;
+            var maxPace = 0;
+            var sumPace = 0;
+            var paces = [];
+
+            var distance = 0;
+            var divider = 1000;
+
+            for (var i = 0; i < activity.points.length - 1; i++) {
+                distance += distanceVincenty(activity.points[i].coords.latitude, activity.points[i].coords.longitude, 
+                    activity.points[i + 1].coords.latitude, activity.points[i + 1].coords.longitude);
+                if (distance / divider >= 1.0 || i == activity.points.length - 2) {
+                    var durationUntil = (new Date(activity.points[i + 1].timestamp).getTime() - new Date(activity.start).getTime()) * 0.001;
+                    var durationToPace = 0;
+                    var distanceToPace = 0;
+                    if (paces.length == 0) {
+                        durationToPace = durationUntil;
+                    } else {
+                        durationToPace = durationUntil - paces[paces.length - 1].durationActivity;
+                    }
+                    if (distance >= divider) {
+                        distanceToPace = distance - divider;
+                    } else {
+                        distanceToPace = distance;
+                    }
+                    var pace = durationToPace / (distanceToPace / 1000);
+                    if (pace > maxPace) {
+                        maxPace = pace;
+                    }
+                    sumPace += pace;
+                    paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
+                    divider += 1000;
+                }
+            }
+            
+            activity.distance = distance / 1000;
+            activity.paces = paces;
+            activity.averagePace = sumPace / paces.length;
+            activity.maxPace = maxPace;
+            const user: any = await UserService.getUserByEmail(req.body.user);
+            const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
+            const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
+            activity.calories = calories;
+            console.log(activity);
             const createdActivity = await ActivityService.createActivity(activity);
             return res.status(201).json({
                 message: 'Activity created successfully!',

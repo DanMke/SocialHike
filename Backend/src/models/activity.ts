@@ -113,7 +113,23 @@ const activitySchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    paces:[
+        {
+            distance: {
+                type: Number
+            },
+            durationActivity: {
+                type: Date
+            },
+            pace: {
+                type: Number
+            },
+        }
+    ],
+    elevations: {
+        type: [Number]
+    },
 });
 
 const Activity = mongoose.model('Activities', activitySchema);
