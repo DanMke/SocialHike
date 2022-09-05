@@ -26,14 +26,17 @@ interface StartProps {
 
 const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProps) => {
 
-  const [latitude, setLatitude] = React.useState<Number>(0);
-  const [longitude, setLongitude] = React.useState<Number>(0);
-  const [altitude, setAltitude] = React.useState<Number>(0);
-  const [speed, setSpeed] = React.useState<Number>(0);
-  
-  const [type, setType] = React.useState<string>('Run');
+  const [startDateTime, setStartDateTime] = React.useState<Date | null>(null);
+  const [endDateTime, setEndDateTime] = React.useState<Date | null>(null);
 
-  const [points, setPoints] = React.useState([]);
+  const [latitude, setLatitude] = React.useState<number>(0);
+  const [longitude, setLongitude] = React.useState<number>(0);
+  const [altitude, setAltitude] = React.useState<number | null>(0);
+  const [speed, setSpeed] = React.useState<number | null>(0);
+  
+  const [type, setType] = React.useState<string>('run');
+
+  const [points, setPoints] = React.useState<Array<Geolocation.GeoPosition>>([]);
   
   const [initialLatitude, setInitialLatitude] = React.useState(0);
   const [initialLongitude, setInitialLongitude] = React.useState(0);
@@ -87,12 +90,15 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         console.log(position);
         setInitialLatitude(position.coords.latitude);
         setInitialLongitude(position.coords.longitude);
+        setPoints([position]);
       },
       (error) => {
         console.log(error);
       },
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
+
+    setStartDateTime(new Date());
 
     const interval = setInterval(() => {
       Geolocation.getCurrentPosition(
@@ -102,6 +108,8 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setLongitude(position.coords.longitude);
           setAltitude(position.coords.altitude);
           setSpeed(position.coords.speed);
+          setPoints(points => [...points, position]);
+            
         },
         (error) => {
           console.log(error);
@@ -116,6 +124,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   const onPause = () => {
     clearInterval(intervalGetCurrentPosition);
     setIsPaused(true);
+    setEndDateTime(new Date());
   };
 
   const onResume = () => {
@@ -127,6 +136,8 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setLongitude(position.coords.longitude);
           setAltitude(position.coords.altitude);
           setSpeed(position.coords.speed);
+          setPoints([...points, position]);
+          
         },
         (error) => {
           console.log(error);
@@ -139,16 +150,37 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   };
 
   const onStop = () => {
-    clearInterval(intervalGetCurrentPosition);
-    setIsStarted(false);
-    setIsPaused(false);
-    api.post('/activities', {
-      user: user.email,
-      points: points,
-      }).then((response) => {
-        console.log(response);
+    setTimeout(() => {
+      var end: Date | null = new Date();
+      if (isPaused) {
+        end = endDateTime;
       }
-    );
+      clearInterval(intervalGetCurrentPosition);
+      setIsStarted(false);
+      setIsPaused(false);
+      api.post('/activities', {
+        user: user.email,
+        start: startDateTime,
+        end: end,
+        initialCoord: {
+          latitude: initialLatitude,
+          longitude: initialLongitude,
+        },
+        points: points,
+        type: type,
+        }).then((response) => {
+          console.log(response);
+          setStartDateTime(null);
+          setEndDateTime(null);
+          setPoints([]);
+          setInitialLatitude(latitude);
+          setInitialLongitude(longitude);
+          setType('run');
+        }
+      ).catch((error) => {
+        console.log(error);
+      });
+    }, 1000);
   };
 
   return (
