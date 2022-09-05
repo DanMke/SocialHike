@@ -1,6 +1,7 @@
 import {
   Button,
   ScrollView, View,
+  Select, CheckIcon
 } from 'native-base';
 import React, {useEffect} from 'react';
 import { SafeAreaView, Text, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
@@ -14,18 +15,23 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import styles from './styles';
 import api from '../../Services/api';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faRunning, faBiking, faHiking } from '@fortawesome/free-solid-svg-icons'
+
 interface StartProps {
-  onTest?: any;
+  onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => {
+const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProps) => {
 
   const [latitude, setLatitude] = React.useState<Number>(0);
   const [longitude, setLongitude] = React.useState<Number>(0);
   const [altitude, setAltitude] = React.useState<Number>(0);
   const [speed, setSpeed] = React.useState<Number>(0);
+  
+  const [type, setType] = React.useState<string>('Run');
 
   const [points, setPoints] = React.useState([]);
   
@@ -164,14 +170,32 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
           >
           </MapView>
           <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'white'}}>LATITUDE: {latitude}</Text>
-            <Text style={{color: 'white'}}>LONGITUDE: {longitude}</Text>
-            <Text style={{color: 'white'}}>ALTITUDE: {altitude}</Text>
-            <Text style={{color: 'white'}}>SPEED: {speed}</Text>
+            <Text style={{color: 'white'}}>Latitude: {latitude}</Text>
+            <Text style={{color: 'white'}}>Longitude: {longitude}</Text>
+            <Text style={{color: 'white'}}>Altitude: {altitude}</Text>
+            <Text style={{color: 'white'}}>Speed (m/s): {speed}</Text>
             { !isStarted && 
-              <Button width={"200"} height={"200"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart} borderRadius={100}>
-                <Text style={{color: '#fff', fontSize: 25}}>Start</Text>
-              </Button>
+              <View>
+                <Select selectedValue={type} 
+                  accessibilityLabel="Choose Type" 
+                  variant="underlined" 
+                  borderColor={'#04C37D'}
+                  placeholder="Choose Type"
+                  color={'#E9E8E8'}
+                  _selectedItem={{
+                    bg: "white",
+                    endIcon: <CheckIcon size="5" />
+                  }} 
+                  mt={1} onValueChange={itemValue => {setType(itemValue); console.log(itemValue)}}>
+                    <Select.Item label="Run" value="run" startIcon={<FontAwesomeIcon icon={faRunning} size={30} color="#000"/>} />
+                    <Select.Item label="Ride" value="ride" startIcon={<FontAwesomeIcon icon={faBiking} size={30} color="#000"/>}/>
+                    <Select.Item label="Hike" value="hike" startIcon={<FontAwesomeIcon icon={faHiking} size={30} color="#000"/>}/>
+                </Select>
+
+                <Button width={"200"} height={"200"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart} borderRadius={100}>
+                  <Text style={{color: '#fff', fontSize: 25}}>Start</Text>
+                </Button>
+              </View>
             }
             {
               isStarted && !isPaused &&
@@ -206,7 +230,7 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onTest: () => dispatch(updateUser({name: 'Jobs'})),
+    onUpdateUser: (loggedUser: Object) => dispatch(updateUser(loggedUser)),
   };
 };
 
