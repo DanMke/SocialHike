@@ -106,8 +106,7 @@ const activitySchema = new Schema({
         required: true
     },
     user: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
+        type: String,
         required: true,
         index: true
     },

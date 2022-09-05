@@ -12,6 +12,7 @@ import Geolocation from 'react-native-geolocation-service';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 
 import styles from './styles';
+import api from '../../Services/api';
 
 interface StartProps {
   onTest?: any;
@@ -21,12 +22,15 @@ interface StartProps {
 
 const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => {
 
-  const [latitude, setLatitude] = React.useState(0);
-  const [longitude, setLongitude] = React.useState(0);
+  const [latitude, setLatitude] = React.useState<Number>(0);
+  const [longitude, setLongitude] = React.useState<Number>(0);
+  const [altitude, setAltitude] = React.useState<Number>(0);
+  const [speed, setSpeed] = React.useState<Number>(0);
+
+  const [points, setPoints] = React.useState([]);
+  
   const [initialLatitude, setInitialLatitude] = React.useState(0);
   const [initialLongitude, setInitialLongitude] = React.useState(0);
-  const [altitude, setAltitude] = React.useState(0);
-  const [speed, setSpeed] = React.useState(0);
 
   const [isStarted, setIsStarted] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
@@ -57,7 +61,21 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
     };
 
     requestLocationPermission();
-    
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        setInitialLatitude(position.coords.latitude);
+        setInitialLongitude(position.coords.longitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  } , []);
+  
+  const onStart = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
@@ -70,12 +88,9 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
 
-  } , []);
-  
-  const onStart = () => {
     const interval = setInterval(() => {
       Geolocation.getCurrentPosition(
-        (position) => {
+        (position: Geolocation.GeoPosition) => {
           console.log(position);
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
@@ -120,6 +135,14 @@ const Start: React.FC<StartProps> = ({onTest, user, navigation}: StartProps) => 
   const onStop = () => {
     clearInterval(intervalGetCurrentPosition);
     setIsStarted(false);
+    setIsPaused(false);
+    api.post('/activities', {
+      user: user.email,
+      points: points,
+      }).then((response) => {
+        console.log(response);
+      }
+    );
   };
 
   return (
