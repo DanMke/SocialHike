@@ -5,11 +5,6 @@ import {
   Pressable,
   VStack,
   ArrowBackIcon,
-  Box,
-  HStack,
-  FlatList,
-  Spacer,
-  Avatar
 } from 'native-base';
 import React, { useEffect } from 'react';
 import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
@@ -19,7 +14,9 @@ import {updateUser} from '../../Redux/actions';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClock, faRoute, faRunning, faBolt, faFire, faBiking, faHiking } from '@fortawesome/free-solid-svg-icons'
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; 
+
+import MapViewDirections from 'react-native-maps-directions';
 
 import styles from './styles';
 
@@ -37,15 +34,35 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
 
   const [activity, setActivity] = React.useState(navigation.getState().routes[1].params.activity);
   const [paces, setPaces] = React.useState<any>([0]);
+  const [startCoord, setStartCoord] = React.useState<any>({latitude: 0, longitude: 0});
+  const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
+  const [coords, setCoords] = React.useState<any>([]);
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
     console.log(activity);
+    
     var pacesTemp = [];
     for (var i = 0; i < activity.paces.length; i++) {
       pacesTemp.push(activity.paces[i].pace);
     }
     setPaces(pacesTemp);
+
+    var coordsTemp = [];
+    if (activity.points.length <= 25) {
+      for (var i = 1; i < activity.points.length - 1; i++) {
+        coordsTemp.push({latitude: activity.points[i].coords.latitude, longitude: activity.points[i].coords.longitude});
+      }
+    } else {
+      var step = Math.trunc(activity.points.length / 25) + 1;
+      for (var i = 1; i < activity.points.length - 1; i += step) {
+        coordsTemp.push({latitude: activity.points[i].coords.latitude, longitude: activity.points[i].coords.longitude});
+      }
+    }
+    setCoords(coordsTemp);
+
+    setStartCoord(activity.initialCoord);
+    setEndCoord({latitude: activity.points[activity.points.length-1].coords.latitude, longitude: activity.points[activity.points.length-1].coords.longitude});
   }, []);
 
   return (
@@ -64,14 +81,27 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
             showsUserLocation={false}
             followsUserLocation={false}
             showsMyLocationButton={false}
-            scrollEnabled={false}
+            scrollEnabled={true}
             provider={PROVIDER_GOOGLE} // remove if not using Google Maps
             region={{
-              latitude: -15.8426396,
-              longitude: -48.0511031,
+              latitude: startCoord.latitude,
+              longitude: startCoord.longitude,
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
-            }} />
+            }}>
+              <Marker coordinate={startCoord} title={"Start"} />
+              <Marker coordinate={endCoord} title={"End"} />
+              <MapViewDirections
+                origin={startCoord}
+                destination={endCoord}
+                waypoints={coords}
+                apikey={'AIzaSyB7s0q8XsrI4Ih0gnv19wuZOlyE32fc_ds'}
+                strokeWidth={2}
+                strokeColor="green"
+                optimizeWaypoints={true}
+                mode="WALKING"
+              />
+            </MapView>
             <View style={styles.feedElementUser}>
               <View style={styles.feedElementInfo}>
                 <Text style={styles.feedElementDetailsTextDark}>{new Date(activity.start).toDateString()}</Text>

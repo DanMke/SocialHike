@@ -26,7 +26,8 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
-
+  
+  const [loggedUser, setLoggedUser] = React.useState<any>(user);
   const [allDurationTimeActivies, setAllDurationTimeActivies] = React.useState(0);
   const [allDistanceActivities, setAllDistanceActivities] = React.useState(0);
   const [activiesSize, setActiviesSize] = React.useState(0);
@@ -67,8 +68,9 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
       .signOut()
       .then(() => {
         console.log('User signed out!');
-        onUpdateUser(null);
-        navigation.navigate('Login');
+        navigation.navigate('Login').then(() => {
+          onUpdateUser(null);
+        });
       })
       .catch((error) => console.log(error));
   };
