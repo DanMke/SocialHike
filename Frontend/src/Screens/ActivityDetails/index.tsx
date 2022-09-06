@@ -39,6 +39,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
   const [startCoord, setStartCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [coords, setCoords] = React.useState<any>([]);
+  const [pacesInterval, setPacesInterval] = React.useState<any>([]);
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
@@ -179,7 +180,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                 <Text style={styles.feedElementDetailsTextDark}>Elevation</Text>
                 <LineChart
                   data={{
-                    labels: ['100', '200', '300'],
+                    labels: activity.elevations,
                     datasets: [
                       {
                         data: activity.elevations
@@ -195,7 +196,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     backgroundGradientFrom: "#fff",
                     backgroundGradientTo: "#fff",
                     color: (opacity = 1) => `rgba(0, 125, 0, ${opacity})`,
-                    strokeWidth: 2, // optional, default 3
+                    strokeWidth: 10, // optional, default 3
                     propsForDots: {
                       r: "0",
                       strokeWidth: "0",
@@ -226,7 +227,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                 <Text style={styles.feedElementDetailsTextDark}>Pace  </Text>
                 <LineChart
                   data={{
-                    labels: ['0', '5', '10'],
+                    labels: paces,
                     datasets: [
                       {
                         data: paces
