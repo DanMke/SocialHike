@@ -27,10 +27,10 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
   
-  const [loggedUser, setLoggedUser] = React.useState<any>(user);
   const [allDurationTimeActivies, setAllDurationTimeActivies] = React.useState(0);
   const [allDistanceActivities, setAllDistanceActivities] = React.useState(0);
   const [activiesSize, setActiviesSize] = React.useState(0);
+  const [activitiesDistanceByMonth, setActivitiesDistanceByMonth] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   useEffect(() => {
     api.get('/users/' + user.email).then((response) => {
@@ -43,8 +43,9 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
       var durationTime = 0;
       var distance = 0;
       activities.forEach((activity: any) => {
-        durationTime += activity.durationTime;
+        durationTime += activity.duration;
         distance += activity.distance;
+        activitiesDistanceByMonth[new Date(activity.start).getMonth()] += activity.distance;
       });
       setAllDurationTimeActivies(durationTime);
       setAllDistanceActivities(distance);
@@ -129,15 +130,15 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
               <View style={styles.profileUserDetailsTwo}>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Time</Text>
-                  <Text style={styles.feedElementDetailsText}>3h30m</Text>
+                  <Text style={styles.feedElementDetailsText}>{new Date(allDurationTimeActivies * 1000).toISOString().slice(11, 19)}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Distance</Text>
-                  <Text style={styles.feedElementDetailsText}>12.78km</Text>
+                  <Text style={styles.feedElementDetailsText}>{allDistanceActivities.toFixed(2) + 'KM'}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Activities</Text>
-                  <Text style={styles.feedElementDetailsText}>98</Text>
+                  <Text style={styles.feedElementDetailsText}>{activiesSize}</Text>
                 </View>
               </View>
               <LineChart
@@ -145,20 +146,7 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
                   labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
                   datasets: [
                     {
-                      data: [
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100,
-                        Math.random() * 100
-                      ]
+                      data: activitiesDistanceByMonth
                     }
                   ]
                 }}
