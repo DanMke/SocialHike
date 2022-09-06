@@ -20,7 +20,8 @@ import MapViewDirections from 'react-native-maps-directions';
 
 import styles from './styles';
 
-import PinIcon from '../../../assets/pin.png';
+import PinStartIcon from '../../../assets/pinStart.png';
+import PinEndIcon from '../../../assets/pinEnd.png';
 
 import {
   LineChart,
@@ -93,15 +94,15 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
             }}>
               <Marker coordinate={startCoord} title={"Start"} >
                 <Image
-                  source={PinIcon}
-                  style={{width: 20, height: 20}}
+                  source={PinStartIcon}
+                  style={{width: 25, height: 25}}
                   resizeMode="contain"
                 />
               </Marker>
               <Marker coordinate={endCoord} title={"End"}>
                 <Image
-                  source={PinIcon}
-                  style={{width: 20, height: 20}}
+                  source={PinEndIcon}
+                  style={{width: 25, height: 25}}
                   resizeMode="contain"
                 />
               </Marker>
