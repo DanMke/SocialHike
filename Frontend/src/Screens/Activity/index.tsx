@@ -41,72 +41,62 @@ const Activity: React.FC<ActivityProps> = ({onUpdateUser, user, navigation}: Act
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
-        <ScrollView style={{paddingHorizontal: 20, paddingTop: 20}}>
-          {activities.map((activity: any) => (
-            <Pressable style={styles.feedElement} onPress={(e) => onActivityDetails(e, activity)} key={activity._id}>
-              {/* <MapView style={styles.feedElementMap}
-              showsUserLocation={false}
-              followsUserLocation={false}
-              showsMyLocationButton={false}
-              scrollEnabled={false}
-              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-              region={{
-                latitude: -15.8426396,
-                longitude: -48.0511031,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }} /> */}
-              <View style={styles.feedElementUser}>
-                <View style={styles.feedElementInfo}>
-                  <Text style={styles.feedElementDetailsTextDark}>{new Date(activity.start).toDateString()}</Text>
-                  <Text style={{color: '#fff', fontSize: 14}}>{new Date(activity.start).getHours() + ':' + new Date(activity.start).getMinutes()}</Text>
+        <ScrollView>
+          <View style={{paddingHorizontal: 20, paddingVertical: 40}}>
+            {activities.map((activity: any) => (
+              <Pressable style={styles.feedElement} onPress={(e) => onActivityDetails(e, activity)} key={activity._id}>
+                <View style={styles.feedElementUser}>
+                  <View style={styles.feedElementInfo}>
+                    <Text style={styles.feedElementDetailsTextDark}>{new Date(activity.start).toDateString()}</Text>
+                    <Text style={{color: '#fff', fontSize: 14}}>{new Date(activity.start).getHours() + ':' + new Date(activity.start).getMinutes()}</Text>
+                  </View>
+                  {activity.type == 'run' && <FontAwesomeIcon icon={ faRunning } size={ 20 } color="#fff" />}
+                  {activity.type == 'ride' && <FontAwesomeIcon icon={ faBiking } size={ 20 } color="#fff" />}
+                  {activity.type == 'hike' && <FontAwesomeIcon icon={ faHiking } size={ 20 } color="#fff" />}
                 </View>
-                {activity.type == 'run' && <FontAwesomeIcon icon={ faRunning } size={ 20 } color="#fff" />}
-                {activity.type == 'ride' && <FontAwesomeIcon icon={ faBiking } size={ 20 } color="#fff" />}
-                {activity.type == 'hike' && <FontAwesomeIcon icon={ faHiking } size={ 20 } color="#fff" />}
-              </View>
-              <View style={styles.feedElementDetails}>
-                <View>
-                  <Text style={styles.feedElementDetailsTextDark}>Calories Burned</Text>
-                  <View style={styles.feedElementDetailsTextWithImage}>
-                    <FontAwesomeIcon icon={faFire} size={20} color="#ffffff"/>
-                    <Text style={styles.feedElementDetailsText}>{activity.calories.toFixed(1) + 'kcal'}</Text>
+                <View style={styles.feedElementDetails}>
+                  <View>
+                    <Text style={styles.feedElementDetailsTextDark}>Calories Burned</Text>
+                    <View style={styles.feedElementDetailsTextWithImage}>
+                      <FontAwesomeIcon icon={faFire} size={20} color="#ffffff"/>
+                      <Text style={styles.feedElementDetailsText}>{activity.calories.toFixed(1) + 'kcal'}</Text>
+                    </View>
+                  </View>
+                  
+                  <View>
+                    <Text style={styles.feedElementDetailsTextDark}>Time Duration</Text>
+                    <View style={styles.feedElementDetailsTextWithImage}>
+                      <FontAwesomeIcon icon={faClock} size={20} color="#ffffff"/>
+                      <Text style={styles.feedElementDetailsText}>{new Date(activity.duration * 1000).toISOString().slice(11, 19)}</Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Text style={styles.feedElementDetailsTextDark}>Distance</Text>
+                    <View style={styles.feedElementDetailsTextWithImage}>
+                      <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
+                      <Text style={styles.feedElementDetailsText}>{activity.distance.toFixed(2) + 'KM'}</Text>
+                    </View>
                   </View>
                 </View>
-                
-                <View>
-                  <Text style={styles.feedElementDetailsTextDark}>Time Duration</Text>
-                  <View style={styles.feedElementDetailsTextWithImage}>
-                    <FontAwesomeIcon icon={faClock} size={20} color="#ffffff"/>
-                    <Text style={styles.feedElementDetailsText}>{new Date(activity.duration * 1000).toISOString().slice(11, 19)}</Text>
+                <View style={styles.feedElementDetailsTwo}>
+                  <View>
+                    <Text style={styles.feedElementDetailsTextDark}>Average Speed</Text>
+                    <View style={styles.feedElementDetailsTextWithImage}>
+                      <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
+                      <Text style={styles.feedElementDetailsText}>{activity.averageSpeed.toFixed(2) + 'km/h'}</Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Text style={styles.feedElementDetailsTextDark}>Max Speed</Text>
+                    <View style={styles.feedElementDetailsTextWithImage}>
+                      <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
+                      <Text style={styles.feedElementDetailsText}>{activity.maxSpeed.toFixed(2) + 'km/h'}</Text>
+                    </View>
                   </View>
                 </View>
-                <View>
-                  <Text style={styles.feedElementDetailsTextDark}>Distance</Text>
-                  <View style={styles.feedElementDetailsTextWithImage}>
-                    <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
-                    <Text style={styles.feedElementDetailsText}>{activity.distance.toFixed(2) + 'KM'}</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={styles.feedElementDetailsTwo}>
-                <View>
-                  <Text style={styles.feedElementDetailsTextDark}>Average Speed</Text>
-                  <View style={styles.feedElementDetailsTextWithImage}>
-                    <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
-                    <Text style={styles.feedElementDetailsText}>{activity.averageSpeed.toFixed(2) + 'km/h'}</Text>
-                  </View>
-                </View>
-                <View>
-                  <Text style={styles.feedElementDetailsTextDark}>Max Speed</Text>
-                  <View style={styles.feedElementDetailsTextWithImage}>
-                    <FontAwesomeIcon icon={faBolt} size={20} color="#ffffff"/>
-                    <Text style={styles.feedElementDetailsText}>{activity.maxSpeed.toFixed(2) + 'km/h'}</Text>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-          ))}
+              </Pressable>
+            ))}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

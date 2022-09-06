@@ -40,7 +40,6 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
   const [startCoord, setStartCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [coords, setCoords] = React.useState<any>([]);
-  const [pacesInterval, setPacesInterval] = React.useState<any>([]);
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
