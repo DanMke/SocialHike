@@ -210,7 +210,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
                 <ArrowBackIcon size="xl" color="#ffffff" />
               </VStack>
             </Pressable>
-            <Image source={SocialHikeIcon} style={styles.icon} alt="App Icon" />
+            <Image source={SocialHikeIcon} style={styles.icon} />
           </View>
           <View style={styles.containerInputs}>
             <VStack width="90%" mx="3" maxW="320px">

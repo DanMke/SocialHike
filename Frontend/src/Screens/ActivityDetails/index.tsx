@@ -7,7 +7,7 @@ import {
   ArrowBackIcon,
 } from 'native-base';
 import React, { useEffect } from 'react';
-import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import {SafeAreaView, KeyboardAvoidingView, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -19,6 +19,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 
 import styles from './styles';
+
+import PinIcon from '../../../assets/pin.png';
 
 import {
   LineChart,
@@ -89,8 +91,20 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}>
-              <Marker coordinate={startCoord} title={"Start"} />
-              <Marker coordinate={endCoord} title={"End"} />
+              <Marker coordinate={startCoord} title={"Start"} >
+                <Image
+                  source={PinIcon}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </Marker>
+              <Marker coordinate={endCoord} title={"End"}>
+                <Image
+                  source={PinIcon}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </Marker>
               <MapViewDirections
                 origin={startCoord}
                 destination={endCoord}
