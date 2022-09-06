@@ -41,16 +41,12 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
     console.log(activity);
-    console.log(activity.elevations.length);
     var pacesTemp = [];
     for (var i = 0; i < activity.paces.length; i++) {
       pacesTemp.push(activity.paces[i].pace);
     }
-    console.log(pacesTemp);
     setPaces(pacesTemp);
   }, []);
-
-  console.log(navigation.getState().routes[1].params.activity);
 
   return (
     <SafeAreaView style={styles.container}>
