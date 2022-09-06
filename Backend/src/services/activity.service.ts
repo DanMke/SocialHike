@@ -11,6 +11,24 @@ const ActivityService = {
             throw error;
         }
     },
+    async updateActivity(activity: any) {
+        try {
+            const updateActivity = await Activity.findOneAndUpdate({ _id: activity._id }, activity, { new: true });
+            return updateActivity;
+        }
+        catch (error) {
+            throw error;
+        }
+    },
+    async getActivityById(id: any) {
+        try {
+            const activity = await Activity.findById(id);
+            return activity;
+        }
+        catch (error) {
+            throw error;
+        }
+    },
     async getActivities() {
         try {
             const activities = await Activity.find().sort({ start: -1 });

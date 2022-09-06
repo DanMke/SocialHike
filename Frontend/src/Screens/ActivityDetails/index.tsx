@@ -119,7 +119,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
             <View style={styles.feedElementUser}>
               <View style={styles.feedElementInfo}>
                 <Text style={styles.feedElementDetailsTextDark}>{new Date(activity.start).toDateString()}</Text>
-                <Text style={{color: '#fff', fontSize: 14}}>{new Date(activity.start).getHours() + ':' + new Date(activity.start).getMinutes()}</Text>
+                <Text style={{color: '#fff', fontSize: 14}}>{new Date(activity.start).getHours() + ':' + (new Date(activity.start).getMinutes() < 10 ?'0':'') + new Date(activity.start).getMinutes()}</Text>
               </View>
               {activity.type == 'run' && <FontAwesomeIcon icon={ faRunning } size={ 20 } color="#fff" />}
               {activity.type == 'ride' && <FontAwesomeIcon icon={ faBiking } size={ 20 } color="#fff" />}

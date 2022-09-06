@@ -1,4 +1,5 @@
 import express from 'express';
+import { ObjectId } from 'mongoose';
 
 import ActivityService from '../services/activity.service';
 import UserService from '../services/user.service';
@@ -67,6 +68,82 @@ function distanceVincenty(lat1: number, lon1: number, lat2: number, lon2: number
     return s;
 };
 
+function calculateElevation(activity: any) {
+    var maxElevation = 0;
+    var sumElevation = 0;
+    var elevations: number[] = [];
+    
+    for (var i = 0; i < activity.points.length; i++) {
+        elevations.push(activity.points[i].coords.altitude);
+        if (activity.points[i].coords.altitude > maxElevation) {
+            maxElevation = activity.points[i].coords.altitude;
+        }
+        sumElevation += activity.points[i].coords.altitude;
+    }
+    
+    activity.elevations = elevations;
+    activity.maxElevation = maxElevation;
+    activity.sumElevation = sumElevation;
+    activity.averageElevation = sumElevation / activity.points.length;
+}
+
+function calculateDistanceAndDependents(activity: any) {
+    var maxPace: number = 1000000;
+    var sumPace: number = 0;
+    var paces: any[] = [];
+
+    var maxSpeed: number = 0;
+    var sumSpeed: number = 0;
+
+    var distance: number = 0;
+
+    var divider = 1000;
+    for (var i = 0; i < activity.points.length - 1; i++) {
+        distance += distanceVincenty(activity.points[i].coords.latitude, activity.points[i].coords.longitude, 
+            activity.points[i + 1].coords.latitude, activity.points[i + 1].coords.longitude);
+        var durationUntil = (new Date(activity.points[i + 1].timestamp).getTime() - new Date(activity.start).getTime()) * 0.001;
+        var speed = distance / durationUntil;
+        if (speed > maxSpeed) {
+            maxSpeed = speed;
+        }
+        sumSpeed += speed;
+        if ((distance / divider) >= 1.0 || i == activity.points.length - 2) {
+            var durationToPace = 0;
+            var distanceToPace = 0;
+            if (paces.length == 0) {
+                durationToPace = durationUntil;
+            } else {
+                durationToPace = durationUntil - paces[paces.length - 1].durationActivity;
+            }
+            if (distance >= divider) {
+                distanceToPace = distance - divider;
+            } else {
+                distanceToPace = distance;
+            }
+            var pace = durationToPace / (distanceToPace / 1000);
+            if (pace <= maxPace) {
+                maxPace = pace;
+            }
+            sumPace += pace;
+            paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
+            divider += 1000;
+        }
+    }
+    activity.distance = distance / 1000;
+    activity.sumPace = sumPace;
+    activity.paces = paces;
+    activity.averagePace = (sumPace / paces.length) === Infinity ? 0 : (sumPace / paces.length);
+    activity.maxPace = maxPace === 1000000 || maxPace === Infinity ? 0 : maxPace;
+    activity.sumSpeed = sumSpeed;
+    activity.maxSpeed = maxSpeed * 3.6;
+    activity.averageSpeed = (sumSpeed / activity.points.length) * 3.6;
+}
+
+function updateFieldsActivity(activityToUpdate: any, activity: any) {
+    activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
+    activity.points = activityToUpdate.points.concat(activity.points);
+}
+
 const ActivityController = {
     
     createActivity: async (req: express.Request, res: express.Response) => {
@@ -74,78 +151,15 @@ const ActivityController = {
             const activity = req.body;
             activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
 
-            var maxElevation = 0;
-            var sumElevation = 0;
-            var elevations = [];
+            calculateElevation(activity);
 
-            
-
-            for (var i = 0; i < activity.points.length; i++) {
-                elevations.push(activity.points[i].coords.altitude);
-                if (activity.points[i].coords.altitude > maxElevation) {
-                    maxElevation = activity.points[i].coords.altitude;
-                }
-                sumElevation += activity.points[i].coords.altitude;
-            }
-
-            activity.elevations = elevations;
-            activity.maxElevation = maxElevation;
-            activity.averageElevation = sumElevation / activity.points.length;
-            
-
-            var maxPace = 1000000;
-            var sumPace = 0;
-            var paces = [];
-
-            var maxSpeed = 0;
-            var sumSpeed = 0;
-
-            var distance = 0;
-            var divider = 1000;
-
-            for (var i = 0; i < activity.points.length - 1; i++) {
-                distance += distanceVincenty(activity.points[i].coords.latitude, activity.points[i].coords.longitude, 
-                    activity.points[i + 1].coords.latitude, activity.points[i + 1].coords.longitude);
-                var durationUntil = (new Date(activity.points[i + 1].timestamp).getTime() - new Date(activity.start).getTime()) * 0.001;
-                var speed = distance / durationUntil;
-                if (speed > maxSpeed) {
-                    maxSpeed = speed;
-                }
-                sumSpeed += speed;
-                if (distance / divider >= 1.0 || i == activity.points.length - 2) {
-                    var durationToPace = 0;
-                    var distanceToPace = 0;
-                    if (paces.length == 0) {
-                        durationToPace = durationUntil;
-                    } else {
-                        durationToPace = durationUntil - paces[paces.length - 1].durationActivity;
-                    }
-                    if (distance >= divider) {
-                        distanceToPace = distance - divider;
-                    } else {
-                        distanceToPace = distance;
-                    }
-                    var pace = durationToPace / (distanceToPace / 1000);
-                    if (pace <= maxPace) {
-                        maxPace = pace;
-                    }
-                    sumPace += pace;
-                    paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
-                    divider += 1000;
-                }
-            }
-            
-            activity.distance = distance / 1000;
-            activity.paces = paces;
-            activity.averagePace = sumPace / paces.length;
-            activity.maxPace = maxPace;
-            activity.maxSpeed = maxSpeed * 3.6;
-            activity.averageSpeed = (sumSpeed / activity.points.length) * 3.6;
+            calculateDistanceAndDependents(activity);
 
             const user: any = await UserService.getUserByEmail(req.body.user);
 
-            const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
-            const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
+            // const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
+            // const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
+            const calories = 0.056 * (activity.distance * 1000);
             activity.calories = calories;
 
             console.log(activity);
@@ -156,6 +170,35 @@ const ActivityController = {
                 message: 'Activity created successfully!',
                 createdActivity
             });
+        } catch (error: any) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    getDataOfActivity: async (req: express.Request, res: express.Response) => {
+        try {
+            const activity = req.body;
+            activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
+
+            calculateElevation(activity);
+
+            calculateDistanceAndDependents(activity);
+
+            const user: any = await UserService.getUserByEmail(req.body.user);
+
+            // const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
+            // const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
+            const calories = 0.056 * (activity.distance * 1000);
+            activity.calories = calories;
+
+            console.log(activity);
+
+            return res.status(200).json({
+                message: 'Activity updated successfully!',
+                activity
+            });
+            
+
         } catch (error: any) {
             console.log(error);
             return res.status(500).send(error);

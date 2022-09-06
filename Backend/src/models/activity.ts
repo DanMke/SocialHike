@@ -128,7 +128,7 @@ const activitySchema = new Schema({
                 type: Number
             },
             durationActivity: {
-                type: Date
+                type: Number
             },
             pace: {
                 type: Number
@@ -138,6 +138,15 @@ const activitySchema = new Schema({
     elevations: {
         type: [Number]
     },
+    sumPaces: {
+        type: Number
+    },
+    sumElevations: {
+        type: Number
+    },
+    sumSpeeds: {
+        type: Number
+    }
 });
 
 const Activity = mongoose.model('Activities', activitySchema);

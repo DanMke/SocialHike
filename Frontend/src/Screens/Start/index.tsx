@@ -32,7 +32,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   const [latitude, setLatitude] = React.useState<number>(0);
   const [longitude, setLongitude] = React.useState<number>(0);
   const [altitude, setAltitude] = React.useState<number | null>(0);
-  const [speed, setSpeed] = React.useState<number | null>(0);
+  const [speed, setSpeed] = React.useState<number>(0);
   
   const [type, setType] = React.useState<string>('run');
 
@@ -45,6 +45,11 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   const [isPaused, setIsPaused] = React.useState(false);
 
   const [intervalGetCurrentPosition, setIntervalGetCurrentPosition] = React.useState<any>();
+
+  const [distance, setDistance] = React.useState(0);
+  const [averageSpeed, setAverageSpeed] = React.useState(0);
+  const [calories, setCalories] = React.useState(0);
+  const [duration, setDuration] = React.useState(0);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -122,9 +127,30 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   };
 
   const onPause = () => {
-    clearInterval(intervalGetCurrentPosition);
-    setIsPaused(true);
-    setEndDateTime(new Date());
+    api.post('/activities/data', {
+      user: user.email,
+      start: startDateTime,
+      end: new Date(),
+      initialCoord: {
+        latitude: initialLatitude,
+        longitude: initialLongitude,
+      },
+      points: points,
+      type: type,
+      }).then((response) => {
+        clearInterval(intervalGetCurrentPosition);
+        setDistance(response.data.activity.distance);
+        setAverageSpeed(response.data.activity.averageSpeed);
+        setCalories(response.data.activity.calories);
+        setDuration(response.data.activity.duration);
+        setIsPaused(true);
+        setEndDateTime(new Date());
+      }
+    ).catch((error) => {
+      console.log(error);
+    });
+    
+    
   };
 
   const onResume = () => {
@@ -176,6 +202,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setInitialLatitude(latitude);
           setInitialLongitude(longitude);
           setType('run');
+          navigation.navigate('ActivityDetails', {activity: response.data.createdActivity});
         }
       ).catch((error) => {
         console.log(error);
@@ -202,10 +229,22 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           >
           </MapView>
           <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: 'white'}}>Latitude: {latitude}</Text>
-            <Text style={{color: 'white'}}>Longitude: {longitude}</Text>
-            <Text style={{color: 'white'}}>Altitude: {altitude}</Text>
-            <Text style={{color: 'white'}}>Speed (m/s): {speed}</Text>
+            { isStarted && isPaused &&
+              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: 'white'}}>Duration: {new Date(duration * 1000).toISOString().slice(11, 19)}</Text>
+                <Text style={{color: 'white'}}>Distance: {distance.toFixed(2) + ' KM'}</Text>
+                <Text style={{color: 'white'}}>Average Speed: {averageSpeed.toFixed(2) + ' KM/H'}</Text>
+                <Text style={{color: 'white'}}>Calories: {calories.toFixed(1) + ' kcal'}</Text>
+              </View>
+            }
+            { isStarted && !isPaused && 
+              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: 'white'}}>Latitude: {latitude}</Text>
+                <Text style={{color: 'white'}}>Longitude: {longitude}</Text>
+                <Text style={{color: 'white'}}>Altitude: {altitude}</Text>
+                <Text style={{color: 'white'}}>Speed: {(speed * 3.6) + ' KM/H'}</Text>
+              </View>
+            }
             { !isStarted && 
               <View>
                 <Select selectedValue={type} 
@@ -218,13 +257,13 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
                     bg: "white",
                     endIcon: <CheckIcon size="5" />
                   }} 
-                  mt={1} onValueChange={itemValue => {setType(itemValue); console.log(itemValue)}}>
+                  mt={2} onValueChange={itemValue => {setType(itemValue); console.log(itemValue)}}>
                     <Select.Item label="Run" value="run" startIcon={<FontAwesomeIcon icon={faRunning} size={30} color="#000"/>} />
                     <Select.Item label="Ride" value="ride" startIcon={<FontAwesomeIcon icon={faBiking} size={30} color="#000"/>}/>
                     <Select.Item label="Hike" value="hike" startIcon={<FontAwesomeIcon icon={faHiking} size={30} color="#000"/>}/>
                 </Select>
 
-                <Button width={"200"} height={"200"} backgroundColor={'#04AA6C'} margin={2} onPress={onStart} borderRadius={100}>
+                <Button width={"150"} height={"150"} mt={5} backgroundColor={'#04AA6C'} margin={2} onPress={onStart} borderRadius={100}>
                   <Text style={{color: '#fff', fontSize: 25}}>Start</Text>
                 </Button>
               </View>

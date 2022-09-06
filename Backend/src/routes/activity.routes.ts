@@ -6,6 +6,8 @@ const activityRouter = express.Router();
 
 activityRouter.post('/activities', ActivityController.createActivity);
 
+activityRouter.post('/activities/data', ActivityController.getDataOfActivity);
+
 activityRouter.get('/activities', ActivityController.getActivities);
 
 activityRouter.get('/activities/:email', ActivityController.getActivitiesByUser);
