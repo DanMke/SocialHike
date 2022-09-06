@@ -42,7 +42,6 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
-    console.log(activity);
     
     var pacesTemp = [];
     for (var i = 0; i < activity.paces.length; i++) {
@@ -195,7 +194,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     backgroundColor: "#fff",
                     backgroundGradientFrom: "#fff",
                     backgroundGradientTo: "#fff",
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    color: (opacity = 1) => `rgba(0, 125, 0, ${opacity})`,
                     strokeWidth: 2, // optional, default 3
                     propsForDots: {
                       r: "0",
@@ -242,7 +241,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     backgroundColor: "#fff",
                     backgroundGradientFrom: "#fff",
                     backgroundGradientTo: "#fff",
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    color: (opacity = 1) => `rgba(0, 125, 0, ${opacity})`,
                     strokeWidth: 10, // optional, default 3
                     propsForDots: {
                       r: "0",
