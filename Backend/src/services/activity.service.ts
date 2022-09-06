@@ -13,7 +13,7 @@ const ActivityService = {
     },
     async getActivities() {
         try {
-            const activities = await Activity.find();
+            const activities = await Activity.find().sort({ start: -1 });
             return activities;
         }
         catch (error) {
@@ -22,7 +22,7 @@ const ActivityService = {
     },
     async getActivitiesByUser(email: string) {
         try {
-            const activities = await Activity.find({ email });
+            const activities = await Activity.find({ email }).sort({ start: -1 });
             return activities;
         }
         catch (error) {
