@@ -139,8 +139,8 @@ const ActivityController = {
             activity.paces = paces;
             activity.averagePace = sumPace / paces.length;
             activity.maxPace = maxPace;
-            activity.maxSpeed = maxSpeed;
-            activity.averageSpeed = sumSpeed / activity.points.length;
+            activity.maxSpeed = maxSpeed * 3.6;
+            activity.averageSpeed = (sumSpeed / activity.points.length) * 3.6;
 
             const user: any = await UserService.getUserByEmail(req.body.user);
 
