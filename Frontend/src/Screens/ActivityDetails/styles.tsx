@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   feedElement: {
     backgroundColor: '#333333',
-    minHeight: 550,
+    minHeight: 570,
     marginVertical: 5,
   },
   feedElementMap: {
@@ -81,6 +81,7 @@ export default StyleSheet.create({
   feedElementReacts: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 20,
   },
   feedElementReactLike: {
     flexDirection: 'row',

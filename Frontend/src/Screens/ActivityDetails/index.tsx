@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faClock, faRoute, faRunning, faBolt, faFire, faBiking, faHiking } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faRoute, faRunning, faBolt, faFire, faBiking, faHiking, faHeart, faComment } from '@fortawesome/free-solid-svg-icons'
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; 
 
@@ -259,7 +259,18 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                 />
               </View>
             </View>
-            
+            <View style={styles.feedElementReacts}>
+              <Pressable style={styles.feedElementReactLike} onPress={() => console.log('f')}>
+                <VStack width={'50%'} height={10} bgColor={"#15573E"} alignItems="center" justifyContent={"center"}>
+                  <FontAwesomeIcon icon={faHeart} size={30} color="#ffffff"/>
+                </VStack>
+              </Pressable>
+              <Pressable style={styles.feedElementReactComment} onPress={() => console.log('f')}>
+                <VStack width={'50%'} height={10} bgColor={"#04AA6C"} alignItems="center" justifyContent={"center"}>
+                  <FontAwesomeIcon icon={faComment} size={30} color="#ffffff"/>
+                </VStack>
+              </Pressable>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

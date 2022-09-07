@@ -15,7 +15,6 @@ import styles from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUsers, faBell, faClock, faRoute, faRunning, faHeart, faPlus, faBiking, faHiking } from '@fortawesome/free-solid-svg-icons'
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
 import api from '../../Services/api';
 
 interface HomeProps {
