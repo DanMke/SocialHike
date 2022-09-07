@@ -88,7 +88,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
     snapshot.then((uri) => {
       activity.mapImage = uri;
       api.post('/activities', {
-        user: user.email,
+        user: user._id,
         start: activity.start,
         end: activity.end,
         initialCoord: {

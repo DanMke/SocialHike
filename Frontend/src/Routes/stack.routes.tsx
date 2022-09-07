@@ -35,7 +35,7 @@ export function HomeStack() {
   return (
     <Stack.Navigator initialRouteName='HomeStack'>
         <Stack.Screen name='HomeStack' component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name='FeedDetails' component={FeedDetails} options={{ headerShown: false }} />
+        <Stack.Screen name='ActivityDetails' component={ActivityDetails} options={{ headerShown: false }} />
         <Stack.Screen name='Notifications' component={Notifications} options={{ headerShown: false }} />
         <Stack.Screen name='Social' component={Social} options={{ headerShown: false }} />
     </Stack.Navigator>

@@ -31,7 +31,7 @@ const ActivityService = {
     },
     async getActivities() {
         try {
-            const activities = await Activity.find().sort({ start: -1 });
+            const activities = await Activity.find().populate('user').sort({ start: -1 });
             return activities;
         }
         catch (error) {
