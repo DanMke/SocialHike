@@ -223,6 +223,16 @@ const ActivityController = {
             return res.status(500).send(error);
         }
     },
+    getActivityById: async (req: express.Request, res: express.Response) => {
+        try {
+            const id = req.params.id;
+            const activity = await ActivityService.getActivityById(id);
+            return res.status(200).json(activity);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
     getActivitiesNearestOfPoint: async (req: express.Request, res: express.Response) => {
         try {
             const point = req.body;
@@ -246,6 +256,30 @@ const ActivityController = {
             // TODO: Get following users
             // TODO: Get activities of following users
             return res.status(200).json(activities);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    likeActivity: async (req: express.Request, res: express.Response) => {
+        try {
+            const activityId = req.params.id;
+            const action = req.body.action;
+            const user = req.body.user;
+            const activity = await ActivityService.likeActivity(activityId, action, user);
+            return res.status(200).json(activity);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+    commentActivity: async (req: express.Request, res: express.Response) => {
+        try {
+            const activityId = req.params.id;
+            const comment = req.body.comment;
+            const user = req.body.user;
+            const activity = await ActivityService.commentActivity(activityId, comment, user);
+            return res.status(200).json(activity);
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);

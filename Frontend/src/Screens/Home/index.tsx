@@ -49,11 +49,27 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
     navigation.navigate('Social');
   }
 
-  const onLike = () => {
-    console.log(user);
-    // TODO req +1 like or -1 like
-    // TODO change color of heart
-  }
+  const onLike = (e: any, activity: any) => {
+    var action = "add";
+    if (activity.likes.some((like: any) => like._id === user._id)) {
+      action = "remove";
+    }
+    api.post('/activities/' + activity._id + '/like', {
+      action: action,
+      user: user._id
+    }).then((response) => {
+      console.log(response);
+      var newActivities = activities.map((a: any) => {
+        if (a._id === activity._id) {
+          a.likes = response.data.likes;
+        }
+        return a;
+      });
+      setActivities(newActivities);
+    }).catch((error) => {
+      console.log(error);
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,9 +87,14 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
               </VStack>
             </Pressable>
           </View>
-          <View style={styles.feed}>
-            {activities.map((activity) => (
-              <View style={styles.feedElement} key={activity._id}>
+            {activities.length === 0 ? (
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={styles.feedElementDetailsTextDark}>No activities yet</Text>
+              </View>
+            ) : 
+            (activities.map((activity) => (
+            <View style={styles.feed} key={activity._id}>
+              <View style={styles.feedElement}>
                 <Image style={styles.feedElementMap} source={{
                     uri: `data:image/png;base64,${activity.mapImage}`,
                   }} />
@@ -109,9 +130,9 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
                   </View>
                 </View>
                 <View style={styles.feedElementReacts}>
-                  <Pressable style={styles.feedElementReactLike} onPress={onLike}>
+                  <Pressable style={styles.feedElementReactLike} onPress={(e) => onLike(e, activity)}>
                     <VStack width={'50%'} height={10} bgColor={"#15573E"} alignItems="center" justifyContent={"center"}>
-                      <FontAwesomeIcon icon={faHeart} size={30} color="#ffffff"/>
+                      <FontAwesomeIcon icon={faHeart} size={30} color={activity.likes.some((like: any) => like._id === user._id) ? '#FF2400' : '#fff'}/>
                     </VStack>
                   </Pressable>
                   <Pressable style={styles.feedElementReactComment} onPress={(e) => onActivityDetails(e, activity)}>
@@ -121,8 +142,8 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
                   </Pressable>
                 </View>
               </View>
-            ))}
-          </View>
+            </View>
+            )))}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

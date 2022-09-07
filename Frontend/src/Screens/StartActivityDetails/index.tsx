@@ -69,12 +69,6 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
     setStartCoord(activity.initialCoord);
     setEndCoord({latitude: activity.points[activity.points.length-1].coords.latitude, longitude: activity.points[activity.points.length-1].coords.longitude});
 
-    if (navigation.getState().routes[0].name === 'StartStack') {
-      console.log('entrei')
-
-    }
-   
-    
   }, []);
 
   const onSave = () => {
@@ -132,8 +126,8 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
             region={{
               latitude: startCoord.latitude,
               longitude: startCoord.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.05,
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.001,
             }}>
               <Marker coordinate={startCoord} title={"Start"} >
                 <Image

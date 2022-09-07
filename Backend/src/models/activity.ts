@@ -13,10 +13,14 @@ const activitySchema = new Schema({
         type: String,
         required: true
     },
-    likes: {
-        type: Number,
-        default: 0
-    },
+    likes: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'Users',
+            }
+        }
+    ],
     comments: [
         {
             user: {
@@ -26,7 +30,10 @@ const activitySchema = new Schema({
             comment: {
                 type: String,
                 required: true
-            }
+            },
+            createdAt: {
+                type: Date,
+            } 
         }
     ],
     initialCoord: {

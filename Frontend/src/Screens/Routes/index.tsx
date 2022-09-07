@@ -125,8 +125,14 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
             ))}
           </MapView>
           <ScrollView>
+          {routes.length === 0 ? (
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={styles.routeElementTextDark}>No activities yet</Text>
+              </View>
+            ) : 
+            
+          (routes.map((route: any) => (
             <View style={styles.routes}>
-              {routes.map((route: any) => (
                 <View style={styles.routeElement} key={route._id}>
                   <View>
                     <Text style={styles.routeElementText}>{new Date(route.start).toDateString() + ' ' + new Date(route.start).toLocaleTimeString()}</Text>
@@ -187,8 +193,8 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
                     </View>
                   </View>
                 </View>
-              ))}
             </View>
+            )))}
           </ScrollView>
         </View>
       </KeyboardAvoidingView>

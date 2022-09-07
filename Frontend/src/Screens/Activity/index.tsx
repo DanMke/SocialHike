@@ -26,7 +26,7 @@ const Activity: React.FC<ActivityProps> = ({onUpdateUser, user, navigation}: Act
   const [activities, setActivities] = React.useState([]);
   
   useEffect(() => {
-    api.get('/activities/' + user.email).then((response) => {
+    api.get('/activities/user/' + user.email).then((response) => {
       setActivities(response.data);
     });
   }, []);
@@ -39,8 +39,13 @@ const Activity: React.FC<ActivityProps> = ({onUpdateUser, user, navigation}: Act
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
         <ScrollView>
+          {activities.length === 0 ? (
+              <View style={{alignItems: 'center', justifyContent: 'center', paddingTop: 60}}>
+                <Text style={styles.feedElementDetailsTextDark}>No activities yet</Text>
+              </View>
+            ) : (
+          activities.map((activity: any) => (
           <View style={{paddingHorizontal: 20, paddingVertical: 40}}>
-            {activities.map((activity: any) => (
               <View style={styles.feedElement} key={activity._id}>
                 <View>
                   <Image style={{width: '100%', height: 150}} source={{
@@ -100,8 +105,8 @@ const Activity: React.FC<ActivityProps> = ({onUpdateUser, user, navigation}: Act
                   </View>
                 </Pressable>
               </View>
-            ))}
           </View>
+          )))}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

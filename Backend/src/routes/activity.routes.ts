@@ -10,10 +10,16 @@ activityRouter.post('/activities/data', ActivityController.getDataOfActivity);
 
 activityRouter.get('/activities', ActivityController.getActivities);
 
-activityRouter.get('/activities/:email', ActivityController.getActivitiesByUser);
+activityRouter.get('/activities/:id', ActivityController.getActivityById);
+
+activityRouter.get('/activities/user/:email', ActivityController.getActivitiesByUser);
 
 activityRouter.get('/activities/near', ActivityController.getActivitiesNearestOfPoint);
 
 activityRouter.get('/activities/following/:email', ActivityController.getActivitiesOfFollowingUsers);
+
+activityRouter.post('/activities/:id/like', ActivityController.likeActivity);
+
+activityRouter.post('/activities/:id/comments', ActivityController.commentActivity);
 
 export default activityRouter;
