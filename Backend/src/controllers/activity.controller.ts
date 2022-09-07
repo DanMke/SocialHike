@@ -226,9 +226,14 @@ const ActivityController = {
     getActivitiesNearestOfPoint: async (req: express.Request, res: express.Response) => {
         try {
             const point = req.body;
-            const activities = await ActivityService.getActivities();
-            //TODO: Filter by point
-            return res.status(200).json(activities);
+            const activities: any[] = await ActivityService.getActivities();
+            const activitiesNearestOfPoint = [];
+            for (const activity of activities) {
+                if (distanceVincenty(activity.initialCoord.latitude, activity.initialCoord.longitude, point.latitude, point.longitude)) {
+                    activitiesNearestOfPoint.push(activity);
+                }
+            }
+            return res.status(200).json(activitiesNearestOfPoint);
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);

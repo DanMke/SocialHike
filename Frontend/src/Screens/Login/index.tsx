@@ -59,9 +59,9 @@ const Login: React.FC<LoginProps> = ({onUpdateUser, user, navigation}: LoginProp
         .signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           console.log('User account signed in!');
-          console.log(userCredential);
+          // console.log(userCredential);
           api.get('/users/' + email).then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             onUpdateUser(response.data);
             setErrors({});
             navigation.navigate('TabRoutes',  {screen: 'Home'});

@@ -4,13 +4,13 @@ import {
   Text,
 } from 'native-base';
 import React, {useEffect} from 'react';
-import {SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import {SafeAreaView, KeyboardAvoidingView, PermissionsAndroid, Image, TouchableHighlight} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import Geolocation from 'react-native-geolocation-service';
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'; 
 
 import styles from './styles';
 
@@ -18,6 +18,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons'
 
 import {LineChart} from "react-native-chart-kit";
+import api from '../../Services/api';
+
+import PinStartIcon from '../../../assets/pinStart.png';
 
 interface RoutesProps {
   onTest?: any;
@@ -27,20 +30,48 @@ interface RoutesProps {
 
 const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) => {
 
-  const [latitude, setLatitude] = React.useState(-15.8426396);
-  const [longitude, setLongitude] = React.useState(-48.0511031);
+  const [latitude, setLatitude] = React.useState(0);
+  const [longitude, setLongitude] = React.useState(0);
+  const [routes, setRoutes] = React.useState([]);
+  const [elevations, setElevations] = React.useState<any[]>([0]);
 
   useEffect(() => {
-    // TODO: pegar as activities e os inicios de rotas e desenhar no mapa
-    // TODO: listar as activities
+    const requestLocationPermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'This app needs access to your location',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the location');
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
 
-    // TODO geolocation request authorization if not authorized
-    // Geolocation.requestAuthorization("always");
+    requestLocationPermission();
+    // TODO: pegar as activities e os inicios de rotas e desenhar no mapa
+
     Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
+        api.get('/activities/near').then((response) => {
+          setRoutes(response.data);
+          setElevations(response.data.map((route: any) => route.elevation));
+        }).catch((error) => {
+          console.log(error);
+        });
       },
       (error) => {
         console.log(error);
@@ -49,29 +80,6 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
     );
 
   } , []);
-
-  const data = {
-    labels: [100, 200, 300],
-    datasets: [
-      {
-        data: [20, 45, 28],
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`, // optional
-        strokeWidth: 0 // optional
-      }
-    ],
-    legend: ["Elevation"] // optional
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false // optional
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -90,77 +98,100 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
               longitudeDelta: 0.01,
             }}
           >
-          </MapView>
-          <ScrollView style={styles.routes}>
-            <View style={styles.routeElement}>
-              <View>
-                <Text style={styles.routeElementText}>Percurso do Parque de Taguatinga</Text>
-              </View>
-              <View style={styles.routeDetails}>
-                <View style={styles.routeDistance}>
-                  <Text style={styles.routeElementTextDark}>Distance</Text>
-                  <View style={styles.routeElementTextWithImage}>
-                    <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
-                    <Text style={styles.routeElementTextKM}>12.34KM</Text>
-                  </View>
-                  <Text style={styles.routeElementTextDark}>Average Elevation</Text>
-                  <Text style={styles.routeElementTextValue}>1500 m</Text>
-                </View>
-                <View style={styles.routeElevation}> 
-                  <View style={{alignItems: 'center'}}>
-                    <Text style={styles.routeElementTextDark}>Max Elevation</Text>
-                    <Text style={styles.routeElementTextValue}>1500 m</Text>
-                  </View>
-                  <View style={{alignItems: 'center'}}>
-                    <Text style={styles.routeElementTextDark}>Min Elevation</Text>
-                    <Text style={styles.routeElementTextValue}>500 m</Text>
-                  </View>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.routeElementTextDark}>Elevation</Text>
-                  <LineChart
-                    data={{
-                      labels: ['100', '200', '300'],
-                      datasets: [
-                        {
-                          data: [
-                            800,
-                            1200,
-                            1500,
-                            500,
-                            1500,
-                            1500,
-                            1500,
-                            1500,
-                            1500,
-                          ]
-                        }
-                      ],
-                    }}
-                    width={120} // from react-native
-                    height={60}
-                    withVerticalLabels={false} // optional, defaults to false
-                    withHorizontalLabels={false} // optional, defaults to false
-                    chartConfig={{
-                      backgroundColor: "#FAFAFA",
-                      backgroundGradientFrom: "#FAFAFA",
-                      backgroundGradientTo: "#FAFAFA",
-                      color: (opacity = 1) => `rgba(0, 120, 0, ${opacity})`,
-                      propsForDots: {
-                        r: "0",
-                        strokeWidth: "0",
-                      }
-                    }}
-                    bezier
-                    style={{
-                      paddingRight: 0,
-                      marginLeft: 20,
-                      marginTop: 5,
-                      width: '100%',
-                    }}
+            {routes.map((route: any) => (
+              <Marker
+                coordinate={{
+                  latitude: route.initialCoord.latitude,
+                  longitude: route.initialCoord.longitude,
+                }}
+                title={'Distance: ' + route.distance.toFixed(2) + ' KM'}
+                key={route._id}
+                onPress={(event) => {
+                  if (event.nativeEvent.action === 'marker-press') {
+                    console.log("porra")
+                    console.log(route._id)
+                  } else {
+                    console.log("não é")
+                  }
+
+                }}
+              >
+                {/* <Callout tooltip> */}
+                  <TouchableHighlight onPress={() => console.log('p')} onShowUnderlay={()=> console.log(route._id)}>
+                  <Image
+                    source={PinStartIcon}
+                    style={{width: 25, height: 25}}
+                    resizeMode="contain"
                   />
+                  </TouchableHighlight>
+                {/* </Callout> */}
+              </Marker>
+            ))}
+          </MapView>
+          <ScrollView>
+            <View style={styles.routes}>
+              {routes.map((route: any) => (
+                <View style={styles.routeElement} key={route._id}>
+                  <View>
+                    <Text style={styles.routeElementText}>{new Date(route.start).toDateString() + ' ' + new Date(route.start).toLocaleTimeString()}</Text>
+                  </View>
+                  <View style={styles.routeDetails}>
+                    <View style={styles.routeDistance}>
+                      <Text style={styles.routeElementTextDark}>Distance</Text>
+                      <View style={styles.routeElementTextWithImage}>
+                        <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
+                        <Text style={styles.routeElementTextKM}>{route.distance.toFixed(2) + 'KM'}</Text>
+                      </View>
+                      <Text style={styles.routeElementTextDark}>Average Elevation</Text>
+                      <Text style={styles.routeElementTextValue}>{route.maxElevation.toFixed(2) + 'm'}</Text>
+                    </View>
+                    <View style={styles.routeElevation}> 
+                      <View style={{alignItems: 'center'}}>
+                        <Text style={styles.routeElementTextDark}>Max Elevation</Text>
+                        <Text style={styles.routeElementTextValue}>{route.maxElevation.toFixed(2) + 'm'}</Text>
+                      </View>
+                      <View style={{alignItems: 'center'}}>
+                        <Text style={styles.routeElementTextDark}>Min Elevation</Text>
+                        <Text style={styles.routeElementTextValue}>{Math.min(...route.elevations).toFixed(2) + 'm'}</Text>
+                      </View>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                      <Text style={styles.routeElementTextDark}>Elevation</Text>
+                      <LineChart
+                        data={{
+                          labels: route.elevations,
+                          datasets: [
+                            {
+                              data: route.elevations
+                            }
+                          ]
+                        }}
+                        width={120} // from react-native
+                        height={60}
+                        withVerticalLabels={false} // optional, defaults to false
+                        withHorizontalLabels={false} // optional, defaults to false
+                        chartConfig={{
+                          backgroundColor: "#FAFAFA",
+                          backgroundGradientFrom: "#FAFAFA",
+                          backgroundGradientTo: "#FAFAFA",
+                          color: (opacity = 1) => `rgba(0, 120, 0, ${opacity})`,
+                          propsForDots: {
+                            r: "0",
+                            strokeWidth: "0",
+                          }
+                        }}
+                        bezier
+                        style={{
+                          paddingRight: 0,
+                          marginLeft: 20,
+                          marginTop: 5,
+                          width: '100%',
+                        }}
+                      />
+                    </View>
+                  </View>
                 </View>
-              </View>
+              ))}
             </View>
           </ScrollView>
         </View>
