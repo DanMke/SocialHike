@@ -38,7 +38,7 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
   }, []);
 
   const onActivityDetails = (e: any, activity: any) => {
-    navigation.navigate('ActivityDetails', {activity: activity});
+    navigation.navigate('ActivityDetailsFeed', {activity: activity});
   }
 
   const onNotifications = () => {
@@ -71,6 +71,11 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
     });
   };
 
+  const onUser = (e: any, activity: any) => {
+    console.log(activity)
+    // navigation.navigate('Home', {screen: 'FeedProfile', params: {user: activity}});
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
@@ -99,12 +104,12 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
                     uri: `data:image/png;base64,${activity.mapImage}`,
                   }} />
                 <View style={styles.feedElementUser}>
-                  <View style={styles.feedElementUserInfo}>
+                  <Pressable style={styles.feedElementUserInfo} onPress={(e) => onUser(e, activity.user)}>
                     <Image style={{width: 25, height: 25, borderRadius: 100}} source={{
                     uri: `data:image/png;base64,${activity.user.avatar}`,
                     }} />
                     <Text style={styles.feedElementUserText}>{activity.user.firstName + ' ' + activity.user.lastName}</Text>
-                  </View>
+                  </Pressable>
                   {activity.type == 'run' && <FontAwesomeIcon icon={ faRunning } size={ 20 } color="#fff" />}
                   {activity.type == 'ride' && <FontAwesomeIcon icon={ faBiking } size={ 20 } color="#fff" />}
                   {activity.type == 'hike' && <FontAwesomeIcon icon={ faHiking } size={ 20 } color="#fff" />}

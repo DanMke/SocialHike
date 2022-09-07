@@ -4,6 +4,7 @@ import {
   View,
   VStack,
   Text,
+  ArrowBackIcon,
 } from 'native-base';
 import React, {useEffect} from 'react';
 import {SafeAreaView, Image, KeyboardAvoidingView, Dimensions} from 'react-native';
@@ -19,13 +20,15 @@ import {LineChart} from "react-native-chart-kit";
 import auth from '@react-native-firebase/auth';
 import api from '../../Services/api';
 
-interface ProfileProps {
+interface FeedProfileProps {
   onUpdateUser?: any;
   user: any;
   navigation: any;
 }
 
-const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: ProfileProps) => {
+const FeedProfile: React.FC<FeedProfileProps> = ({onUpdateUser, user, navigation}: FeedProfileProps) => {
+
+  const [userProfile, setUserProfile] = React.useState<any>({followers: [], following: []});
   
   const [allDurationTimeActivies, setAllDurationTimeActivies] = React.useState(0);
   const [allDistanceActivities, setAllDistanceActivities] = React.useState(0);
@@ -33,11 +36,12 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
   const [activitiesDistanceByMonth, setActivitiesDistanceByMonth] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   useEffect(() => {
-    api.get('/users/' + user.email).then((response) => {
-      onUpdateUser(response.data);
+    var userEmail = navigation.getState().routes[navigation.getState().routes.length -2].params.activity.user.email;
+    api.get('/users/' + userEmail).then((response) => {
+      setUserProfile(response.data);
     });
 
-    api.get('/activities/user/' + user.email).then((response) => {
+    api.get('/activities/user/' + userEmail).then((response) => {
       var activities = response.data;
       setActiviesSize(activities.length);
       var durationTime = 0;
@@ -54,77 +58,40 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
     });
   }, []);
 
-  const onFollowers = () => {
-    navigation.navigate('Followers');
-  };
-
-  const onFollowing = () => {
-    navigation.navigate('Following');
-  };
-
-  const onEditProfile = () => {
-    navigation.navigate('EditProfile');
-  };
-  
-  const onSignOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('User signed out!');
-        navigation.navigate('Login').then(() => {
-          onUpdateUser(null);
-        });
-      })
-      .catch((error) => console.log(error));
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
         <ScrollView style={{paddingHorizontal: 20}}>
           <View style={styles.containerIcon}>
-            <Pressable style={styles.icon} onPress={onEditProfile}>
+            <Pressable style={styles.icon} onPress={() => navigation.goBack()}>
               <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
-                <FontAwesomeIcon icon={faGear} size={30} color="#ffffff"/>
+                <ArrowBackIcon size="xl" color="#ffffff" />
               </VStack>
             </Pressable>
-            <Pressable style={styles.icon} onPress={onSignOut}>
-              <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
-                <FontAwesomeIcon icon={faDoorOpen} size={30} color="#ffffff"/>
-              </VStack>
-            </Pressable>
+            
           </View>
           <View>
             <View style={styles.profile}>
               <View style={styles.profileUser}>
               <Image style={{width: 30, height: 30, borderRadius: 100}} source={{
-                      uri: `data:image/png;base64,${user.avatar}`,
+                      uri: `data:image/png;base64,${userProfile.avatar}`,
                       }} />
-                <Text style={styles.feedElementUserText}>{user.firstName + ' ' + user.lastName}</Text>
+                <Text style={styles.feedElementUserText}>{userProfile.firstName + ' ' + userProfile.lastName}</Text>
               </View>
               <View style={styles.profileUserDetails}>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Username</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.username}</Text>
+                  <Text style={styles.feedElementDetailsText}>{userProfile.username}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.feedElementDetailsTextDark}>Height</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.height + ' CM'}</Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.feedElementDetailsTextDark}>Weight</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.weight + ' KG'}</Text>
-                </View>
-              </View>
-              <View style={styles.profileUserDetailsTwo}>
-                <Pressable style={{alignItems: 'center'}} onPress={onFollowers}>
                   <Text style={styles.feedElementDetailsTextDark}>Followers</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.followers.length}</Text>
-                </Pressable>
-                <Pressable style={{alignItems: 'center'}} onPress={onFollowing}>
+                  <Text style={styles.feedElementDetailsText}>{userProfile.followers.length}</Text>
+                </View>
+                <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Following</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.following.length}</Text>
-                </Pressable>
+                  <Text style={styles.feedElementDetailsText}>{userProfile.following.length}</Text>
+                </View>
               </View>
             </View>
             <View style={styles.activity}>
@@ -199,4 +166,4 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedProfile);

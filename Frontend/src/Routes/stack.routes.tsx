@@ -8,7 +8,6 @@ const Stack = createNativeStackNavigator();
 import Login from '../Screens/Login';
 import Register from '../Screens/Register';
 import Home from '../Screens/Home';
-import FeedDetails from '../Screens/FeedDetails';
 import Profile from '../Screens/Profile';
 import Notifications from '../Screens/Notifications';
 import Social from '../Screens/Social';
@@ -19,6 +18,8 @@ import Activity from '../Screens/Activity';
 import ActivityDetails from '../Screens/ActivityDetails';
 import StartActivityDetails from '../Screens/StartActivityDetails';
 import Start from '../Screens/Start';
+import FeedProfile from '../Screens/FeedProfile';
+import ActivityDetailsFeed from '../Screens/ActivityDetailsFeed';
 
 export function StackRoutes() {
   return (
@@ -35,9 +36,10 @@ export function HomeStack() {
   return (
     <Stack.Navigator initialRouteName='HomeStack'>
         <Stack.Screen name='HomeStack' component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name='ActivityDetails' component={ActivityDetails} options={{ headerShown: false }} />
+        <Stack.Screen name='ActivityDetailsFeed' component={ActivityDetailsFeed} options={{ headerShown: false }} />
         <Stack.Screen name='Notifications' component={Notifications} options={{ headerShown: false }} />
         <Stack.Screen name='Social' component={Social} options={{ headerShown: false }} />
+        <Stack.Screen name='FeedProfile' component={FeedProfile} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
