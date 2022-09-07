@@ -219,6 +219,22 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                   </View>
                 </View>
               </View>
+              <View style={styles.feedElementDetailsTwo}>
+                <View>
+                  <Text style={styles.feedElementDetailsTextDark}>Num Likes</Text>
+                  <View style={styles.feedElementDetailsTextWithImage}>
+                    <FontAwesomeIcon icon={faHeart} size={20} color="#ffffff"/>
+                    <Text style={styles.feedElementDetailsText}>{activity.likes.length}</Text>
+                  </View>
+                </View>
+                <View>
+                  <Text style={styles.feedElementDetailsTextDark}>Num Comments</Text>
+                  <View style={styles.feedElementDetailsTextWithImage}>
+                    <FontAwesomeIcon icon={faComment} size={20} color="#ffffff"/>
+                    <Text style={styles.feedElementDetailsText}>{activity.comments.length}</Text>
+                  </View>
+                </View>
+              </View>
               <View style={styles.routeDetails}>
                 <View style={styles.routeElevation}> 
                   <View style={{alignItems: 'center'}}>
@@ -327,7 +343,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
               </View>
             </View>
             {showComments &&
-              <View style={{backgroundColor: '#333333'}}>
+              <View style={{backgroundColor: '#333333', marginTop: 30}}>
                 <View style={{paddingVertical: 2}}>
                   <Input variant="outline" selectionColor={'#15573E'} type="text" color={'#E9E8E8'}
                       borderColor={'#04C37D'} _focus={{borderColor: '#15573E'}} onChangeText={value => setCommentText(value)} rightElement={

@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   feedElement: {
     backgroundColor: '#333333',
-    height: 570,
+    height: 610,
     marginVertical: 5,
   },
   feedElementMap: {
