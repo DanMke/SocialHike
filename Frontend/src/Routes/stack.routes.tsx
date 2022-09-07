@@ -17,6 +17,7 @@ import Following from '../Screens/Following';
 import EditProfile from '../Screens/EditProfile';
 import Activity from '../Screens/Activity';
 import ActivityDetails from '../Screens/ActivityDetails';
+import StartActivityDetails from '../Screens/StartActivityDetails';
 import Start from '../Screens/Start';
 
 export function StackRoutes() {
@@ -65,7 +66,7 @@ export function StartStack() {
   return (
     <Stack.Navigator initialRouteName='StartStack'>
         <Stack.Screen name='StartStack' component={Start} options={{ headerShown: false }} />
-        <Stack.Screen name='ActivityDetails' component={ActivityDetails} options={{ headerShown: false }} />
+        <Stack.Screen name='StartActivityDetails' component={StartActivityDetails} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

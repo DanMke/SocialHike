@@ -146,6 +146,9 @@ const activitySchema = new Schema({
     },
     sumSpeeds: {
         type: Number
+    },
+    mapImage: {
+        type: String
     }
 });
 

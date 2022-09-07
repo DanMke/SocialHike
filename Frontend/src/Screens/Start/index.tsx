@@ -163,7 +163,6 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setAltitude(position.coords.altitude);
           setSpeed(position.coords.speed);
           setPoints([...points, position]);
-          
         },
         (error) => {
           console.log(error);
@@ -184,7 +183,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
       clearInterval(intervalGetCurrentPosition);
       setIsStarted(false);
       setIsPaused(false);
-      api.post('/activities', {
+      api.post('/activities/data', {
         user: user.email,
         start: startDateTime,
         end: end,
@@ -202,7 +201,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setInitialLatitude(latitude);
           setInitialLongitude(longitude);
           setType('run');
-          navigation.navigate('ActivityDetails', {activity: response.data.createdActivity});
+          navigation.navigate('StartActivityDetails', {activity: response.data.activity});
         }
       ).catch((error) => {
         console.log(error);

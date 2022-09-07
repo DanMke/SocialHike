@@ -108,12 +108,8 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
                 key={route._id}
                 onPress={(event) => {
                   if (event.nativeEvent.action === 'marker-press') {
-                    console.log("porra")
                     console.log(route._id)
-                  } else {
-                    console.log("não é")
                   }
-
                 }}
               >
                 {/* <Callout tooltip> */}

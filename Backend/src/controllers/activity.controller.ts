@@ -155,7 +155,7 @@ const ActivityController = {
 
             calculateDistanceAndDependents(activity);
 
-            const user: any = await UserService.getUserByEmail(req.body.user);
+            // const user: any = await UserService.getUserByEmail(req.body.user);
 
             // const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
             // const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
@@ -184,7 +184,7 @@ const ActivityController = {
 
             calculateDistanceAndDependents(activity);
 
-            const user: any = await UserService.getUserByEmail(req.body.user);
+            // const user: any = await UserService.getUserByEmail(req.body.user);
 
             // const bmr = 88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * 30);
             // const calories = (bmr / 24) * 4.0 * (activity.duration / 3600);
