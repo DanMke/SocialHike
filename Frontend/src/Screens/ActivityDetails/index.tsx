@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faClock, faRoute, faRunning, faBolt, faFire, faBiking, faHiking, faHeart, faComment, faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faRoute, faRunning, faBolt, faFire, faBiking, faHiking, faHeart, faComment } from '@fortawesome/free-solid-svg-icons'
 
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; 
 
@@ -58,7 +58,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
       var activityTemp = response.data;
       var pacesTemp = [];
       for (var i = 0; i < activityTemp.paces.length; i++) {
-        pacesTemp.push(activityTemp.paces[i].pace);
+        pacesTemp.push(activityTemp.paces[i].pace / 60);
       }
       setPaces(pacesTemp);
 
@@ -250,7 +250,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                   <Text style={styles.feedElementDetailsTextDark}>Elevation</Text>
                   <LineChart
                     data={{
-                      labels: activity.elevations,
+                      labels: activity.elevations.slice,
                       datasets: [
                         {
                           data: activity.elevations
@@ -262,11 +262,15 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     withVerticalLabels={false} // optional, defaults to false
                     withHorizontalLabels={false} // optional, defaults to false
                     chartConfig={{
-                      backgroundColor: "#fff",
-                      backgroundGradientFrom: "#fff",
-                      backgroundGradientTo: "#fff",
-                      color: (opacity = 1) => `rgba(0, 125, 0, ${opacity})`,
-                      strokeWidth: 10, // optional, default 3
+                      backgroundColor: '#15573E',
+                      backgroundGradientFrom: '#04AA6C',
+                      backgroundGradientTo: '#04C37D',
+                      decimalPlaces: 2, // optional, defaults to 2dp
+                      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      style: {
+                        borderRadius: 16
+                      },
+                      strokeWidth: 10,
                       propsForDots: {
                         r: "0",
                         strokeWidth: "0",
@@ -309,11 +313,15 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     withVerticalLabels={false} // optional, defaults to false
                     withHorizontalLabels={false} // optional, defaults to false
                     chartConfig={{
-                      backgroundColor: "#fff",
-                      backgroundGradientFrom: "#fff",
-                      backgroundGradientTo: "#fff",
-                      color: (opacity = 1) => `rgba(0, 125, 0, ${opacity})`,
-                      strokeWidth: 10, // optional, default 3
+                      backgroundColor: '#15573E',
+                      backgroundGradientFrom: '#04AA6C',
+                      backgroundGradientTo: '#04C37D',
+                      decimalPlaces: 2, // optional, defaults to 2dp
+                      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      style: {
+                        borderRadius: 16
+                      },
+                      strokeWidth: 10,
                       propsForDots: {
                         r: "0",
                         strokeWidth: "0",
