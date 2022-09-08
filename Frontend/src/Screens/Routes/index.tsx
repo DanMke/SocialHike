@@ -66,7 +66,7 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
         console.log(position);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
-        api.get('/activitiesNear').then((response) => {
+        api.post('/activitiesNear', {latitude: position.coords.latitude, longitude: position.coords.longitude}).then((response) => {
           setRoutes(response.data);
           setElevations(response.data.map((route: any) => route.elevation));
         }).catch((error) => {
@@ -139,13 +139,17 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
                   </View>
                   <View style={styles.routeDetails}>
                     <View style={styles.routeDistance}>
-                      <Text style={styles.routeElementTextDark}>Distance</Text>
+                      <Text style={styles.routeElementTextDark}>Route Distance</Text>
                       <View style={styles.routeElementTextWithImage}>
                         <FontAwesomeIcon icon={faRoute} size={20} color="#ffffff"/>
                         <Text style={styles.routeElementTextKM}>{route.distance.toFixed(2) + 'KM'}</Text>
                       </View>
                       <Text style={styles.routeElementTextDark}>Average Elevation</Text>
                       <Text style={styles.routeElementTextValue}>{route.maxElevation.toFixed(2) + 'm'}</Text>
+                      <View style={{alignItems: 'center'}}>
+                        <Text style={styles.routeElementTextDark}>Average Distance From Me</Text>
+                        <Text style={styles.routeElementTextValue}>{route.distanceFromMe.toFixed(2) + 'KM'}</Text>
+                      </View>
                     </View>
                     <View style={styles.routeElevation}> 
                       <View style={{alignItems: 'center'}}>

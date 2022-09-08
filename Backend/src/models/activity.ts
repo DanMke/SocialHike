@@ -157,6 +157,9 @@ const activitySchema = new Schema({
     },
     mapImage: {
         type: String
+    },
+    distanceFromMe: {
+        type: Number
     }
 });
 

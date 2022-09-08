@@ -54,10 +54,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 0,
     justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%'
   },
   routeElevation: {
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   routeDistance: {

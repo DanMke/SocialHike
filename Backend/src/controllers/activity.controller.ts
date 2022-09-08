@@ -1,8 +1,6 @@
 import express from 'express';
-import { ObjectId } from 'mongoose';
 
 import ActivityService from '../services/activity.service';
-import UserService from '../services/user.service';
 
 function deg2rad(deg: number) {
     return deg * (Math.PI/180);
@@ -236,12 +234,12 @@ const ActivityController = {
     getActivitiesNearestOfPoint: async (req: express.Request, res: express.Response) => {
         try {
             const point = req.body;
-            const activities: any[] = await ActivityService.getActivities();
+            var activities: any[] = await ActivityService.getActivities();
             const activitiesNearestOfPoint = [];
-            for (const activity of activities) {
-                activity.distanceOfMe = distanceVincenty(activity.initialCoord.latitude, activity.initialCoord.longitude, point.latitude, point.longitude)
+            for (var activity of activities) {
+                activity.distanceFromMe = (distanceVincenty(activity.initialCoord.latitude, 
+                    activity.initialCoord.longitude, point.latitude, point.longitude) / 1000);
                 activitiesNearestOfPoint.push(activity);
-                
             }
             return res.status(200).json(activitiesNearestOfPoint);
         } catch (error) {
