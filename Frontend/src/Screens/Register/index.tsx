@@ -202,7 +202,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="height">
         <ScrollView>
           <View style={styles.containerIcon}>
             <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>

@@ -18,7 +18,6 @@ import {LineChart} from "react-native-chart-kit";
 
 import auth from '@react-native-firebase/auth';
 import api from '../../Services/api';
-
 interface ProfileProps {
   onUpdateUser?: any;
   user: any;
@@ -33,6 +32,7 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
   const [activitiesDistanceByMonth, setActivitiesDistanceByMonth] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   useEffect(() => {
+   
     api.get('/users/' + user.email).then((response) => {
       onUpdateUser(response.data);
     });
@@ -71,9 +71,8 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
       .signOut()
       .then(() => {
         console.log('User signed out!');
-        navigation.navigate('Login').then(() => {
-          onUpdateUser(null);
-        });
+        // onUpdateUser(null);
+        navigation.navigate('Login');
       })
       .catch((error) => console.log(error));
   };

@@ -5,8 +5,18 @@ import connectDatabase from './config/database';
 import userRouter from './routes/user.routes';
 import activityRouter from './routes/activity.routes';
 
+import checkAuth from './middlewares/auth';
+
+import admin from "firebase-admin";
+
+var serviceAccount = require("./serviceAccountKey.json");
+
 const PORT = 4000;
 const HOSTNAME = 'http://localhost';
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 connectDatabase();
 
@@ -22,6 +32,8 @@ app.use(cors({
 app.get('/', (req, res) => {
     res.send('Bem-vindo!');
 });
+
+app.use(checkAuth);
 
 app.use(userRouter);
 app.use(activityRouter);

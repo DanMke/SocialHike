@@ -10,8 +10,6 @@ import {ActivityStack, HomeStack, StartStack} from './stack.routes'
 import {ProfileStack} from './stack.routes'
 
 import Routes from '../Screens/Routes';
-import Start from '../Screens/Start';
-import Activity from '../Screens/Activity';
 
 export function TabRoutes() {
   return (

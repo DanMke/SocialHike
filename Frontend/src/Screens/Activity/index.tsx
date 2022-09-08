@@ -39,14 +39,15 @@ const Activity: React.FC<ActivityProps> = ({onUpdateUser, user, navigation}: Act
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
         <ScrollView>
+          <View style={{paddingTop: 40}} />
           {activities.length === 0 ? (
               <View style={{alignItems: 'center', justifyContent: 'center', paddingTop: 60}}>
                 <Text style={styles.feedElementDetailsTextDark}>No activities yet</Text>
               </View>
             ) : (
           activities.map((activity: any) => (
-          <View style={{paddingHorizontal: 20, paddingVertical: 40}}>
-              <View style={styles.feedElement} key={activity._id}>
+          <View style={{paddingHorizontal: 20, paddingVertical: 10}} key={activity._id}>
+              <View style={styles.feedElement}>
                 <View>
                   <Image style={{width: '100%', height: 150}} source={{
                     uri: `data:image/png;base64,${activity.mapImage}`,

@@ -21,15 +21,24 @@ import Start from '../Screens/Start';
 import FeedProfile from '../Screens/FeedProfile';
 import ActivityDetailsFeed from '../Screens/ActivityDetailsFeed';
 
+import auth from '@react-native-firebase/auth';
+
 export function StackRoutes() {
+
+  const user = auth().currentUser;
+  var initialRoute = 'Login';
+  if (user && user.email) {
+    initialRoute = 'TabRoutes';
+  }
   return (
-    <Stack.Navigator initialRouteName='Login'>
+    <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
         <Stack.Screen name='Register' component={Register} options={{ headerShown: false }} />
         <Stack.Screen name='TabRoutes' component={TabRoutes} options={{ headerShown: false }} />
         {/* <Stack.Screen name='HomeTab' component={Home} options={{ headerShown: false }} /> */}
     </Stack.Navigator>
   );
+
 }
 
 export function HomeStack() {

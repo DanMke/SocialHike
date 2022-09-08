@@ -17,6 +17,8 @@ import { faUsers, faBell, faClock, faRoute, faRunning, faHeart, faPlus, faBiking
 
 import api from '../../Services/api';
 
+import auth from '@react-native-firebase/auth';
+
 interface HomeProps {
   onUpdateUser?: any;
   user: any;
@@ -28,13 +30,29 @@ const Home: React.FC<HomeProps> = ({onUpdateUser, user, navigation}: HomeProps) 
   const [activities, setActivities] = React.useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/activities').then((response) => {
-      var allActivities = response.data;
-      // TODO: Filter by following users
-      setActivities(allActivities);
-    }).catch((error) => {
-      console.log(error);
-    });
+    if (!user) {
+      const userFirebase = auth().currentUser;
+      api.get('/users/' + userFirebase?.email).then((response) => {
+        onUpdateUser(response.data);
+        api.get('/activities').then((response) => {
+          var allActivities = response.data;
+          // TODO: Filter by following users
+          setActivities(allActivities);
+        }).catch((error) => {
+          console.log(error);
+        });
+      }).catch((error) => {
+        console.log(error);
+      });
+    } else {
+      api.get('/activities').then((response) => {
+        var allActivities = response.data;
+        // TODO: Filter by following users
+        setActivities(allActivities);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
   }, []);
 
   const onActivityDetails = (e: any, activity: any) => {
