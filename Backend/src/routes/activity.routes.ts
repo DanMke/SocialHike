@@ -14,7 +14,7 @@ activityRouter.get('/activities/:id', ActivityController.getActivityById);
 
 activityRouter.get('/activities/user/:email', ActivityController.getActivitiesByUser);
 
-activityRouter.get('/activities/near', ActivityController.getActivitiesNearestOfPoint);
+activityRouter.get('/activitiesNear', ActivityController.getActivitiesNearestOfPoint);
 
 activityRouter.get('/activities/following/:email', ActivityController.getActivitiesOfFollowingUsers);
 

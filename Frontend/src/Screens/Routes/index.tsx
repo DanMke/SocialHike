@@ -66,7 +66,7 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
         console.log(position);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
-        api.get('/activities/near').then((response) => {
+        api.get('/activitiesNear').then((response) => {
           setRoutes(response.data);
           setElevations(response.data.map((route: any) => route.elevation));
         }).catch((error) => {
@@ -132,8 +132,8 @@ const Routes: React.FC<RoutesProps> = ({onTest, user, navigation}: RoutesProps) 
             ) : 
             
           (routes.map((route: any) => (
-            <View style={styles.routes}>
-                <View style={styles.routeElement} key={route._id}>
+            <View style={styles.routes} key={route._id}>
+                <View style={styles.routeElement}>
                   <View>
                     <Text style={styles.routeElementText}>{new Date(route.start).toDateString() + ' ' + new Date(route.start).toLocaleTimeString()}</Text>
                   </View>

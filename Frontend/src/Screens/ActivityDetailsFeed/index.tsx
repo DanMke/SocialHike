@@ -358,7 +358,8 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
               <View style={{backgroundColor: '#333333', marginTop: 30}}>
                 <View style={{paddingVertical: 2}}>
                   <Input variant="outline" selectionColor={'#15573E'} type="text" color={'#E9E8E8'}
-                      borderColor={'#04C37D'} _focus={{borderColor: '#15573E'}} onChangeText={value => setCommentText(value)} rightElement={
+                      value={commentText} borderColor={'#04C37D'} _focus={{borderColor: '#15573E'}} 
+                      onChangeText={value => setCommentText(value)} rightElement={
                     <Pressable onPress={onComment}>
                       <ChevronRightIcon size="xl" color="#ffffff" style={{marginRight: 10}} />
                     </Pressable>

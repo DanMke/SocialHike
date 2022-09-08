@@ -239,9 +239,9 @@ const ActivityController = {
             const activities: any[] = await ActivityService.getActivities();
             const activitiesNearestOfPoint = [];
             for (const activity of activities) {
-                if (distanceVincenty(activity.initialCoord.latitude, activity.initialCoord.longitude, point.latitude, point.longitude)) {
-                    activitiesNearestOfPoint.push(activity);
-                }
+                activity.distanceOfMe = distanceVincenty(activity.initialCoord.latitude, activity.initialCoord.longitude, point.latitude, point.longitude)
+                activitiesNearestOfPoint.push(activity);
+                
             }
             return res.status(200).json(activitiesNearestOfPoint);
         } catch (error) {
