@@ -33,6 +33,9 @@ export default StyleSheet.create({
     paddingTop: 20,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#211F20'
-  }
+    backgroundColor: '#211F20',
+  },
+  activityIndicator: {
+    marginVertical: 30,
+  },
 });
