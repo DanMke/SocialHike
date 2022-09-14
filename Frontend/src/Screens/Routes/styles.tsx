@@ -55,7 +55,7 @@ export default StyleSheet.create({
     paddingTop: 0,
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   routeElevation: {
     flexDirection: 'column',
@@ -66,5 +66,13 @@ export default StyleSheet.create({
     flexDirection: 'column',
     paddingRight: 20,
     alignItems: 'center',
+  },
+  noActivityWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  loadingWrapper: {
+    marginTop: 20,
   },
 });
