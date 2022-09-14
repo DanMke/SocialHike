@@ -89,4 +89,9 @@ export default StyleSheet.create({
     paddingTop: 5,
     justifyContent: 'space-around',
   },
+  indicatorWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 60,
+  },
 });
