@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   container: {
@@ -22,7 +22,7 @@ export default StyleSheet.create({
   feed: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20
+    padding: 20,
   },
   feedElement: {
     backgroundColor: '#333333',
@@ -92,5 +92,10 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#04AA6C',
+  },
+  indicatorWrapper: {
+    height: Dimensions.get('screen').height * 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
