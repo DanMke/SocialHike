@@ -108,7 +108,8 @@ const Following: React.FC<FollowingProps> = ({
                 </Pressable>
               </View>
               <View>
-                {following.map((followingUser: any) => (
+                {following.length > 0 ? (
+                following.map((followingUser: any) => (
                   <View style={styles.feedElement} key={followingUser.email}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Image
@@ -142,7 +143,12 @@ const Following: React.FC<FollowingProps> = ({
                       <Text style={styles.buttonText}>Unfollow</Text>
                     </Button>
                   </View>
-                ))}
+                )
+                )) : (
+                  <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 20}}>
+                    <Text style={{color: '#ffffff', fontSize: 20}}>You are not following anyone</Text>
+                  </View>
+                )}
               </View>
             </>
           )}

@@ -118,7 +118,8 @@ const Followers: React.FC<FollowersProps> = ({
                 </Pressable>
               </View>
               <View>
-                {followers.map((follower: any) => (
+                {followers.length > 0 ? (
+                  followers.map((follower: any) => (
                   <View style={styles.feedElement} key={follower.email}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Image
@@ -164,7 +165,13 @@ const Followers: React.FC<FollowersProps> = ({
                     }
                     
                   </View>
-                ))}
+                ))) : (
+                  <View style={styles.feedElement}>
+                    <Text style={styles.feedElementText}>
+                      You don't have any followers yet.
+                    </Text>
+                  </View>
+                )}
               </View>
             </>
           )}
