@@ -109,8 +109,8 @@ const EditProfile: React.FC<EditProfileProps> = ({onUpdateUser, user, navigation
         height: height,
         avatar: avatar,
       }
-      api.put('/users', user).then((response) => {
-        onUpdateUser(response.data);
+      api.put('/users/' + user.email, user).then((response) => {
+        onUpdateUser(response.data.user);
         setErrors({});
         navigation.goBack();
       }).catch((error) => {

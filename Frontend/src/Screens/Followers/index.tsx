@@ -58,6 +58,29 @@ const Followers: React.FC<FollowersProps> = ({
     onRefresh();
   }, []);
 
+  const onFollow = (e: any, follower: any) => {
+    e.preventDefault();
+    api
+      .post('/users/' + user.email + '/following', {
+        following: follower.email,
+      })
+      .then(response => {
+        onRefresh();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const onUnfollow = (e: any, followingUser: any) => {
+    api.delete('/users/' + user.email + '/following', {data: {following: followingUser.email}}).then(response => {
+      onRefresh();
+    }
+    ).catch(error => {
+      console.log(error);
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
@@ -123,11 +146,23 @@ const Followers: React.FC<FollowersProps> = ({
                         </Text>
                       </View>
                     </View>
-                    <Button
-                      backgroundColor={'#04AA6C'}
-                      onPress={() => navigation.goBack()}>
-                      <Text style={styles.buttonText}>Follow</Text>
-                    </Button>
+
+                    {
+                      user.following.filter((followingUser: any) => followingUser.user.email === follower.email).length > 0 ? (
+                        <Button
+                          backgroundColor={'#15573E'}
+                          onPress={e => onUnfollow(e, follower)}>
+                          <Text style={styles.buttonText}>Unfollow</Text>
+                        </Button>
+                      ) : (
+                        <Button
+                          backgroundColor={'#04AA6C'}
+                          onPress={e => onFollow(e, follower)}>
+                          <Text style={styles.buttonText}>Follow</Text>
+                        </Button>
+                      )
+                    }
+                    
                   </View>
                 ))}
               </View>

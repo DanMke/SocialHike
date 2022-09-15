@@ -43,7 +43,11 @@ const Following: React.FC<FollowingProps> = ({
       .get('/users/' + user.email)
       .then(response => {
         onUpdateUser(response.data);
-        setFollowing(user.following);
+        var followingTemp = [];
+        user.following.forEach((element: any) => {
+          followingTemp.push(element.user);
+        });
+        setFollowing(followingTemp);
         setLoading(false);
         setRefreshing(false);
       })
@@ -57,6 +61,15 @@ const Following: React.FC<FollowingProps> = ({
   useEffect(() => {
     onRefresh();
   }, []);
+
+  const onUnfollow = (e: any, followingUser: any) => {
+    api.delete('/users/' + user.email + '/following', {data: {following: followingUser.email}}).then(response => {
+      setFollowing(following.filter((element: any) => element.email !== followingUser.email));
+    }
+    ).catch(error => {
+      console.log(error);
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -124,9 +137,9 @@ const Following: React.FC<FollowingProps> = ({
                       </View>
                     </View>
                     <Button
-                      backgroundColor={'#04AA6C'}
-                      onPress={() => navigation.goBack()}>
-                      <Text style={styles.buttonText}>Follow</Text>
+                      backgroundColor={'#15573E'}
+                      onPress={e => onUnfollow(e, followingUser)}>
+                      <Text style={styles.buttonText}>Unfollow</Text>
                     </Button>
                   </View>
                 ))}

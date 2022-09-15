@@ -259,6 +259,7 @@ const UserController = {
             const email = req.params.email;
             const {following} = req.body;
             const updatedUser = await UserService.addFollowingByEmail(email, following);
+            const followingUserUpdated = await UserService.addFollowerByEmail(following, email);
             return res.status(200).json(updatedUser);
         } catch (error) {
             console.log(error);
@@ -281,6 +282,7 @@ const UserController = {
             const email = req.params.email;
             const {following} = req.body;
             const updatedUser = await UserService.deleteFollowingByEmail(email, following);
+            const followingUserUpdated = await UserService.deleteFollowerByEmail(following, email);
             return res.status(200).json(updatedUser);
         } catch (error) {
             console.log(error);
