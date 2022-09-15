@@ -13,7 +13,7 @@ const UserService = {
     },
     async getUserByEmail(email: string) {
         try {
-            const user = await User.findOne({ email }).populate('followers').populate('following');
+            const user = await User.findOne({ email }).populate('followers').populate('following.user');
             return user;
         }
         catch (error) {
@@ -22,7 +22,7 @@ const UserService = {
     },
     async getUsers() {
         try {
-            const users = await User.find();
+            const users = await User.find().populate('followers').populate('following.user');
             return users;
         }
         catch (error) {
@@ -63,22 +63,6 @@ const UserService = {
             throw error;
         }
     },
-    async addFollowingByEmail(email: string, followingEmail: string) {
-        try {
-            const user = await User.findOne({ email });
-            const following = await User.findOne({ email: followingEmail });
-            if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $addToSet: { following: following } }, { new: true });
-                return updatedUser;
-            }
-            else {
-                return null;
-            }
-        }
-        catch (error) {
-            throw error;
-        }
-    },
     async deleteFollowerByEmail(email: string, followerEmail: string) {
         try {
             const user = await User.findOne({ email });
@@ -95,12 +79,28 @@ const UserService = {
             throw error;
         }
     },
+    async addFollowingByEmail(email: string, followingEmail: string) {
+        try {
+            const user = await User.findOne({ email });
+            const following = await User.findOne({ email: followingEmail });
+            if (user && following) {
+                const updatedUser = await User.findOneAndUpdate({ email }, { $addToSet: { following: {user: following} } }, { new: true });
+                return updatedUser;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (error) {
+            throw error;
+        }
+    },
     async deleteFollowingByEmail(email: string, followingEmail: string) {
         try {
             const user = await User.findOne({ email });
             const following = await User.findOne({ email: followingEmail });
             if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: following._id } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: {user: following._id} } }, { new: true });
                 return updatedUser;
             }
             else {

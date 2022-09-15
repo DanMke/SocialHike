@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
     res.send('Bem-vindo!');
 });
 
-app.use(checkAuth);
+// app.use(checkAuth);
 
 app.use(userRouter);
 app.use(activityRouter);

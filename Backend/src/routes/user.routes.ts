@@ -8,6 +8,8 @@ userRouter.post('/users', UserController.createUser);
 
 userRouter.get('/users', UserController.getUsers);
 
+userRouter.post('/users/social', UserController.getUsersSocial);
+
 userRouter.get('/users/:email', UserController.getUserByEmail);
 
 userRouter.put('/users/:email', UserController.updateUserByEmail);

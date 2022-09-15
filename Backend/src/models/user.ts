@@ -44,10 +44,18 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Users',
     }],
-    following: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
-    }],
+    following: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'Users',
+            },
+            strength: {
+                type: Number,
+                default: 1000
+            }
+        }
+    ],
     gender: {
         type: String,
         required: true
