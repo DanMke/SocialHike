@@ -5,7 +5,7 @@ import {
   KeyboardAvoidingView,
   Image,
   ActivityIndicator,
-  Dimensions,
+  RefreshControl,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
@@ -42,8 +42,13 @@ const Home: React.FC<HomeProps> = ({
 }: HomeProps) => {
   const [activities, setActivities] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  useEffect(() => {
+  const onRefresh = React.useCallback((initial: Boolean = false) => {
+    if (initial) {
+      setRefreshing(true);
+    }
+
     setLoading(true);
     if (!user) {
       const userFirebase = auth().currentUser;
@@ -58,15 +63,18 @@ const Home: React.FC<HomeProps> = ({
               // TODO: Filter by following users
               setActivities(allActivities);
               setLoading(false);
+              setRefreshing(false);
             })
             .catch(error => {
               console.log(error);
               setLoading(false);
+              setRefreshing(false);
             });
         })
         .catch(error => {
           console.log(error);
           setLoading(false);
+          setRefreshing(false);
         });
     } else {
       api
@@ -76,12 +84,18 @@ const Home: React.FC<HomeProps> = ({
           // TODO: Filter by following users
           setActivities(allActivities);
           setLoading(false);
+          setRefreshing(false);
         })
         .catch(error => {
           console.log(error);
           setLoading(false);
+          setRefreshing(false);
         });
     }
+  }, []);
+
+  useEffect(() => {
+    onRefresh(true);
   }, []);
 
   const onActivityDetails = (e: any, activity: any) => {
@@ -129,7 +143,11 @@ const Home: React.FC<HomeProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
-        <ScrollView style={{height: '100%'}}>
+        <ScrollView
+          style={{height: '100%'}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View style={styles.containerIcon}>
             <Pressable style={styles.icon} onPress={onSocial}>
               <VStack
