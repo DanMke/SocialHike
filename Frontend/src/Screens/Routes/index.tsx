@@ -194,7 +194,7 @@ const Routes: React.FC<RoutesProps> = ({
                         </Text>
                         <View style={{alignItems: 'center'}}>
                           <Text style={styles.routeElementTextDark}>
-                            Average Distance From Me
+                            Avg Dist From Me
                           </Text>
                           <Text style={styles.routeElementTextValue}>
                             {route.distanceFromMe.toFixed(2) + 'KM'}

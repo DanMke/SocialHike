@@ -84,6 +84,22 @@ const activitySchema = new Schema({
             }
         }
     ],
+    pointsOfInterest: [
+    {
+            latitude: {
+                type: Number,
+            },
+            longitude: {
+                type: Number,
+            },
+            name: {
+                type: String,
+            },
+            description: {
+                type: String,
+            }
+        }
+    ],
     distance: {
         type: Number,
         required: true

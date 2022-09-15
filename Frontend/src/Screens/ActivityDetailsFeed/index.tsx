@@ -28,6 +28,7 @@ import styles from './styles';
 
 import PinStartIcon from '../../../assets/pinStart.png';
 import PinEndIcon from '../../../assets/pinEnd.png';
+import PinInfoIcon from '../../../assets/pinInfo.png';
 
 import {
   LineChart,
@@ -159,6 +160,15 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
                     resizeMode="contain"
                   />
                 </Marker>
+                { activity.pointsOfInterest && activity.pointsOfInterest.length > 0 && activity.pointsOfInterest.map((poi: any, index: number) => (
+                  <Marker coordinate={{latitude: poi.latitude, longitude: poi.longitude}} title={poi.title} key={index}>
+                    <Image
+                      source={PinInfoIcon}
+                      style={{width: 25, height: 25}}
+                      resizeMode="contain"
+                    />
+                  </Marker>
+                ))}
                 {
                   coords.length > 0 && (
                     <MapViewDirections
@@ -374,8 +384,8 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
                   }/>
                 </View>
                 {activity.comments.map((item: any) => (
-                  <Box key={item._id}>
-                    <Box borderBottomWidth="1" _dark={{borderColor: "#15573E"}} borderColor="#15573E" pl={["0", "4"]} pr={["0", "5"]} py="2">
+                  <Box key={item._id} style={{marginHorizontal: 10}}>
+                    <Box  borderBottomWidth="1" _dark={{borderColor: "#15573E"}} borderColor="#15573E" pl={["0", "4"]} pr={["0", "5"]} py="2">
                       <HStack space={[2, 3]} justifyContent="space-between">
                         <Avatar size="48px" source={{
                           uri: `data:image/png;base64,${item.user.avatar}`,

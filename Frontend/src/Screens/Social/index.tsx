@@ -50,18 +50,10 @@ const Social: React.FC<SocialProps> = ({
   const onRefresh = React.useCallback(() => {
     setLoading(true);
     api
-      .get('/users')
+      .post('/users/social', {'email': user.email})
       .then(response => {
-        console.log(response.data);
-        // TODO filter users without me
-        // TODO filter users without following
-        console.log(response.data);
-        var usersFiltered = response.data.filter(
-          (userList: any) => userList.email !== user.email,
-        );
-        console.log(usersFiltered);
-        setUsersList(usersFiltered);
-        setOriginalUsersList(usersFiltered);
+        setUsersList(response.data);
+        setOriginalUsersList(response.data);
         setLoading(false);
         setRefreshing(false);
       })
@@ -168,13 +160,13 @@ const Social: React.FC<SocialProps> = ({
               </View>
             ) : (
               usersList.map((userList: any) => (
-                <Pressable style={styles.feedElement} key={userList.email}>
+                <Pressable style={styles.feedElement} key={userList.user.email}>
                   <View
                     style={{flexDirection: 'row', justifyContent: 'center'}}>
                     <Image
                       style={{width: 50, height: 50, borderRadius: 100}}
                       source={{
-                        uri: `data:image/png;base64,${userList.avatar}`,
+                        uri: `data:image/png;base64,${userList.user.avatar}`,
                       }}
                     />
                     <View
@@ -186,10 +178,10 @@ const Social: React.FC<SocialProps> = ({
                         alignContent: 'flex-start',
                       }}>
                       <Text style={styles.feedElementDetailsTextDark}>
-                        {userList.username}
+                        {userList.user.username}
                       </Text>
                       <Text style={styles.feedElementText}>
-                        {userList.firstName}
+                        {userList.user.firstName}
                       </Text>
                     </View>
                   </View>

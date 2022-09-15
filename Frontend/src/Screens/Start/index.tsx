@@ -1,22 +1,29 @@
 import {
   Button,
   ScrollView, View,
-  Select, CheckIcon
+  Select, CheckIcon,
+  Modal, FormControl, Input
 } from 'native-base';
 import React, {useEffect} from 'react';
-import { SafeAreaView, Text, KeyboardAvoidingView, PermissionsAndroid } from 'react-native';
+import { SafeAreaView, Text, KeyboardAvoidingView, PermissionsAndroid, Image } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
 import Geolocation from 'react-native-geolocation-service';
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'; 
 
 import styles from './styles';
 import api from '../../Services/api';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRunning, faBiking, faHiking } from '@fortawesome/free-solid-svg-icons'
+
+import PinStartIcon from '../../../assets/pinStart.png';
+import PinEndIcon from '../../../assets/pinEnd.png';
+import PinInfoIcon from '../../../assets/pinInfo.png';
+
+import MapViewDirections from 'react-native-maps-directions';
 
 interface StartProps {
   onUpdateUser?: any;
@@ -51,7 +58,15 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   const [calories, setCalories] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
 
+  const [pointsOfInterest, setPointsOfInterest] = React.useState<Array<any>>([]);
+  const [pointsToRender, setPointsToRender] = React.useState<Array<any>>([]);
+
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [poiTitle, setPoiTitle] = React.useState('');
+
   useEffect(() => {
+    let isMounted = true;   
+  
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
@@ -85,12 +100,14 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
       (error) => {
         console.log(error);
       },
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      {enableHighAccuracy: true, timeout: 20000}
     );
+
+    return () => { isMounted = false };
   } , []);
   
-  const onStart = () => {
-    Geolocation.getCurrentPosition(
+  const onStart = async () => {
+    await Geolocation.getCurrentPosition(
       (position) => {
         console.log(position);
         setInitialLatitude(position.coords.latitude);
@@ -100,7 +117,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
       (error) => {
         console.log(error);
       },
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      {enableHighAccuracy: true, timeout: 20000}
     );
 
     setStartDateTime(new Date());
@@ -119,7 +136,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         (error) => {
           console.log(error);
         },
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        {enableHighAccuracy: true, timeout: 20000}
       );
     }, 2000);
     setIntervalGetCurrentPosition(interval);
@@ -127,30 +144,49 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   };
 
   const onPause = () => {
-    api.post('/activities/data', {
-      user: user.email,
-      start: startDateTime,
-      end: new Date(),
-      initialCoord: {
-        latitude: initialLatitude,
-        longitude: initialLongitude,
+    Geolocation.getCurrentPosition(
+      (position: Geolocation.GeoPosition) => {
+        console.log(position);
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+        setAltitude(position.coords.altitude);
+        setSpeed(position.coords.speed);
+        setPoints(points => [...points, position]);
+        api.post('/activities/data', {
+          user: user.email,
+          start: startDateTime,
+          end: new Date(),
+          initialCoord: {
+            latitude: initialLatitude,
+            longitude: initialLongitude,
+          },
+          points: points,
+          type: type,
+          pointsOfInterest: pointsOfInterest,
+          }).then((response) => {
+            clearInterval(intervalGetCurrentPosition);
+            setDistance(response.data.activity.distance);
+            setAverageSpeed(response.data.activity.averageSpeed);
+            setCalories(response.data.activity.calories);
+            setDuration(response.data.activity.duration);
+            setIsPaused(true);
+            setEndDateTime(new Date());
+            var coordsTemp = [];
+            var step = Math.trunc(points.length / 25) + 1;
+            for (var i = 1; i < points.length - 1; i += step) {
+              coordsTemp.push({latitude: points[i].coords.latitude, longitude: points[i].coords.longitude});
+            }
+            setPointsToRender(coordsTemp);
+          }
+        ).catch((error) => {
+          console.log(error);
+        });
       },
-      points: points,
-      type: type,
-      }).then((response) => {
-        clearInterval(intervalGetCurrentPosition);
-        setDistance(response.data.activity.distance);
-        setAverageSpeed(response.data.activity.averageSpeed);
-        setCalories(response.data.activity.calories);
-        setDuration(response.data.activity.duration);
-        setIsPaused(true);
-        setEndDateTime(new Date());
-      }
-    ).catch((error) => {
-      console.log(error);
-    });
-    
-    
+      (error) => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true, timeout: 20000}
+    );
   };
 
   const onResume = () => {
@@ -167,7 +203,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         (error) => {
           console.log(error);
         },
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        {enableHighAccuracy: true, timeout: 20000}
       );
     }, 1000);
     setIntervalGetCurrentPosition(interval);
@@ -193,6 +229,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         },
         points: points,
         type: type,
+        pointsOfInterest: pointsOfInterest,
         }).then((response) => {
           console.log(response);
           setStartDateTime(null);
@@ -201,12 +238,29 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           setInitialLatitude(latitude);
           setInitialLongitude(longitude);
           setType('run');
+          setPoiTitle('');
+          setModalVisible(false);
+          setPointsOfInterest([]);
+          setPointsToRender([]);
           navigation.navigate('StartActivityDetails', {activity: response.data.activity});
         }
       ).catch((error) => {
         console.log(error);
       });
     }, 1000);
+  };
+
+  const onSavePointOfInterest = () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        setPointsOfInterest([...pointsOfInterest, {latitude: position.coords.latitude, longitude: position.coords.longitude, title: poiTitle}]);
+      },
+      (error) => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true, timeout: 20000}
+    );
   };
 
   return (
@@ -226,6 +280,47 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
               longitudeDelta: 0.01,
             }}
           >
+            { isPaused && initialLatitude && initialLongitude &&
+              <Marker coordinate={{latitude: initialLatitude, longitude: initialLongitude}} title={"Start"} >
+                <Image
+                  source={PinStartIcon}
+                  style={{width: 25, height: 25}}
+                  resizeMode="contain"
+                />
+              </Marker>
+            }
+            { isPaused && pointsToRender.length > 0 &&
+              <Marker coordinate={pointsToRender[pointsToRender.length - 1]} title={"End"} >
+                <Image
+                  source={PinEndIcon}
+                  style={{width: 25, height: 25}}
+                  resizeMode="contain"
+                />
+              </Marker>
+            }
+            { pointsOfInterest.length > 0 &&
+              pointsOfInterest.map((poi, index) => (
+                <Marker key={index} coordinate={{latitude: poi.latitude, longitude: poi.longitude}} title={poi.title} >
+                  <Image
+                    source={PinInfoIcon}
+                    style={{width: 25, height: 25}}
+                    resizeMode="contain"
+                  />
+                </Marker>
+              ))
+            }
+            { pointsToRender.length > 0 &&
+              <MapViewDirections
+                origin={{latitude: initialLatitude, longitude: initialLongitude}}
+                destination={{latitude: pointsToRender[pointsToRender.length - 1].latitude, longitude: pointsToRender[pointsToRender.length - 1].longitude}}
+                waypoints={pointsToRender}
+                apikey={'AIzaSyB7s0q8XsrI4Ih0gnv19wuZOlyE32fc_ds'}
+                strokeWidth={2}
+                strokeColor="green"
+                optimizeWaypoints={true}
+                mode="WALKING"
+              />
+            }
           </MapView>
           <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             { isStarted && isPaused &&
@@ -241,7 +336,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
                 <Text style={{color: 'white'}}>Latitude: {latitude}</Text>
                 <Text style={{color: 'white'}}>Longitude: {longitude}</Text>
                 <Text style={{color: 'white'}}>Altitude: {altitude}</Text>
-                <Text style={{color: 'white'}}>Speed: {(speed * 3.6) + ' KM/H'}</Text>
+                <Text style={{color: 'white'}}>Speed: {(speed * 3.6).toFixed(2) + ' KM/H'}</Text>
               </View>
             }
             { !isStarted && 
@@ -269,22 +364,70 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
             }
             {
               isStarted && !isPaused &&
-                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
+                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
                   <Text style={{color: '#fff', fontSize: 18}}>Pause</Text>
                 </Button>
             }
             {
               isStarted && isPaused &&
-                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onResume}>
+                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={() => setModalVisible(true)}>
+                  <Text style={{color: '#fff', fontSize: 18}}>Add Point of Interest</Text>
+                </Button>
+            }
+            {
+              isStarted && isPaused &&
+                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onResume}>
                   <Text style={{color: '#fff', fontSize: 18}}>Resume</Text>
                 </Button>
             }
             {
               isStarted && 
-                <Button width={"80%"} height={20} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
                   <Text style={{color: '#fff', fontSize: 18}}>Stop</Text>
                 </Button>
-            }         
+            }
+            <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Point of Interest</Modal.Header>
+                <Modal.Body>
+                  Add your point of interest
+                  <FormControl>
+                    <FormControl.Label mt={4}>Description</FormControl.Label>
+                    <Input
+                      placeholder=""
+                      type="text"
+                      selectionColor={'#15573E'}
+                      size="md"
+                      _focus={{borderColor: '#15573E'}}
+                      color={'#15573E'}
+                      variant="underlined"
+                      borderColor={'#04C37D'}
+                      onChangeText={value => setPoiTitle(value)}
+                    />
+                  </FormControl>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button.Group space={2}>
+                    <Button
+                      backgroundColor={'#15573E'}
+                      onPress={() => {
+                        setModalVisible(false);
+                      }}>
+                      Cancel
+                    </Button>
+                    <Button
+                      backgroundColor={'#04AA6C'}
+                      onPress={() => {
+                        setModalVisible(false);
+                        onSavePointOfInterest();
+                      }}>
+                      Add
+                    </Button>
+                  </Button.Group>
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal> 
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

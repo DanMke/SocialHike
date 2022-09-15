@@ -28,6 +28,7 @@ import styles from './styles';
 
 import PinStartIcon from '../../../assets/pinStart.png';
 import PinEndIcon from '../../../assets/pinEnd.png';
+import PinInfoIcon from '../../../assets/pinInfo.png';
 
 import {
   LineChart,
@@ -77,6 +78,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
 
       setStartCoord(activityTemp.initialCoord);
       setEndCoord({latitude: activityTemp.points[activityTemp.points.length-1].coords.latitude, longitude: activityTemp.points[activityTemp.points.length-1].coords.longitude});
+
     }).catch((error) => {
       console.log(error);
     });
@@ -155,6 +157,15 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                     resizeMode="contain"
                   />
                 </Marker>
+                { activity.pointsOfInterest && activity.pointsOfInterest.length > 0 && activity.pointsOfInterest.map((poi: any, index: number) => (
+                  <Marker coordinate={{latitude: poi.latitude, longitude: poi.longitude}} title={poi.title} key={index}>
+                    <Image
+                      source={PinInfoIcon}
+                      style={{width: 25, height: 25}}
+                      resizeMode="contain"
+                    />
+                  </Marker>
+                ))}
                 {
                   coords.length > 0 && (
                     <MapViewDirections
@@ -351,7 +362,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
               </View>
             </View>
             {showComments &&
-              <View style={{backgroundColor: '#333333', marginTop: 30}}>
+              <View style={{backgroundColor: '#red'}}>
                 <View style={{paddingVertical: 2}}>
                   <Input variant="outline" selectionColor={'#15573E'} type="text" color={'#E9E8E8'}
                       borderColor={'#04C37D'} _focus={{borderColor: '#15573E'}} onChangeText={value => setCommentText(value)} rightElement={
@@ -361,7 +372,7 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                   }/>
                 </View>
                 {activity.comments.map((item: any) => (
-                  <Box key={item._id}>
+                  <Box key={item._id} style={{marginHorizontal: 10}}>
                     <Box borderBottomWidth="1" _dark={{borderColor: "#15573E"}} borderColor="#15573E" pl={["0", "4"]} pr={["0", "5"]} py="2">
                       <HStack space={[2, 3]} justifyContent="space-between">
                         <Avatar size="48px" source={{

@@ -28,7 +28,7 @@ const Notifications: React.FC<NotificationsProps> = ({onTest, user, navigation}:
   const mockNotifications = [
     {
       id: 1,
-      title: 'New post',
+      title: 'This screen is mocked',
       description: 'New post from @user',
       date: '05 May 2022 - 4:15 PM'
     },

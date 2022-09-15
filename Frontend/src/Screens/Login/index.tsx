@@ -80,8 +80,9 @@ const Login: React.FC<LoginProps> = ({
         .then(userCredential => {
           console.log('User account signed in!');
           // console.log(userCredential);
+          console.log('/users/' + email)
           api
-            .get('/users/' + email)
+            .get('/users/' + email.toLowerCase())
             .then(response => {
               // console.log(response.data);
               onUpdateUser(response.data);

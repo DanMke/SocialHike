@@ -23,6 +23,7 @@ import styles from './styles';
 
 import PinStartIcon from '../../../assets/pinStart.png';
 import PinEndIcon from '../../../assets/pinEnd.png';
+import PinInfoIcon from '../../../assets/pinInfo.png';
 
 import {
   LineChart,
@@ -42,11 +43,13 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
   const [startCoord, setStartCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [coords, setCoords] = React.useState<any>([]);
+
   var mapRef = React.useRef<MapView>(null);
 
   useEffect(() => {
     
     setActivity(navigation.getState().routes[1].params.activity);
+    console.log(navigation.getState().routes[1].params.activity)
     var pacesTemp = [];
     for (var i = 0; i < activity.paces.length; i++) {
       pacesTemp.push(activity.paces[i].pace);
@@ -92,6 +95,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
         points: activity.points,
         type: activity.type,
         mapImage: activity.mapImage,
+        pointsOfInterest: activity.pointsOfInterest,
         }).then((response) => {
           console.log(response);
           navigation.goBack();
@@ -107,13 +111,14 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
-        <ScrollView style={{paddingHorizontal: 20, paddingTop: 20}}>
-        <View style={styles.containerIcon}>
-          <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>
-            <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
-              <ArrowBackIcon size="xl" color="#ffffff" />
-            </VStack>
-          </Pressable>
+        <ScrollView>
+        <View style={{paddingHorizontal: 20, height: '100%'}}>
+          <View style={styles.containerIcon}>
+            <Pressable style={styles.backIcon} onPress={() => navigation.goBack()}>
+              <VStack width={50} height={50} bgColor={"#333333"} space={4} alignItems="center" justifyContent={"center"} borderRadius="10">
+                <ArrowBackIcon size="xl" color="#ffffff" />
+              </VStack>
+            </Pressable>
           </View>
           
           <View style={styles.feedElement}> 
@@ -143,6 +148,15 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
                   resizeMode="contain"
                 />
               </Marker>
+              { activity.pointsOfInterest &&  activity.pointsOfInterest.length > 0 && activity.pointsOfInterest.map((poi: any, index: number) => (
+                <Marker coordinate={{ latitude: poi.latitude, longitude: poi.longitude }} title={poi.title} key={index}>
+                  <Image
+                    source={PinInfoIcon}
+                    style={{width: 25, height: 25}}
+                    resizeMode="contain"
+                  />
+                </Marker>
+              ))}
               <MapViewDirections
                 origin={startCoord}
                 destination={endCoord}
@@ -306,9 +320,10 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
               </View>
             </View>
           </View>
-          <Button style={{width: '100%', height: 50}} backgroundColor={"#04AA6C"} onPress={onSave}>
+          <Button style={{width: '100%', height: 50, marginBottom: 30}} backgroundColor={"#04AA6C"} onPress={onSave}>
             <Text style={{color: '#fff', fontSize: 16}}>Save</Text>
           </Button>
+        </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

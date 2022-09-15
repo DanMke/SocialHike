@@ -51,6 +51,8 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
       setActivitiesDistanceByMonth(activitiesDistanceByMonthTemp);
       setAllDurationTimeActivies(durationTime);
       setAllDistanceActivities(distance);
+      console.log(user.followers)
+      console.log(user.following)
     });
   }, []);
 
@@ -115,16 +117,19 @@ const Profile: React.FC<ProfileProps> = ({onUpdateUser, user, navigation}: Profi
                   <Text style={styles.feedElementDetailsText}>{user.weight + ' KG'}</Text>
                 </View>
               </View>
-              <View style={styles.profileUserDetailsTwo}>
-                <Pressable style={{alignItems: 'center'}} onPress={onFollowers}>
-                  <Text style={styles.feedElementDetailsTextDark}>Followers</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.followers.length}</Text>
-                </Pressable>
-                <Pressable style={{alignItems: 'center'}} onPress={onFollowing}>
-                  <Text style={styles.feedElementDetailsTextDark}>Following</Text>
-                  <Text style={styles.feedElementDetailsText}>{user.following.length}</Text>
-                </Pressable>
-              </View>
+              {
+                user && user.followers !== undefined && user.following !== undefined &&
+                <View style={styles.profileUserDetailsTwo}>
+                  <Pressable style={{alignItems: 'center'}} onPress={onFollowers}>
+                    <Text style={styles.feedElementDetailsTextDark}>Followers</Text>
+                    <Text style={styles.feedElementDetailsText}>{user.followers.length}</Text>
+                  </Pressable>
+                  <Pressable style={{alignItems: 'center'}} onPress={onFollowing}>
+                    <Text style={styles.feedElementDetailsTextDark}>Following</Text>
+                    <Text style={styles.feedElementDetailsText}>{user.following.length}</Text>
+                  </Pressable>
+                </View>
+              }
             </View>
             <View style={styles.activity}>
               <Text style={styles.feedElementUserText}>Activity in this Year</Text>
