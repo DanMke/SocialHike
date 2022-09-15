@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
@@ -36,19 +37,26 @@ const Activity: React.FC<ActivityProps> = ({
 }: ActivityProps) => {
   const [activities, setActivities] = React.useState([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
+  const [refreshing, setRefreshing] = React.useState<Boolean>(false);
 
-  useEffect(() => {
+  const onRefresh = React.useCallback(() => {
     setLoading(true);
     api
       .get('/activities/user/' + user.email)
       .then(response => {
         setActivities(response.data);
         setLoading(false);
+        setRefreshing(false);
       })
       .catch(error => {
         console.log(error);
         setLoading(false);
+        setRefreshing(false);
       });
+  }, []);
+
+  useEffect(() => {
+    onRefresh();
   }, []);
 
   const onActivityDetails = (e: any, activity: any) => {
@@ -58,7 +66,10 @@ const Activity: React.FC<ActivityProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View style={{paddingTop: 40}} />
           {loading ? (
             <View style={styles.indicatorWrapper}>
