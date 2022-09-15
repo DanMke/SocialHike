@@ -7,6 +7,7 @@ import {
   Image,
   TouchableHighlight,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
@@ -41,8 +42,9 @@ const Routes: React.FC<RoutesProps> = ({
   const [routes, setRoutes] = React.useState([]);
   const [elevations, setElevations] = React.useState<any[]>([0]);
   const [loading, setLoading] = React.useState<Boolean>(false);
+  const [refreshing, setRefreshing] = React.useState<Boolean>(false);
 
-  useEffect(() => {
+  const onRefresh = React.useCallback(() => {
     const requestLocationPermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
@@ -96,6 +98,10 @@ const Routes: React.FC<RoutesProps> = ({
     );
   }, []);
 
+  useEffect(() => {
+    onRefresh();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
@@ -140,7 +146,10 @@ const Routes: React.FC<RoutesProps> = ({
               </Marker>
             ))}
           </MapView>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
             {loading ? (
               <View style={styles.loadingWrapper}>
                 <ActivityIndicator size="large" color="#04AA6C" />

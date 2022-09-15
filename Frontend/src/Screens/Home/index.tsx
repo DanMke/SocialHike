@@ -42,7 +42,7 @@ const Home: React.FC<HomeProps> = ({
 }: HomeProps) => {
   const [activities, setActivities] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState<Boolean>(false);
 
   const onRefresh = React.useCallback((initial: Boolean = false) => {
     if (initial) {
