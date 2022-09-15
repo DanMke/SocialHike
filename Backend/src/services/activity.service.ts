@@ -1,4 +1,5 @@
 import Activity from '../models/activity';
+import User from '../models/user';
 
 const ActivityService = {
     async createActivity(activity: any) {
@@ -59,10 +60,16 @@ const ActivityService = {
     async likeActivity(id: string, action: string, user: any) {
         try {
             if (action === 'add') {
-                const updatedActivity = await Activity.findOneAndUpdate({ _id: id }, { $addToSet: { likes: {_id: user} } }, { new: true }).populate('user').populate('comments.user');
+                const updatedActivity: any = await Activity.findOneAndUpdate({ _id: id }, { $addToSet: { likes: {_id: user} } }, { new: true }).populate('user').populate('comments.user');
+                const userLikedId = updatedActivity.user._id;
+                const updatedUser = await User.findOneAndUpdate({ _id: user, 'following.user': userLikedId }, { $inc: { 'following.$.strength': -2 } }, { new: true });
+                console.log(updatedUser);
                 return updatedActivity;
             } else {
-                const updatedActivity = await Activity.findOneAndUpdate({ _id: id }, { $pull: { likes: {_id: user} } }, { new: true }).populate('user').populate('comments.user');
+                const updatedActivity: any = await Activity.findOneAndUpdate({ _id: id }, { $pull: { likes: {_id: user} } }, { new: true }).populate('user').populate('comments.user');
+                const userLikedId = updatedActivity.user._id;
+                const updatedUser = await User.findOneAndUpdate({ _id: user, 'following.user': userLikedId }, { $inc: { 'following.$.strength': 2 } }, { new: true });
+                console.log(updatedUser);
                 return updatedActivity;
             }
         }
@@ -72,7 +79,10 @@ const ActivityService = {
     },
     async commentActivity(id: string, comment: any, user: any) {
         try {
-            const updatedActivity = await Activity.findOneAndUpdate({ _id: id }, { $push: { comments: { user: user, comment: comment, createdAt: new Date()} } }, { new: true }).populate('comments.user');
+            const updatedActivity: any = await Activity.findOneAndUpdate({ _id: id }, { $push: { comments: { user: user, comment: comment, createdAt: new Date()} } }, { new: true }).populate('comments.user');
+            const userLikedId = updatedActivity.user._id;
+            const updatedUser = await User.findOneAndUpdate({ _id: user, 'following.user': userLikedId }, { $inc: { 'following.$.strength': -4 } }, { new: true });
+            console.log(updatedUser);
             return updatedActivity;
         }
         catch (error) {
