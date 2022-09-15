@@ -70,10 +70,9 @@ const UserController = {
                 if (!graph[start]) {
                     return visited;
                 }
-                console.log(start)
                 visited.push(start.valueOf());
                 graph[start].forEach((neighbor: any) => {
-                    if (!visited.includes(neighbor.user._id)) {
+                    if (!visited.includes(neighbor.user._id.valueOf())) {
                         dfs(graph, neighbor.user._id, visited);
                     }
                 });
@@ -86,10 +85,8 @@ const UserController = {
                 return visited != user._id;
             });
 
-            console.log(filteredVisiteds)
+            console.log(filteredVisiteds);
         
-            // delete usersSocialGraph[user._id];
-
             const shortestDistanceNode = (distances: any, visited: any) => {
                 let shortest = null;
             
@@ -183,6 +180,20 @@ const UserController = {
 
             dijkstraResult.sort((a: any, b: any) => {
                 return a.distance - b.distance;
+            });
+            
+            allUsers.forEach((currentUser: any) => {
+                for (var i = 0; i < dijkstraResult.length; i++) {
+                    if (dijkstraResult[i].user._id == currentUser._id || currentUser._id == user._id.valueOf()) {
+                        return;
+                    } else if (i == dijkstraResult.length - 1) {
+                        dijkstraResult.push({
+                            user: currentUser,
+                            distance: 1001,
+                            path: []
+                        });
+                    }
+                }
             });
 
             dijkstraResult = dijkstraResult.filter((result: any) => {
