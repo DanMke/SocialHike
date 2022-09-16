@@ -237,7 +237,7 @@ const ActivityController = {
             var activities: any[] = await ActivityService.getActivities();
             const activitiesNearestOfPoint = [];
             for (var activity of activities) {
-                activity.distanceFromMe = (distanceVincenty(activity.initialCoord.latitude, 
+                activity.distanceFromMe = (distanceHaversine(activity.initialCoord.latitude, 
                     activity.initialCoord.longitude, point.latitude, point.longitude) / 1000);
                 activitiesNearestOfPoint.push(activity);
             }
