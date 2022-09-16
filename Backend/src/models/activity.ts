@@ -176,7 +176,14 @@ const activitySchema = new Schema({
     },
     distanceFromMe: {
         type: Number
-    }
+    },
+    photos: [
+        {
+            photo: {
+                type: String
+            },
+        }
+    ],
 });
 
 const Activity = mongoose.model('Activities', activitySchema);

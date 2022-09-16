@@ -8,7 +8,7 @@ import {
   Button
 } from 'native-base';
 import React, { useEffect } from 'react';
-import {SafeAreaView, KeyboardAvoidingView, Image} from 'react-native';
+import {SafeAreaView, KeyboardAvoidingView, Image, PermissionsAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -24,6 +24,8 @@ import styles from './styles';
 import PinStartIcon from '../../../assets/pinStart.png';
 import PinEndIcon from '../../../assets/pinEnd.png';
 import PinInfoIcon from '../../../assets/pinInfo.png';
+
+import * as ImagePicker from 'react-native-image-picker';
 
 import {
   LineChart,
@@ -43,6 +45,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
   const [startCoord, setStartCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [coords, setCoords] = React.useState<any>([]);
+  const [photos, setPhotos] = React.useState<any>([]);
 
   var mapRef = React.useRef<MapView>(null);
 
@@ -104,8 +107,52 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
         console.log(error);
       });
     });
+  };
 
-    
+  const onAddPhotos = () => {
+    const requestExternalStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to upload photos',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the storage');
+        } else {
+          console.log('Storage permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+    requestExternalStoragePermission();
+
+    const options = {
+      mediaType: 'photo',
+      maxHeight: 200,
+      selectionLimit: 3,
+      includeBase64: true,
+    };
+
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        var photosTemp = [];
+        for (var i = 0; i < response.assets.length; i++) {
+          photosTemp.push(response.assets[i].base64);
+        }
+        setPhotos(photosTemp);
+      }
+    });
   };
 
   return (
@@ -319,7 +366,15 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
                 />
               </View>
             </View>
+            <View style={{alignContent: 'center', justifyContent: 'center', flexDirection: 'row', marginTop: 20}}>
+              <Button style={{width: '60%', height: 50, marginBottom: 30}} backgroundColor={"#04AA6C"} onPress={onAddPhotos}>
+                <Text style={{color: '#fff', fontSize: 16}}>See activity photos</Text>
+              </Button>
+            </View>
           </View>
+          <Button style={{width: '100%', height: 50, marginBottom: 10}} backgroundColor={"#15573E"} onPress={onAddPhotos}>
+            <Text style={{color: '#fff', fontSize: 16}}>Add photo of activity</Text>
+          </Button>
           <Button style={{width: '100%', height: 50, marginBottom: 30}} backgroundColor={"#04AA6C"} onPress={onSave}>
             <Text style={{color: '#fff', fontSize: 16}}>Save</Text>
           </Button>
