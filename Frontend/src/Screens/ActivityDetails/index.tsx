@@ -11,6 +11,8 @@ import {
   Box,
   Avatar,
   ChevronRightIcon,
+  Modal,
+  Button
 } from 'native-base';
 import React, { useEffect } from 'react';
 import {SafeAreaView, KeyboardAvoidingView, Image} from 'react-native';
@@ -35,6 +37,8 @@ import {
 } from "react-native-chart-kit";
 import api from '../../Services/api';
 
+import Carousel from 'react-native-snap-carousel';
+
 interface ActivityDetailsProps {
   onUpdateUser?: any;
   user: any;
@@ -51,6 +55,8 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
 
   const [showComments, setShowComments] = React.useState(false);
   const [commentText, setCommentText] = React.useState('');
+
+  const [showPhotos, setShowPhotos] = React.useState(false);
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
@@ -348,6 +354,11 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                   />
                 </View>
               </View>
+              <View style={{alignContent: 'center', justifyContent: 'center', flexDirection: 'row', marginTop: 20}}>
+                <Button style={{width: '60%', height: 50, marginBottom: 5}} backgroundColor={"#04AA6C"} onPress={() => setShowPhotos(true)}>
+                  <Text style={{color: '#fff', fontSize: 16}}>See activity photos</Text>
+                </Button>
+              </View>
               <View style={styles.feedElementReacts}>
                 <Pressable style={styles.feedElementReactLike} onPress={onLike}>
                   <VStack width={'50%'} height={10} bgColor={"#15573E"} alignItems="center" justifyContent={"center"}>
@@ -361,6 +372,39 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({onUpdateUser, user, na
                 </Pressable>
               </View>
             </View>
+            <Modal isOpen={showPhotos} onClose={() => setShowPhotos(false)} style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Activity Photos</Modal.Header>
+                <Modal.Footer>
+                  {activity.photos.length > 0 ? (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
+                  <Carousel
+                    layout='default'
+                    data={activity.photos}
+                    sliderWidth={50}
+                    itemWidth={250}
+                    renderItem={({ item, index }) => (
+                      <Image
+                        key={index}
+                        style={{ width: '100%', height: '100%' }}
+                        resizeMode='center'
+                        source={{
+                          uri: `data:image/png;base64,${item}`,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
+                  ) : (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{color: '#000', fontSize: 16}}>No photos available</Text>
+                    </View>
+                  )}
+
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
             {showComments &&
               <View style={{backgroundColor: '#red'}}>
                 <View style={{paddingVertical: 2}}>

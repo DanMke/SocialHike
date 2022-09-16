@@ -5,10 +5,13 @@ import {
   Pressable,
   VStack,
   ArrowBackIcon,
-  Button
+  Button,
+  Modal
 } from 'native-base';
 import React, { useEffect } from 'react';
 import {SafeAreaView, KeyboardAvoidingView, Image, PermissionsAndroid} from 'react-native';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
+
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
 
@@ -26,6 +29,8 @@ import PinEndIcon from '../../../assets/pinEnd.png';
 import PinInfoIcon from '../../../assets/pinInfo.png';
 
 import * as ImagePicker from 'react-native-image-picker';
+
+import Carousel from 'react-native-snap-carousel';
 
 import {
   LineChart,
@@ -46,6 +51,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
   const [endCoord, setEndCoord] = React.useState<any>({latitude: 0, longitude: 0});
   const [coords, setCoords] = React.useState<any>([]);
   const [photos, setPhotos] = React.useState<any>([]);
+  const [showPhotos, setShowPhotos] = React.useState(false);
 
   var mapRef = React.useRef<MapView>(null);
 
@@ -99,6 +105,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
         type: activity.type,
         mapImage: activity.mapImage,
         pointsOfInterest: activity.pointsOfInterest,
+        photos: photos
         }).then((response) => {
           console.log(response);
           navigation.goBack();
@@ -110,6 +117,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
   };
 
   const onAddPhotos = () => {
+    console.log(photos.length)
     const requestExternalStoragePermission = async () => {
       try {
         const granted = await PermissionsAndroid.request(
@@ -136,7 +144,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
     const options = {
       mediaType: 'photo',
       maxHeight: 200,
-      selectionLimit: 3,
+      selectionLimit: 2,
       includeBase64: true,
     };
 
@@ -366,12 +374,47 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({onUpdateUser
                 />
               </View>
             </View>
+            
             <View style={{alignContent: 'center', justifyContent: 'center', flexDirection: 'row', marginTop: 20}}>
-              <Button style={{width: '60%', height: 50, marginBottom: 30}} backgroundColor={"#04AA6C"} onPress={onAddPhotos}>
+              <Button style={{width: '60%', height: 50, marginBottom: 30}} backgroundColor={"#04AA6C"} onPress={() => setShowPhotos(true)}>
                 <Text style={{color: '#fff', fontSize: 16}}>See activity photos</Text>
               </Button>
             </View>
           </View>
+            <Modal isOpen={showPhotos} onClose={() => setShowPhotos(false)} style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Activity Photos</Modal.Header>
+                <Modal.Footer>
+                  {photos.length > 0 ? (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
+                  <Carousel
+                    layout='default'
+                    data={photos}
+                    sliderWidth={50}
+                    itemWidth={250}
+                    renderItem={({ item, index }) => (
+                      <Image
+                        key={index}
+                        style={{ width: '100%', height: '100%' }}
+                        resizeMode='center'
+                        source={{
+                          uri: `data:image/png;base64,${item}`,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
+                  ) : (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{color: '#000', fontSize: 16}}>No photos available</Text>
+                    </View>
+                  )}
+
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
+
           <Button style={{width: '100%', height: 50, marginBottom: 10}} backgroundColor={"#15573E"} onPress={onAddPhotos}>
             <Text style={{color: '#fff', fontSize: 16}}>Add photo of activity</Text>
           </Button>

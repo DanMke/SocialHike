@@ -11,6 +11,8 @@ import {
   Box,
   Avatar,
   ChevronRightIcon,
+  Button,
+  Modal,
 } from 'native-base';
 import React, { useEffect } from 'react';
 import {SafeAreaView, KeyboardAvoidingView, Image} from 'react-native';
@@ -35,6 +37,8 @@ import {
 } from "react-native-chart-kit";
 import api from '../../Services/api';
 
+import Carousel from 'react-native-snap-carousel';
+
 interface ActivityDetailsFeedProps {
   onUpdateUser?: any;
   user: any;
@@ -51,6 +55,8 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
 
   const [showComments, setShowComments] = React.useState(false);
   const [commentText, setCommentText] = React.useState('');
+
+  const [showPhotos, setShowPhotos] = React.useState(false);
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
@@ -91,7 +97,6 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
       comment: commentText,
       user: user._id
       }).then((response) => {
-        console.log(response.data);
         setActivity(response.data);
         setCommentText('');
       }
@@ -114,7 +119,6 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
       action: action,
       user: user._id
     }).then((response) => {
-      console.log(response.data);
       setActivity(response.data);
     }).catch((error) => {
       console.log(error);
@@ -359,6 +363,11 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
                   />
                 </View>
               </View>
+              <View style={{alignContent: 'center', justifyContent: 'center', flexDirection: 'row', marginTop: 20}}>
+                <Button style={{width: '60%', height: 50, marginBottom: 5}} backgroundColor={"#04AA6C"} onPress={() => setShowPhotos(true)}>
+                  <Text style={{color: '#fff', fontSize: 16}}>See activity photos</Text>
+                </Button>
+              </View>
               <View style={styles.feedElementReacts}>
                 <Pressable style={styles.feedElementReactLike} onPress={onLike}>
                   <VStack width={'50%'} height={10} bgColor={"#15573E"} alignItems="center" justifyContent={"center"}>
@@ -371,7 +380,41 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
                   </VStack>
                 </Pressable>
               </View>
+              
             </View>
+            <Modal isOpen={showPhotos} onClose={() => setShowPhotos(false)} style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+              <Modal.Content maxWidth="400px">
+                <Modal.CloseButton />
+                <Modal.Header>Activity Photos</Modal.Header>
+                <Modal.Footer>
+                  {activity.photos.length > 0 ? (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 10 }}>
+                  <Carousel
+                    layout='default'
+                    data={activity.photos}
+                    sliderWidth={50}
+                    itemWidth={250}
+                    renderItem={({ item, index }) => (
+                      <Image
+                        key={index}
+                        style={{ width: '100%', height: '100%' }}
+                        resizeMode='center'
+                        source={{
+                          uri: `data:image/png;base64,${item}`,
+                        }}
+                      />
+                    )}
+                  />
+                </View>
+                  ) : (
+                    <View style={{ height: '100%', width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{color: '#000', fontSize: 16}}>No photos available</Text>
+                    </View>
+                  )}
+
+                </Modal.Footer>
+              </Modal.Content>
+            </Modal>
             {showComments &&
               <View style={{backgroundColor: '#333333', marginTop: 30}}>
                 <View style={{paddingVertical: 2}}>
@@ -384,7 +427,7 @@ const ActivityDetailsFeed: React.FC<ActivityDetailsFeedProps> = ({onUpdateUser, 
                   }/>
                 </View>
                 {activity.comments.map((item: any) => (
-                  <Box key={item._id} style={{marginHorizontal: 10}}>
+                  <Box key={item._id} style={{marginHorizontal: 10, marginBottom: 10}}>
                     <Box  borderBottomWidth="1" _dark={{borderColor: "#15573E"}} borderColor="#15573E" pl={["0", "4"]} pr={["0", "5"]} py="2">
                       <HStack space={[2, 3]} justifyContent="space-between">
                         <Avatar size="48px" source={{

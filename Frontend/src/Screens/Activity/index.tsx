@@ -44,6 +44,9 @@ const Activity: React.FC<ActivityProps> = ({
     api
       .get('/activities/user/' + user.email)
       .then(response => {
+        response.data.sort((a: any, b: any) => {
+          return new Date(b.start).getTime() - new Date(a.start).getTime();
+        });
         setActivities(response.data);
         setLoading(false);
         setRefreshing(false);

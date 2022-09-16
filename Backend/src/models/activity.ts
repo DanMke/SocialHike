@@ -178,11 +178,7 @@ const activitySchema = new Schema({
         type: Number
     },
     photos: [
-        {
-            photo: {
-                type: String
-            },
-        }
+       String
     ],
 });
 

@@ -23,7 +23,7 @@ export default StyleSheet.create({
   },
   feedElement: {
     backgroundColor: '#333333',
-    minHeight: 1000,
+    minHeight: 1200,
     marginVertical: 5,
     justifyContent: 'space-between',
   },

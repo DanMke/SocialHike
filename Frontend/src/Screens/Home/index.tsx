@@ -80,8 +80,10 @@ const Home: React.FC<HomeProps> = ({
       api
         .get('/activities')
         .then(response => {
-          var allActivities = response.data;
           // TODO: Filter by following users
+          var allActivities = response.data.sort((a: any, b: any) => {
+            return new Date(b.start).getTime() - new Date(a.start).getTime();
+          });
           setActivities(allActivities);
           setLoading(false);
           setRefreshing(false);

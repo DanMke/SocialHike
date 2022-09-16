@@ -32,7 +32,7 @@ const ActivityService = {
     },
     async getActivities() {
         try {
-            const activities = await Activity.find().populate('user').populate('comments.user').sort({ start: -1 });
+            const activities = await Activity.find().populate('user').populate('comments.user');
             return activities;
         }
         catch (error) {
@@ -41,7 +41,7 @@ const ActivityService = {
     },
     async getActivitiesByUser(email: string) {
         try {
-            const activities = await Activity.find({ email }).populate('user').populate('comments.user').sort({ start: -1 });
+            const activities = await Activity.find({ email }).populate('user').populate('comments.user');
             return activities;
         }
         catch (error) {
