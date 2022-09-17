@@ -137,11 +137,6 @@ function calculateDistanceAndDependents(activity: any) {
     activity.averageSpeed = (sumSpeed / activity.points.length) * 3.6;
 }
 
-function updateFieldsActivity(activityToUpdate: any, activity: any) {
-    activity.duration = (new Date(activity.end).getTime() - new Date(activity.start).getTime()) * 0.001;
-    activity.points = activityToUpdate.points.concat(activity.points);
-}
-
 const ActivityController = {
     
     createActivity: async (req: express.Request, res: express.Response) => {
