@@ -28,6 +28,12 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#8C8A8C',
   },
+  routeElementSelected: {
+    backgroundColor: '#4c484a',
+  },
+  routeElementUnselected: {
+    backgroundColor: '#211F20',
+  },
   routeElementText: {
     color: '#ffffff',
     fontSize: 16,
