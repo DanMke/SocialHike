@@ -20,7 +20,7 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
   profile: {
-    backgroundColor: "#333333",
+    backgroundColor: '#333333',
     height: 200,
     marginTop: 20,
     padding: 20,
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     fontSize: 14,
   },
   activity: {
-    backgroundColor: "#333333",
+    backgroundColor: '#333333',
     height: 360,
     marginTop: 20,
     width: '100%',
@@ -67,5 +67,10 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     borderRadius: 10,
+  },
+  activityIndicatorWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
