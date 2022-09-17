@@ -14,9 +14,10 @@ export default StyleSheet.create({
     height: '50%',
   },
   routes: {
+    flex: 1,
+    borderTopWidth: 1,
     width: '100%',
-    height: '100%',
-    borderTopWidth: 4,
+    paddingHorizontal: 10,
     borderTopColor: '#8C8A8C',
   },
   routeElement: {

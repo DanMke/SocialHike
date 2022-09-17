@@ -398,11 +398,11 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     withVerticalLabels={false} // optional, defaults to false
                     withHorizontalLabels={false} // optional, defaults to false
                     chartConfig={{
-                      backgroundColor: '#15573E',
-                      backgroundGradientFrom: '#04AA6C',
-                      backgroundGradientTo: '#04C37D',
+                      backgroundColor: '#FFFFFF',
+                      backgroundGradientFrom: '#FFFFFF',
+                      backgroundGradientTo: '#FFFFFF',
                       decimalPlaces: 2, // optional, defaults to 2dp
-                      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                       style: {
                         borderRadius: 16,
                       },
@@ -465,11 +465,11 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     withVerticalLabels={false} // optional, defaults to false
                     withHorizontalLabels={false} // optional, defaults to false
                     chartConfig={{
-                      backgroundColor: '#15573E',
-                      backgroundGradientFrom: '#04AA6C',
-                      backgroundGradientTo: '#04C37D',
+                      backgroundColor: '#FFFFFF',
+                      backgroundGradientFrom: '#FFFFFF',
+                      backgroundGradientTo: '#FFFFFF',
                       decimalPlaces: 2, // optional, defaults to 2dp
-                      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                       style: {
                         borderRadius: 16,
                       },

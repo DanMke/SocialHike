@@ -96,6 +96,7 @@ const Routes: React.FC<RoutesProps> = ({
               }
               routesTemp[i].pointsToRender = pointsToRender;
             }
+            console.log(routesTemp.length)
             setRoutes(routesTemp);
             setElevations(response.data.map((route: any) => route.elevation));
             setLoading(false);
@@ -193,14 +194,14 @@ const Routes: React.FC<RoutesProps> = ({
             ) : (
               routes.map((route: any) => (
                 <View style={styles.routes} key={route._id}>
-                  <Pressable onPress={() => {
+                  <Pressable style={[styles.routeElement, route._id === selectedRoute ? styles.routeElementSelected : styles.routeElementUnselected]} onPress={() => {
                     if (selectedRoute === route._id) {
                       setSelectedRoute("");
                     } else {
                       setSelectedRoute(route._id);
                     }
                   }}>
-                    <View style={[styles.routeElement, route._id === selectedRoute ? styles.routeElementSelected : styles.routeElementUnselected]}>
+                    <View >
                       <View>
                         <Text style={styles.routeElementText}>
                           {new Date(route.start).toDateString() +

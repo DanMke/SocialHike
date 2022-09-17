@@ -1,5 +1,5 @@
-import {ScrollView, Pressable, VStack, View, Text} from 'native-base';
-import React, {useEffect} from 'react';
+import { ScrollView, Pressable, VStack, View, Text } from 'native-base';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   KeyboardAvoidingView,
@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import {connect} from 'react-redux';
-import {updateUser} from '../../Redux/actions';
+import { connect } from 'react-redux';
+import { updateUser } from '../../Redux/actions';
 
 import styles from './styles';
 
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faUsers,
   faBell,
@@ -42,11 +42,9 @@ const Home: React.FC<HomeProps> = ({
 }: HomeProps) => {
   const [activities, setActivities] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState<Boolean>(false);
-  const [refreshing, setRefreshing] = React.useState<Boolean>(false);
 
   const onRefresh = React.useCallback((initial: Boolean = false) => {
     if (initial) {
-      setRefreshing(true);
     }
 
     setLoading(true);
@@ -63,18 +61,15 @@ const Home: React.FC<HomeProps> = ({
               // TODO: Filter by following users
               setActivities(allActivities);
               setLoading(false);
-              setRefreshing(false);
             })
             .catch(error => {
               console.log(error);
               setLoading(false);
-              setRefreshing(false);
             });
         })
         .catch(error => {
           console.log(error);
           setLoading(false);
-          setRefreshing(false);
         });
     } else {
       api
@@ -86,12 +81,10 @@ const Home: React.FC<HomeProps> = ({
           });
           setActivities(allActivities);
           setLoading(false);
-          setRefreshing(false);
         })
         .catch(error => {
           console.log(error);
           setLoading(false);
-          setRefreshing(false);
         });
     }
   }, []);
@@ -101,7 +94,7 @@ const Home: React.FC<HomeProps> = ({
   }, []);
 
   const onActivityDetails = (e: any, activity: any) => {
-    navigation.navigate('ActivityDetailsFeed', {activity: activity});
+    navigation.navigate('ActivityDetailsFeed', { activity: activity });
   };
 
   const onNotifications = () => {
@@ -146,9 +139,9 @@ const Home: React.FC<HomeProps> = ({
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
         <ScrollView
-          style={{height: '100%'}}
+          style={{ height: '100%' }}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={false} onRefresh={onRefresh} />
           }>
           <View style={styles.containerIcon}>
             <Pressable style={styles.icon} onPress={onSocial}>
@@ -201,7 +194,7 @@ const Home: React.FC<HomeProps> = ({
                       style={styles.feedElementUserInfo}
                       onPress={e => onUser(e, activity.user)}>
                       <Image
-                        style={{width: 25, height: 25, borderRadius: 100}}
+                        style={{ width: 25, height: 25, borderRadius: 100 }}
                         source={{
                           uri: `data:image/png;base64,${activity.user.avatar}`,
                         }}
@@ -229,7 +222,7 @@ const Home: React.FC<HomeProps> = ({
                       <Text style={styles.feedElementDetailsTextDark}>
                         {new Date(activity.start).toDateString()}
                       </Text>
-                      <Text style={{color: '#fff', fontSize: 14}}>
+                      <Text style={{ color: '#fff', fontSize: 14 }}>
                         {new Date(activity.start).toLocaleTimeString()}
                       </Text>
                     </View>
