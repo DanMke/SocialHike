@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {updateUser} from '../../Redux/actions';
@@ -37,7 +38,7 @@ const Profile: React.FC<ProfileProps> = ({
     React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [loading, setLoading] = React.useState(false);
 
-  useEffect(() => {
+  const onRefresh = React.useCallback(() => {
     api.get('/users/' + user.email).then(response => {
       onUpdateUser(response.data);
     });
@@ -72,6 +73,10 @@ const Profile: React.FC<ProfileProps> = ({
       });
   }, []);
 
+  useEffect(() => {
+    onRefresh();
+  }, []);
+
   const onFollowers = () => {
     navigation.navigate('Followers');
   };
@@ -98,7 +103,11 @@ const Profile: React.FC<ProfileProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
-        <ScrollView style={{paddingHorizontal: 20}}>
+        <ScrollView
+          style={{paddingHorizontal: 20}}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={onRefresh} />
+          }>
           <View style={styles.containerIcon}>
             <Pressable style={styles.icon} onPress={onEditProfile}>
               <VStack
