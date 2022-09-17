@@ -2,6 +2,97 @@ import express from "express";
 
 import UserService from "../services/user.service";
 
+function dfs(graph: any, start: any, visited: any = []) {
+    if (!graph[start]) {
+        return visited;
+    }
+    visited.push(start.valueOf());
+    graph[start].forEach((neighbor: any) => {
+        if (!visited.includes(neighbor.user._id.valueOf())) {
+            dfs(graph, neighbor.user._id, visited);
+        }
+    });
+    return visited;
+}
+
+const shortestDistanceNode = (distances: any, visited: any) => {
+    let shortest = null;
+
+    for (let node in distances) {
+        let currentIsShortest = shortest === null || distances[node] < distances[shortest];
+        if (currentIsShortest && !visited.includes(node)) {
+            shortest = node;
+        }
+    }
+    return shortest;
+};
+
+const dijkstraFindShortestPath = (graph: any, startNode: any, endNode: any) => {
+    // establish object for recording distances from the start node
+    let distances: any = {};
+    distances[endNode] = "Infinity";
+    distances = Object.assign(distances, graph[startNode]);
+
+    // track paths
+    let parents: any = { endNode: null };
+    for (let child in graph[startNode]) {
+        parents[child] = startNode;
+    }
+
+    // track nodes that have already been visited
+    let visited: any = [];
+
+    // find the nearest node
+    let node = shortestDistanceNode(distances, visited);
+
+    // for that node
+    while (node) {
+        // find its distance from the start node & its child nodes
+        let distance = distances[node];
+        let children = graph[node];
+        // for each of those child nodes
+        for (let child in children) {
+            // make sure each child node is not the start node
+            if (String(child) === String(startNode)) {
+                continue;
+            } else {
+                // save the distance from the start node to the child node
+                let newdistance = distance + children[child];
+                // if there's no recorded distance from the start node to the child node in the distances object
+                // or if the recorded distance is shorter than the previously stored distance from the start node to the child node
+                // save the distance to the object
+                // record the path
+                if (!distances[child] || distances[child] > newdistance) {
+                    distances[child] = newdistance;
+                    parents[child] = node;
+                }
+            }
+        }
+        // move the node to the visited set
+        visited.push(node);
+        // move to the nearest neighbor node
+        node = shortestDistanceNode(distances, visited);
+    }
+
+    // using the stored paths from start node to end node
+    // record the shortest path
+    let shortestPath = [endNode];
+    let parent = parents[endNode];
+    while (parent) {
+        shortestPath.push(parent);
+        parent = parents[parent];
+    }
+    shortestPath.reverse();
+
+    // return the shortest path from start node to end node & its distance
+    let results = {
+        distance: distances[endNode],
+        path: shortestPath,
+    };
+
+    return results;
+};
+
 const UserController = {
     createUser: async (req: express.Request, res: express.Response) => {
         try {
@@ -65,19 +156,7 @@ const UserController = {
             });
 
             console.log(graphWeight);
-
-            function dfs(graph: any, start: any, visited: any = []) {
-                if (!graph[start]) {
-                    return visited;
-                }
-                visited.push(start.valueOf());
-                graph[start].forEach((neighbor: any) => {
-                    if (!visited.includes(neighbor.user._id.valueOf())) {
-                        dfs(graph, neighbor.user._id, visited);
-                    }
-                });
-                return visited;
-            }
+            
             const visiteds = dfs(usersSocialGraph, user._id);
             console.log(visiteds);
 
@@ -87,85 +166,6 @@ const UserController = {
 
             console.log(filteredVisiteds);
         
-            const shortestDistanceNode = (distances: any, visited: any) => {
-                let shortest = null;
-            
-                for (let node in distances) {
-                    let currentIsShortest = shortest === null || distances[node] < distances[shortest];
-                    if (currentIsShortest && !visited.includes(node)) {
-                        shortest = node;
-                    }
-                }
-                return shortest;
-            };
-            
-            const dijkstraFindShortestPath = (graph: any, startNode: any, endNode: any) => {
-                // establish object for recording distances from the start node
-                let distances: any = {};
-                distances[endNode] = "Infinity";
-                distances = Object.assign(distances, graph[startNode]);
-            
-                // track paths
-                let parents: any = { endNode: null };
-                for (let child in graph[startNode]) {
-                    parents[child] = startNode;
-                }
-            
-                // track nodes that have already been visited
-                let visited: any = [];
-            
-                // find the nearest node
-                let node = shortestDistanceNode(distances, visited);
-            
-                // for that node
-                while (node) {
-                    // find its distance from the start node & its child nodes
-                    let distance = distances[node];
-                    let children = graph[node];
-                    // for each of those child nodes
-                    for (let child in children) {
-                        // make sure each child node is not the start node
-                        if (String(child) === String(startNode)) {
-                            continue;
-                        } else {
-                            // save the distance from the start node to the child node
-                            let newdistance = distance + children[child];
-                            // if there's no recorded distance from the start node to the child node in the distances object
-                            // or if the recorded distance is shorter than the previously stored distance from the start node to the child node
-                            // save the distance to the object
-                            // record the path
-                            if (!distances[child] || distances[child] > newdistance) {
-                                distances[child] = newdistance;
-                                parents[child] = node;
-                            }
-                        }
-                    }
-                    // move the node to the visited set
-                    visited.push(node);
-                    // move to the nearest neighbor node
-                    node = shortestDistanceNode(distances, visited);
-                }
-            
-                // using the stored paths from start node to end node
-                // record the shortest path
-                let shortestPath = [endNode];
-                let parent = parents[endNode];
-                while (parent) {
-                    shortestPath.push(parent);
-                    parent = parents[parent];
-                }
-                shortestPath.reverse();
-            
-                // return the shortest path from start node to end node & its distance
-                let results = {
-                    distance: distances[endNode],
-                    path: shortestPath,
-                };
-            
-                return results;
-            };
-               
-            
             var dijkstraResult: any = [];
             filteredVisiteds.forEach((visited: any) => {
                 const results = dijkstraFindShortestPath(graphWeight, user._id, visited);
@@ -183,23 +183,31 @@ const UserController = {
             });
             
             allUsers.forEach((currentUser: any) => {
+                var founded = false;
                 for (var i = 0; i < dijkstraResult.length; i++) {
-                    if (dijkstraResult[i].user._id == currentUser._id || currentUser._id == user._id.valueOf()) {
+                    if (dijkstraResult[i].user._id == currentUser._id) {
+                        founded = true;
                         return;
-                    } else if (i == dijkstraResult.length - 1) {
-                        dijkstraResult.push({
-                            user: currentUser,
-                            distance: 1001,
-                            path: []
-                        });
                     }
+                }
+                if (founded === false) {
+                    dijkstraResult.push({
+                        user: currentUser,
+                        distance: 1001,
+                        path: []
+                    });
                 }
             });
 
+            
             dijkstraResult = dijkstraResult.filter((result: any) => {
-                for (var i = 0; i < user.following.length; i++) {
-                    if (user.following[i].user._id.valueOf() === result.user._id.valueOf()) {
-                        return false;
+                if (result.user._id.valueOf() == user._id) {
+                    return false;
+                } else {
+                    for (var i = 0; i < user.following.length; i++) {
+                        if (user.following[i].user._id.valueOf() == result.user._id.valueOf()) {
+                            return false;
+                        }
                     }
                 }
                 return true;
