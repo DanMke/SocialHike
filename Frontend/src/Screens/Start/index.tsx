@@ -64,6 +64,8 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
   const [modalVisible, setModalVisible] = React.useState(false);
   const [poiTitle, setPoiTitle] = React.useState('');
 
+  const [endCoord, setEndCoord] = React.useState({latitude: 0, longitude: 0});
+
   useEffect(() => {
     let isMounted = true;   
   
@@ -152,6 +154,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         setAltitude(position.coords.altitude);
         setSpeed(position.coords.speed);
         setPoints(points => [...points, position]);
+        setEndCoord({latitude: position.coords.latitude, longitude: position.coords.longitude});
         api.post('/activities/data', {
           user: user.email.toLowerCase(),
           start: startDateTime,
@@ -290,7 +293,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
               </Marker>
             }
             { isPaused && pointsToRender.length > 0 &&
-              <Marker coordinate={pointsToRender[pointsToRender.length - 1]} title={"End"} >
+              <Marker coordinate={endCoord} title={"End"} >
                 <Image
                   source={PinEndIcon}
                   style={{width: 25, height: 25}}
@@ -309,7 +312,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
                 </Marker>
               ))
             }
-            { pointsToRender.length > 0 &&
+            { isPaused && pointsToRender.length > 0 &&
               <MapViewDirections
                 origin={{latitude: initialLatitude, longitude: initialLongitude}}
                 destination={{latitude: pointsToRender[pointsToRender.length - 1].latitude, longitude: pointsToRender[pointsToRender.length - 1].longitude}}
