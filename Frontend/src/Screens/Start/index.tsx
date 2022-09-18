@@ -327,7 +327,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
           </MapView>
           <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             { isStarted && isPaused &&
-              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start'}}>
                 <Text style={{color: 'white'}}>Duration: {new Date(duration * 1000).toISOString().slice(11, 19)}</Text>
                 <Text style={{color: 'white'}}>Distance: {distance.toFixed(2) + ' KM'}</Text>
                 <Text style={{color: 'white'}}>Average Speed: {averageSpeed.toFixed(2) + ' KM/H'}</Text>
@@ -335,10 +335,10 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
               </View>
             }
             { isStarted && !isPaused && 
-              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', borderWidth: 1, padding: 10, marginTop: 10, borderColor: 'white', borderRadius: 10 }}>
                 <Text style={{color: 'white'}}>Latitude: {latitude}</Text>
                 <Text style={{color: 'white'}}>Longitude: {longitude}</Text>
-                <Text style={{color: 'white'}}>Altitude: {altitude}</Text>
+                <Text style={{color: 'white'}}>Altitude: {altitude?.toFixed(2)}</Text>
                 <Text style={{color: 'white'}}>Speed: {(speed * 3.6).toFixed(2) + ' KM/H'}</Text>
               </View>
             }

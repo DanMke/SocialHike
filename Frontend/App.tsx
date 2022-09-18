@@ -18,7 +18,9 @@ import { Provider } from 'react-redux';
 import { store } from './src/Redux/store';
 import { Routes } from './src/Routes';
 
-// TODO verificar se o usuario esta logado, se nao tiver logado vai para a pagina de login, se tiver vai pra pagina de home
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs();
 
 const App = () => {
   return (
