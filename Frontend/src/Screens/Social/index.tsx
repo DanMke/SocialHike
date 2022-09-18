@@ -64,7 +64,6 @@ const Social: React.FC<SocialProps> = ({
       });
   }, []);
 
-  // TODO useEffect pegando os usuarios com logica de sort por relacionamento
   useEffect(() => {
     onRefresh();
   }, []);
