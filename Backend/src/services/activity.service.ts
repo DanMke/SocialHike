@@ -39,9 +39,9 @@ const ActivityService = {
             throw error;
         }
     },
-    async getActivitiesByUser(email: string) {
+    async getActivitiesByUser(userid: string) {
         try {
-            const activities = await Activity.find({ email }).populate('user').populate('comments.user');
+            const activities = await Activity.find({ 'user': userid }).populate('user').populate('comments.user');
             return activities;
         }
         catch (error) {

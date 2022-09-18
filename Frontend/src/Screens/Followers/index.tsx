@@ -65,6 +65,7 @@ const Followers: React.FC<FollowersProps> = ({
         following: follower.email,
       })
       .then(response => {
+        onUpdateUser(response.data);
         onRefresh();
       })
       .catch(error => {
@@ -73,7 +74,8 @@ const Followers: React.FC<FollowersProps> = ({
   };
 
   const onUnfollow = (e: any, followingUser: any) => {
-    api.delete('/users/' + user.email + '/following', {data: {following: followingUser.email}}).then(response => {
+    api.delete('/users/' + user.email.toLowerCase() + '/following', {data: {following: followingUser.email}}).then(response => {
+      onUpdateUser(response.data);
       onRefresh();
     }
     ).catch(error => {

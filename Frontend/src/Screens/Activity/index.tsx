@@ -42,7 +42,7 @@ const Activity: React.FC<ActivityProps> = ({
   const onRefresh = React.useCallback(() => {
     setLoading(true);
     api
-      .get('/activities/user/' + user.email)
+      .get('/activities/user/' + user._id)
       .then(response => {
         response.data.sort((a: any, b: any) => {
           return new Date(b.start).getTime() - new Date(a.start).getTime();

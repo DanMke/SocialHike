@@ -126,7 +126,7 @@ const Register: React.FC<RegisterProps> = ({navigation}: RegisterProps) => {
 
           api
             .post('/users', {
-              email: email,
+              email: email.toLowerCase(),
               password: password,
               firstName: firstName,
               lastName: lastName,

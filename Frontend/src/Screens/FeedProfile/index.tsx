@@ -56,36 +56,36 @@ const FeedProfile: React.FC<FeedProfileProps> = ({
     var userEmail =
       navigation.getState().routes[navigation.getState().routes.length - 2]
         .params.activity.user.email;
-    api.get('/users/' + userEmail).then(response => {
+    api.get('/users/' + userEmail.toLowerCase()).then(response => {
       setUserProfile(response.data);
+      api
+        .get('/activities/user/' + response.data._id)
+        .then(response => {
+          var activities = response.data;
+          setActiviesSize(activities.length);
+          var durationTime = 0;
+          var distance = 0;
+          var activitiesDistanceByMonthTemp = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          ];
+          activities.forEach((activity: any) => {
+            durationTime += activity.duration;
+            distance += activity.distance;
+            activitiesDistanceByMonthTemp[new Date(activity.start).getMonth()] +=
+              activity.distance;
+          });
+          setActivitiesDistanceByMonth(activitiesDistanceByMonthTemp);
+          setAllDurationTimeActivies(durationTime);
+          setAllDistanceActivities(distance);
+          setLoading(false);
+          setRefreshing(false);
+        })
+        .catch(error => {
+          console.log(error);
+          setLoading(false);
+        });
     });
 
-    api
-      .get('/activities/user/' + userEmail)
-      .then(response => {
-        var activities = response.data;
-        setActiviesSize(activities.length);
-        var durationTime = 0;
-        var distance = 0;
-        var activitiesDistanceByMonthTemp = [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ];
-        activities.forEach((activity: any) => {
-          durationTime += activity.duration;
-          distance += activity.distance;
-          activitiesDistanceByMonthTemp[new Date(activity.start).getMonth()] +=
-            activity.distance;
-        });
-        setActivitiesDistanceByMonth(activitiesDistanceByMonthTemp);
-        setAllDurationTimeActivies(durationTime);
-        setAllDistanceActivities(distance);
-        setLoading(false);
-        setRefreshing(false);
-      })
-      .catch(error => {
-        console.log(error);
-        setLoading(false);
-      });
   }, []);
 
   useEffect(() => {

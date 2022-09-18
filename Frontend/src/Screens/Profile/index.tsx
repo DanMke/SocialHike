@@ -39,38 +39,39 @@ const Profile: React.FC<ProfileProps> = ({
   const [loading, setLoading] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
-    api.get('/users/' + user.email).then(response => {
+    api.get('/users/' + user.email.toLowerCase()).then(response => {
+      var user = response.data;
       onUpdateUser(response.data);
+      setLoading(true);
+      api
+        .get('/activities/user/' + user._id)
+        .then(response => {
+          var activities = response.data;
+          setActiviesSize(activities.length);
+          var durationTime = 0;
+          var distance = 0;
+          var activitiesDistanceByMonthTemp = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          ];
+          activities.forEach((activity: any) => {
+            durationTime += activity.duration;
+            distance += activity.distance;
+            activitiesDistanceByMonthTemp[new Date(activity.start).getMonth()] +=
+              activity.distance;
+          });
+          setActivitiesDistanceByMonth(activitiesDistanceByMonthTemp);
+          setAllDurationTimeActivies(durationTime);
+          setAllDistanceActivities(distance);
+          console.log(user.followers);
+          console.log(user.following);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.log(error);
+          setLoading(false);
+        });
     });
 
-    setLoading(true);
-    api
-      .get('/activities/user/' + user.email)
-      .then(response => {
-        var activities = response.data;
-        setActiviesSize(activities.length);
-        var durationTime = 0;
-        var distance = 0;
-        var activitiesDistanceByMonthTemp = [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ];
-        activities.forEach((activity: any) => {
-          durationTime += activity.duration;
-          distance += activity.distance;
-          activitiesDistanceByMonthTemp[new Date(activity.start).getMonth()] +=
-            activity.distance;
-        });
-        setActivitiesDistanceByMonth(activitiesDistanceByMonthTemp);
-        setAllDurationTimeActivies(durationTime);
-        setAllDistanceActivities(distance);
-        console.log(user.followers);
-        console.log(user.following);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.log(error);
-        setLoading(false);
-      });
   }, []);
 
   useEffect(() => {
@@ -91,10 +92,10 @@ const Profile: React.FC<ProfileProps> = ({
 
   const onSignOut = () => {
     auth()
-      .signOut()
-      .then(() => {
-        console.log('User signed out!');
-        // onUpdateUser(null);
+    .signOut()
+    .then(() => {
+      console.log('User signed out!');
+        onUpdateUser({_id: null, email: null, name: null});
         navigation.navigate('Login');
       })
       .catch(error => console.log(error));
@@ -135,6 +136,7 @@ const Profile: React.FC<ProfileProps> = ({
             </Pressable>
           </View>
           <View>
+            { user &&
             <View style={styles.profile}>
               <View style={styles.profileUser}>
                 <Image
@@ -196,6 +198,7 @@ const Profile: React.FC<ProfileProps> = ({
                   </View>
                 )}
             </View>
+            }
             <View style={styles.activity}>
               {loading ? (
                 <View style={styles.activityIndicatorWrapper}>

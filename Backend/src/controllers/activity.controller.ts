@@ -208,8 +208,8 @@ const ActivityController = {
     },
     getActivitiesByUser: async (req: express.Request, res: express.Response) => {
         try {
-            const email = req.params.email;
-            const activities = await ActivityService.getActivitiesByUser(email);
+            const userid = req.params.userid;
+            const activities = await ActivityService.getActivitiesByUser(userid);
             return res.status(200).json(activities);
         } catch (error) {
             console.log(error);

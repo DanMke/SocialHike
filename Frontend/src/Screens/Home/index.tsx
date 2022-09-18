@@ -48,45 +48,45 @@ const Home: React.FC<HomeProps> = ({
     }
 
     setLoading(true);
-    if (!user) {
-      const userFirebase = auth().currentUser;
-      api
-        .get('/users/' + userFirebase?.email)
-        .then(response => {
-          onUpdateUser(response.data);
-          api
-            .get('/activities')
-            .then(response => {
-              var allActivities = response.data;
-              // TODO: Filter by following users
-              setActivities(allActivities);
-              setLoading(false);
-            })
-            .catch(error => {
-              console.log(error);
-              setLoading(false);
+    const userFirebase = auth().currentUser;
+    api
+      .get('/users/' + userFirebase?.email?.toLowerCase())
+      .then(response => {
+        var user = response.data;
+        onUpdateUser(response.data);
+        api
+          .get('/activities')
+          .then(response => {
+            var allActivities: any = [];
+            response.data.forEach((activity: any) => {
+              if (activity.user._id === user._id) {
+                allActivities.push(activity);
+              } 
+              else {
+                user.following.forEach((following: any) => {
+                  if (activity.user._id.valueOf() === following.user._id.valueOf()) {
+                    allActivities.push(activity);
+                  }
+                });
+              }
             });
-        })
-        .catch(error => {
-          console.log(error);
-          setLoading(false);
-        });
-    } else {
-      api
-        .get('/activities')
-        .then(response => {
-          // TODO: Filter by following users
-          var allActivities = response.data.sort((a: any, b: any) => {
-            return new Date(b.start).getTime() - new Date(a.start).getTime();
+
+            allActivities = allActivities.sort((a: any, b: any) => {
+              return new Date(b.start).getTime() - new Date(a.start).getTime();
+            });
+            setActivities(allActivities);
+            setLoading(false);
+          })
+          .catch(error => {
+            console.log(error);
+            setLoading(false);
           });
-          setActivities(allActivities);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.log(error);
-          setLoading(false);
-        });
-    }
+      })
+      .catch(error => {
+        console.log(error);
+        setLoading(false);
+      });
+    
   }, []);
 
   useEffect(() => {

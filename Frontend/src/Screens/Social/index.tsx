@@ -88,6 +88,21 @@ const Social: React.FC<SocialProps> = ({
     setFunctionTimeout(timeout);
   }
 
+  const onFollow = (e: any, follower: any) => {
+    e.preventDefault();
+    api
+      .post('/users/' + user.email.toLowerCase() + '/following', {
+        following: follower.email,
+      })
+      .then(response => {
+        onUpdateUser(response.data);
+        onRefresh();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView behavior="height">
@@ -187,7 +202,7 @@ const Social: React.FC<SocialProps> = ({
                   </View>
                   <Button
                     backgroundColor={'#04AA6C'}
-                    onPress={() => navigation.goBack()}>
+                    onPress={e => onFollow(e, userList.user)}>
                     <Text style={styles.buttonText}>Follow</Text>
                   </Button>
                 </Pressable>

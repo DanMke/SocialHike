@@ -52,7 +52,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const follower = await User.findOne({ email: followerEmail });
             if (user && follower) {
-                const updatedUser = User.findOneAndUpdate({ email }, { $addToSet: { followers: follower } }, { new: true });
+                const updatedUser = User.findOneAndUpdate({ email }, { $addToSet: { followers: follower } }, { new: true }).populate('following.user').populate('followers');
                 return updatedUser;
             }
             else {
@@ -68,7 +68,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const follower = await User.findOne({ email: followerEmail });
             if (user && follower) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { followers: follower._id } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { followers: follower._id } }, { new: true }).populate('following.user').populate('followers');
                 return updatedUser;
             }
             else {
@@ -84,7 +84,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const following = await User.findOne({ email: followingEmail });
             if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $addToSet: { following: {user: following} } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $addToSet: { following: {user: following} } }, { new: true }).populate('following.user').populate('followers');
                 return updatedUser;
             }
             else {
@@ -100,7 +100,7 @@ const UserService = {
             const user = await User.findOne({ email });
             const following = await User.findOne({ email: followingEmail });
             if (user && following) {
-                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: {user: following._id} } }, { new: true });
+                const updatedUser = await User.findOneAndUpdate({ email }, { $pull: { following: {user: following._id} } }, { new: true }).populate('following.user').populate('followers');
                 return updatedUser;
             }
             else {

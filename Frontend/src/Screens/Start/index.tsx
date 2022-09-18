@@ -153,7 +153,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
         setSpeed(position.coords.speed);
         setPoints(points => [...points, position]);
         api.post('/activities/data', {
-          user: user.email,
+          user: user.email.toLowerCase(),
           start: startDateTime,
           end: new Date(),
           initialCoord: {
@@ -220,7 +220,7 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
       setIsStarted(false);
       setIsPaused(false);
       api.post('/activities/data', {
-        user: user.email,
+        user: user.email.toLowerCase(),
         start: startDateTime,
         end: end,
         initialCoord: {

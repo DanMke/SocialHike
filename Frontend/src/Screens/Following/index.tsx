@@ -63,8 +63,9 @@ const Following: React.FC<FollowingProps> = ({
   }, []);
 
   const onUnfollow = (e: any, followingUser: any) => {
-    api.delete('/users/' + user.email + '/following', {data: {following: followingUser.email}}).then(response => {
+    api.delete('/users/' + user.email.toLowerCase() + '/following', {data: {following: followingUser.email}}).then(response => {
       setFollowing(following.filter((element: any) => element.email !== followingUser.email));
+      updateUser(response.data);
     }
     ).catch(error => {
       console.log(error);

@@ -12,7 +12,7 @@ activityRouter.get('/activities', ActivityController.getActivities);
 
 activityRouter.get('/activities/:id', ActivityController.getActivityById);
 
-activityRouter.get('/activities/user/:email', ActivityController.getActivitiesByUser);
+activityRouter.get('/activities/user/:userid', ActivityController.getActivitiesByUser);
 
 activityRouter.post('/activitiesNear', ActivityController.getActivitiesNearestOfPoint);
 
