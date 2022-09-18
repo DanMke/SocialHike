@@ -105,27 +105,36 @@ function calculateDistanceAndDependents(activity: any) {
             maxSpeed = speed;
         }
         sumSpeed += speed;
-        if ((distance / divider) >= 1.0 || i == activity.points.length - 2) {
-            var durationToPace = 0;
-            var distanceToPace = 0;
-            if (paces.length == 0) {
-                durationToPace = durationUntil;
-            } else {
-                durationToPace = durationUntil - paces[paces.length - 1].durationActivity;
-            }
-            if (distance >= divider) {
-                distanceToPace = distance - divider;
-            } else {
-                distanceToPace = distance;
-            }
-            var pace = durationToPace / (distanceToPace / 1000);
-            if (pace <= maxPace) {
-                maxPace = pace;
-            }
-            sumPace += pace;
-            paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
-            divider += 1000;
+        // if ((distance / divider) >= 1.0 || i == activity.points.length - 2) {
+        //     var durationToPace = 0;
+        //     var distanceToPace = 0;
+        //     if (paces.length == 0) {
+        //         durationToPace = durationUntil;
+        //     } else {
+        //         durationToPace = durationUntil - paces[paces.length - 1].durationActivity;
+        //     }
+        //     if (distance >= divider) {
+        //         distanceToPace = distance - divider;
+        //     } else {
+        //         distanceToPace = distance;
+        //     }
+        //     var pace = durationToPace / (distanceToPace / 1000);
+        //     if (pace <= maxPace) {
+        //         maxPace = pace;
+        //     }
+        //     sumPace += pace;
+        //     paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
+        //     divider += 1000;
+        // }
+        var pace = 1000 / (speed * 3.6);
+        if (pace <= maxPace) {
+            maxPace = pace;
         }
+        if (pace != Infinity) {
+            sumPace += pace;
+        }
+            
+        paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
     }
     activity.distance = distance / 1000;
     activity.sumPace = sumPace;
