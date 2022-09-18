@@ -367,25 +367,25 @@ const Start: React.FC<StartProps> = ({onUpdateUser, user, navigation}: StartProp
             }
             {
               isStarted && !isPaused &&
-                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
+                <Button width={"80%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onPause}>
                   <Text style={{color: '#fff', fontSize: 18}}>Pause</Text>
                 </Button>
             }
             {
               isStarted && isPaused &&
-                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={() => setModalVisible(true)}>
+                <Button width={"80%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={() => setModalVisible(true)}>
                   <Text style={{color: '#fff', fontSize: 18}}>Add Point of Interest</Text>
                 </Button>
             }
             {
               isStarted && isPaused &&
-                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onResume}>
+                <Button width={"80%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onResume}>
                   <Text style={{color: '#fff', fontSize: 18}}>Resume</Text>
                 </Button>
             }
             {
               isStarted && 
-                <Button width={"60%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
+                <Button width={"80%"} height={60} backgroundColor={'#04AA6C'} margin={2} onPress={onStop}>
                   <Text style={{color: '#fff', fontSize: 18}}>Stop</Text>
                 </Button>
             }
