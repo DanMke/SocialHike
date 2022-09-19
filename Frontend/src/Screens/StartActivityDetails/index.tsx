@@ -81,7 +81,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
 
   useEffect(() => {
     setActivity(navigation.getState().routes[1].params.activity);
-    console.log(navigation.getState().routes[1].params.activity);
+    console.log('aqui', navigation.getState().routes[1].params.activity);
     var pacesTemp = [];
     for (var i = 0; i < activity.paces.length; i++) {
       pacesTemp.push(activity.paces[i].pace);
@@ -380,6 +380,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     </Text>
                   </View>
                 </View>
+                { activity.elevations.length > 0 &&
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>
                     Elevation
@@ -421,6 +422,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     }}
                   />
                 </View>
+                }
               </View>
               <View style={styles.routeDetails}>
                 <View style={styles.routeElevation}>
@@ -449,6 +451,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     </Text>
                   </View>
                 </View>
+                { paces.length > 0 && 
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.feedElementDetailsTextDark}>Pace </Text>
                   <LineChart
@@ -488,6 +491,7 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                     }}
                   />
                 </View>
+                }
               </View>
 
               <View
