@@ -9,6 +9,9 @@ import checkAuth from './middlewares/auth';
 
 import admin from "firebase-admin";
 
+const https = require('https');
+const fs = require('fs');
+
 var serviceAccount = require("./serviceAccountKey.json");
 
 const PORT = 4000;
@@ -38,6 +41,12 @@ app.use(checkAuth);
 app.use(userRouter);
 app.use(activityRouter);
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando com sucesso ${HOSTNAME}:${PORT}`);
-});
+const options = {
+    key: fs.readFileSync('/Users/danielmaike/Projects/TCC/SocialHike/Backend/key.pem'),
+    cert: fs.readFileSync('/Users/danielmaike/Projects/TCC/SocialHike/Backend/cert.pem')
+  };
+
+https.createServer(options, app).listen(PORT);
+// app.listen(PORT, () => {
+//     console.log(`Servidor rodando com sucesso ${HOSTNAME}:${PORT}`);
+// });

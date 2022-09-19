@@ -2,7 +2,7 @@ import axios from 'axios';
 import auth from '@react-native-firebase/auth';
 
 const api = axios.create({
-    baseURL: 'http://18.210.32.102:4000',
+    baseURL: 'https://18.210.32.102:4000',
 });
 
 api.interceptors.request.use(async (config) => {
