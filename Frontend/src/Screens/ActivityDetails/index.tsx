@@ -307,11 +307,21 @@ const ActivityDetails: React.FC<ActivityDetailsProps> = ({ onUpdateUser, user, n
                 <View style={styles.routeElevation}>
                   <View style={{ alignItems: 'center' }}>
                     <Text style={styles.feedElementDetailsTextDark}>     Max Pace    </Text>
-                    <Text style={styles.feedElementDetailsText}>{Math.trunc(activity.maxPace / 60) + ':' + Math.trunc(activity.maxPace % 60) + '/KM'}</Text>
+                    <Text style={styles.feedElementDetailsText}>
+                      {(Math.trunc(activity.maxPace / 60) < 10 ? '0' : '') + Math.trunc(activity.maxPace / 60) +
+                        ':' +
+                        (Math.trunc(activity.maxPace % 60) < 10 ? '0' : '') + Math.trunc(activity.maxPace % 60) +
+                        '/KM'}
+                    </Text>
                   </View>
                   <View style={{ alignItems: 'center' }}>
                     <Text style={styles.feedElementDetailsTextDark}>     Average Pace    </Text>
-                    <Text style={styles.feedElementDetailsText}>{Math.trunc(activity.averagePace / 60) + ':' + Math.trunc(activity.averagePace % 60) + '/KM'}</Text>
+                    <Text style={styles.feedElementDetailsText}>
+                      { (Math.trunc(activity.averagePace / 60) < 10 ? '0' : '') + Math.trunc(activity.averagePace / 60) +
+                        ':' +
+                        (Math.trunc(activity.averagePace % 60) < 10 ? '0' : '') + Math.trunc(activity.averagePace % 60) +
+                        '/KM'}
+                    </Text>
                   </View>
                 </View>
                 <View style={{ alignItems: 'center' }}>

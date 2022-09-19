@@ -73,7 +73,6 @@ const Routes: React.FC<RoutesProps> = ({
     };
 
     requestLocationPermission();
-    // TODO: pegar as activities e os inicios de rotas e desenhar no mapa
 
     Geolocation.getCurrentPosition(
       position => {

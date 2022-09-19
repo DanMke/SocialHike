@@ -430,9 +430,9 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                       Max Pace{' '}
                     </Text>
                     <Text style={styles.feedElementDetailsText}>
-                      {Math.trunc(activity.maxPace / 60) +
+                      {(Math.trunc(activity.maxPace / 60) < 10 ? '0' : '') + Math.trunc(activity.maxPace / 60) +
                         ':' +
-                        Math.trunc(activity.maxPace % 60) +
+                        (Math.trunc(activity.maxPace % 60) < 10 ? '0' : '') + Math.trunc(activity.maxPace % 60) +
                         '/KM'}
                     </Text>
                   </View>
@@ -442,9 +442,9 @@ const StartActivityDetails: React.FC<StartActivityDetailsProps> = ({
                       Average Pace{' '}
                     </Text>
                     <Text style={styles.feedElementDetailsText}>
-                      {Math.trunc(activity.averagePace / 60) +
+                      { (Math.trunc(activity.averagePace / 60) < 10 ? '0' : '') + Math.trunc(activity.averagePace / 60) +
                         ':' +
-                        Math.trunc(activity.averagePace % 60) +
+                        (Math.trunc(activity.averagePace % 60) < 10 ? '0' : '') + Math.trunc(activity.averagePace % 60) +
                         '/KM'}
                     </Text>
                   </View>
