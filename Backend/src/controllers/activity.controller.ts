@@ -137,7 +137,7 @@ function calculateDistanceAndDependents(activity: any) {
         //     paces.push({durationActivity: durationUntil, distance: distance, pace: pace});
         //     divider += 1000;
         // }
-        var pace = 1000 / (speed * 3.6);
+        var pace = 1000 / speed;
         
         if (pace != Infinity && pace != -Infinity) {
             if (pace <= maxPace) {
