@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const uri = "mongodb+srv://socialhikeadmin:iiCtYiCCARaFfFR7@clustersocialhike.9tygyk5.mongodb.net/socialhike?retryWrites=true&w=majority";
+// const uri = "mongodb+srv://socialhike:nHN1HUWQt4fKyX6L@cluster0socialhike.fx6vjkj.mongodb.net/?retryWrites=true&w=majority";
 
 // const mongoOptions = {
 //     useFindAndModify: false,

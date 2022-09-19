@@ -21,9 +21,9 @@ function distanceHaversine(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 function distanceVincenty(lat1: number, lon1: number, lat2: number, lon2: number) {
-    var a = 6378137,
-        b = 6356752.3142,
-        f = 1 / 298.257223563, // WGS-84 ellipsoid params
+    var a = 6378137, // length of semi-major axis of the ellipsoid (radius at equator) (WGS-84)
+        b = 6356752.3142, // length of semi-minor axis of the ellipsoid (radius at the poles) (WGS-84)
+        f = 1 / 298.257223563, // flattening of the ellipsoid (WGS-84)
         L = deg2rad((lon2-lon1)),
         U1 = Math.atan((1 - f) * Math.tan(deg2rad(lat1))),
         U2 = Math.atan((1 - f) * Math.tan(deg2rad(lat2))),
@@ -95,6 +95,17 @@ function calculateDistanceAndDependents(activity: any) {
 
     var distance: number = 0;
 
+    if (activity.points.length < 2) {
+        activity.distance = 0;
+        activity.sumPace = 0;
+        activity.paces = 0;
+        activity.averagePace = 0;
+        activity.maxPace = 0;
+        activity.sumSpeed = 0;
+        activity.maxSpeed = 0;
+        activity.averageSpeed = 0;
+        return;
+    }
     var divider = 1000;
     for (var i = 0; i < activity.points.length - 1; i++) {
         distance += distanceVincenty(activity.points[i].coords.latitude, activity.points[i].coords.longitude, 
@@ -140,7 +151,7 @@ function calculateDistanceAndDependents(activity: any) {
     activity.distance = distance / 1000;
     activity.sumPace = sumPace;
     activity.paces = paces;
-    activity.averagePace = (sumPace / paces.length) === Infinity ? 0 : (sumPace / paces.length);
+    activity.averagePace = sumPace === Infinity || sumPace === -Infinity || sumPace === 0 || paces.length === 0 ? 0 : (sumPace / paces.length);
     activity.maxPace = maxPace === 1000000 || maxPace === Infinity ? 0 : maxPace;
     activity.sumSpeed = sumSpeed;
     activity.maxSpeed = maxSpeed * 3.6;
